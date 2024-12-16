@@ -10,13 +10,19 @@ import Register from "./pages/public/Register";
 import Login from "./pages/public/Login";
 import Footer from "./components/Footer";
 import Profile from "./pages/Profile";
+import About from "./pages/public/About";
+import Services from "./pages/public/Services";
+import Contact from "./pages/public/Contact";
 
 const App = () => {
   return (
-    <div className="w-full overflow-x-hidden min-h-[100vh] flex flex-col">
+    <div className="">
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
