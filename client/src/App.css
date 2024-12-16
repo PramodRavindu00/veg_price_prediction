@@ -1,0 +1,22 @@
+.form-heading{
+    @apply text-2xl font-bold text-center mb-6
+}
+.form-input {
+  @apply w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-1;
+}
+
+.form-label {
+  @apply block text-sm font-semibold text-gray-700 mb-1;
+}
+
+.form-error{
+    @apply text-red-600 text-sm w-full break-words overflow-hidden
+}
+
+.form-row-2 {
+    @apply flex flex-col lg:flex-row justify-between items-center space-x-4
+}
+
+.btn-primary{
+    @apply w-full sm:w-3/4 lg:w-1/2 bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-bold py-2.5 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2
+}

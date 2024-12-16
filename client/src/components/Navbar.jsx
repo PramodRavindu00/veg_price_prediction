@@ -2,6 +2,13 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faDoorOpen,
+  faRightFromBracket,
+  faUserPen,
+  faUserPlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = ({ publicPage = true, navLinks }) => {
   const [toggleBtn, setToggleBtn] = useState(true);
@@ -27,34 +34,54 @@ const Navbar = ({ publicPage = true, navLinks }) => {
   };
 
   return (
-    <nav className="fixed flex w-full z-50 text-white top-0 right-0 min-h-[10vh] px-3 sm:px-8 items-center bg-black/50">
+    <nav className="flex w-full z-50 text-white top-0 right-0 min-h-[10vh] px-3 sm:p-6 items-center bg-black/60">
       {/* desktop navbar */}
-      <div className="w-full hidden sm:flex items-center gap-2">
-        <span className="text-2xl">GreenPriceNet</span>
-        <ul className="flex w-full gap-5 md:gap-10 justify-center">
+      <div className="w-full hidden sm:flex items-center justify-between gap-2">
+        <span className="text-3xl">GreenPriceNet</span>
+        <ul className="flex gap-5 md:gap-10 justify-center text-xl">
           {navLinks.map((link, index) => (
             <li key={index}>
               <Link
-                to={link.destination}
-                smooth={true}
-                duration={800}
-                className="cursor-pointer "
+                to={link.route}
+                className="hover:font-semibold transition ease-out duration-1000"
               >
                 {link.text}
               </Link>
             </li>
           ))}
         </ul>
-        <div className="flex gap-5 md:gap-10 justify-center">
+        <div className="flex justify-center items-center gap-10">
           {publicPage ? (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+              <Link
+                to="/login"
+                className="hover:font-semibold transition ease-out duration-1000"
+              >
+                <FontAwesomeIcon icon={faDoorOpen} className="mx-2" />
+                Log In
+              </Link>
+
+              <Link
+                to="/register"
+                className="hover:font-semibold transition ease-out duration-1000"
+              >
+                <FontAwesomeIcon icon={faUserPlus} className="mx-2" />
+                Register
+              </Link>
             </>
           ) : (
             <>
-              <Link to="/profile">Profile</Link>
-              <button onClick={logout}>Logout</button>
+              <Link to="/profile">
+                {" "}
+                <FontAwesomeIcon icon={faUserPen} className="mx-2 text-4xl" />
+              </Link>
+              <button onClick={logout}>
+                {" "}
+                <FontAwesomeIcon
+                  icon={faRightFromBracket}
+                  className="mx-2 text-3xl"
+                />
+              </button>
             </>
           )}
         </div>
@@ -81,12 +108,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
           <ul className="flex flex-col w-full  justify-center items-center space-y-3 text-black">
             {navLinks.map((link, index) => (
               <li key={index}>
-                <Link
-                  to={link.destination}
-                  smooth={true}
-                  duration={900}
-                  onClick={() => toggleMenu("close")}
-                >
+                <Link to={link.route} onClick={() => toggleMenu("close")}>
                   {link.text}
                 </Link>
               </li>
@@ -123,7 +145,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
 
 Navbar.propTypes = {
   publicPage: PropTypes.bool,
-  navLinks: PropTypes.arrayOf(PropTypes.string),
+  navLinks: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default Navbar;

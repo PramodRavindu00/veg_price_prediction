@@ -1,6 +1,6 @@
 export const publicLinks = [
-  { text: "Home", destination: "home" },
-  { text: "About", destination: "about" },
-  { text: "Services", destination: "experience" },
-  { text: "Contact", destination: "skills" },
+  { text: "Home", route: "/home" },
+  { text: "About", route: "/about" },
+  { text: "Services", route: "/services" },
+  { text: "Contact", route: "/contact" },
 ];
