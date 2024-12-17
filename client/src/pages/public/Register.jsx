@@ -1,8 +1,12 @@
 import Navbar from "../../components/Navbar";
-import { publicLinks } from "../../assets/navLinks";
+import { publicLinks } from "../../assets/navLinks.mjs";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { registerFormValidations } from "../../assets/validations.mjs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { toast, Toaster } from "sonner";
 
 const initialValues = {
   firstName: "",
@@ -13,14 +17,28 @@ const initialValues = {
   nearestMarket: "",
   password: "",
   confirmPassword: "",
-  notification: "",
-  userType: "user",
+  notification: true,
+  userType: "Admin",
 };
+
 const Register = () => {
   const [marketOptions, setMarketOptions] = useState([]);
   const [selectedMarket, setSelectedMarket] = useState({});
   const [notification, setNotification] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+  const [btnDisabled, setBtnDisabled] = useState(false);
+
+  const togglePasswordVisibility = (e) => {
+    e.preventDefault();
+    setPasswordVisible(!passwordVisible);
+  };
+  const toggleConfirmPasswordVisibility = (e) => {
+    e.preventDefault();
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
 
   const getAllMarkets = async () => {
     try {
@@ -60,16 +78,58 @@ const Register = () => {
     setFormValues({ ...formValues, notification: e.target.checked });
   };
 
-  const handleSubmit = (e) => {
+  const clearForm = () => {
+    setFormValues(initialValues);
+    setBtnDisabled(false);
+    setSelectedMarket({});
+    setNotification(false);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formValues);
+    const errors = registerFormValidations(formValues);
+    setFormErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      console.log("Form has validation errors");
+    } else {
+      const { confirmPassword, ...valuesToSubmit } = formValues;
+      try {
+        setBtnDisabled(true);
+        const res = await axios.post("/api/auth/userRegister", valuesToSubmit);
+        toast.success(res.data.message);
+        clearForm();
+      } catch (error) {
+        setBtnDisabled(false);
+        console.log(error.message);
+        if (error.response) {
+          const errorRes = error.response.data;
+          if (errorRes.type === "email") {
+            setFormErrors({
+              ...errors,
+              email: errorRes.message,
+            });
+            setFormValues({ ...formValues, email: "" });
+          }
+
+          if (errorRes.type === "contact") {
+            setFormErrors({
+              ...errors,
+              contactNo: errorRes.message,
+            });
+            setFormValues({ ...formValues, contactNo: "" });
+          }
+        } else {
+          toast.error("Internal Server Error, Please try again later");
+        }
+      }
+    }
   };
 
   return (
-    <div>
+    <>
       <Navbar navLinks={publicLinks} />
-      <div className="flex items-center justify-center h-screen">
-        <div className="flex-col bg-white bg-opacity-70 p-8 rounded-lg shadow-lg w-full sm:w-3/4 lg:w-1/2">
+      <div className="flex items-center justify-center">
+        <div className="flex-col bg-white bg-opacity-70 p-8 rounded-lg  w-full sm:w-3/4 lg:w-1/2">
           <h2 className="form-heading">CREATE ACCOUNT</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-row-2">
@@ -83,7 +143,7 @@ const Register = () => {
                   value={formValues.firstName}
                   onChange={handleChange}
                 />
-                <span className="form-error"></span>
+                <span className="form-error">{formErrors.firstName}</span>
               </div>
               <div className="mb-4 w-full lg:w-1/2">
                 <label className="form-label">Your Last Name</label>
@@ -95,7 +155,7 @@ const Register = () => {
                   value={formValues.lastName}
                   onChange={handleChange}
                 />
-                <span className="form-error"></span>
+                <span className="form-error">{formErrors.lastName}</span>
               </div>
             </div>
 
@@ -109,7 +169,7 @@ const Register = () => {
                 value={formValues.email}
                 onChange={handleChange}
               />
-              <span className="form-error"></span>
+              <span className="form-error">{formErrors.email}</span>
             </div>
             <div className="mb-4">
               <label className="form-label">Address</label>
@@ -121,7 +181,7 @@ const Register = () => {
                 value={formValues.address}
                 onChange={handleChange}
               />
-              <span className="form-error"></span>
+              <span className="form-error">{formErrors.address}</span>
             </div>
             <div className="form-row-2">
               <div className="mb-4 w-full lg:w-1/2">
@@ -134,7 +194,7 @@ const Register = () => {
                   value={formValues.contactNo}
                   onChange={handleChange}
                 />
-                <span className="form-error"></span>
+                <span className="form-error">{formErrors.contactNo}</span>
               </div>
 
               <div className="mb-4 w-full lg:w-1/2">
@@ -162,33 +222,54 @@ const Register = () => {
                     )}
                   </select>
                 </div>
-                <span className="form-error"></span>
+                <span className="form-error">{formErrors.nearestMarket}</span>
               </div>
             </div>
             <div className="form-row-2">
               <div className="mb-4 w-full lg:w-1/2">
                 <label className="form-label">Password</label>
-                <input
-                  type="password"
-                  placeholder="Enter your Password"
-                  className="form-input"
-                  name="password"
-                  value={formValues.password}
-                  onChange={handleChange}
-                />
-                <span className="form-error"></span>
+                <div className="relative flex items-center">
+                  <input
+                    type={passwordVisible ? "text" : "password"}
+                    placeholder="Enter your Password"
+                    className="form-input"
+                    name="password"
+                    value={formValues.password}
+                    onChange={handleChange}
+                  />
+                  <button
+                    className="absolute right-2"
+                    onClick={togglePasswordVisibility}
+                  >
+                    <FontAwesomeIcon
+                      icon={passwordVisible ? faEyeSlash : faEye}
+                    />
+                  </button>
+                </div>
+                <span className="form-error">{formErrors.password}</span>
               </div>
               <div className="mb-4 w-full lg:w-1/2">
                 <label className="form-label">Confirm Password</label>
-                <input
-                  type="password"
-                  placeholder="Re-enter your password"
-                  className="form-input"
-                  name="confirmPassword"
-                  value={formValues.confirmPassword}
-                  onChange={handleChange}
-                />
-                <span className="form-error"></span>
+                <div className="flex relative items-center">
+                  {" "}
+                  <input
+                    type={confirmPasswordVisible ? "text" : "password"}
+                    placeholder="Re-enter your password"
+                    className="form-input"
+                    name="confirmPassword"
+                    value={formValues.confirmPassword}
+                    onChange={handleChange}
+                  />
+                  <button
+                    className="absolute right-2"
+                    onClick={toggleConfirmPasswordVisibility}
+                  >
+                    <FontAwesomeIcon
+                      icon={confirmPasswordVisible ? faEyeSlash : faEye}
+                    />
+                  </button>
+                </div>
+                <span className="form-error">{formErrors.confirmPassword}</span>
               </div>
             </div>
             <div className="mb-1 flex">
@@ -199,11 +280,14 @@ const Register = () => {
                 onChange={handleCheckBoxChange}
                 className="mr-2"
               />
-              <label htmlFor="notification" className="form-label">
+              <label
+                htmlFor="notification"
+                className="form-label text-blue-500"
+              >
                 I agree to the receive Weekly Price Predictions via Emails
               </label>
             </div>
-            <div className="mb-1 flex justify-center form-label">
+            <div className="my-4 flex justify-center form-label text-blue-500">
               <span>
                 Already Have an Account? &nbsp;
                 <Link to="/login" className="text-black underline">
@@ -211,15 +295,21 @@ const Register = () => {
                 </Link>
               </span>
             </div>
-            <div className="mb-2 flex justify-center">
-              <button type="submit" className="btn-primary">
-                Create Account
+            <div className="mb-2 flex flex-col items-center justify-center">
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={btnDisabled}
+              >
+                {btnDisabled ? "Please Wait..." : "Create Account"}
               </button>
             </div>
           </form>
         </div>
       </div>
-    </div>
+
+      <Toaster richColors position="top-right" />
+    </>
   );
 };
 
