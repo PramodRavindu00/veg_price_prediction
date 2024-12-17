@@ -9,8 +9,14 @@ import {
   faUserPen,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import Confirm from "./Confirm";
+import axios from "axios";
+import { toast, Toaster } from "sonner";
+import { useAuth } from "../assets/useAuth.mjs";
 
 const Navbar = ({ publicPage = true, navLinks }) => {
+  const { setAuth } = useAuth();
+
   const [toggleBtn, setToggleBtn] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
 
@@ -29,8 +35,30 @@ const Navbar = ({ publicPage = true, navLinks }) => {
   };
 
   const logout = () => {
-    navigate("/login");
-    alert("Successfully logout");
+    Confirm({
+      title: "Confirm Log out",
+      message: "Are you sure you want to log out?",
+      onConfirm: async () => {
+        try {
+          const res = await axios.post(
+            "/api/auth/logOut",
+            {},
+            { withCredentials: true }
+          );
+          if (res.data.success) {
+            setAuth({
+              isLoggedIn: false,
+              userId: null,
+              userType: null,
+            });
+            localStorage.removeItem("auth");
+            navigate("/login");
+          }
+        } catch (error) {
+          toast.error(error);
+        }
+      },
+    });
   };
 
   return (
@@ -139,6 +167,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
           </ul>
         </div>
       </div>
+      <Toaster richColors position="top-right" />
     </nav>
   );
 };
