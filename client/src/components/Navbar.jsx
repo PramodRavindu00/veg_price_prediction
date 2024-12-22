@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDoorOpen,
   faRightFromBracket,
-  faUserPen,
+  faUser,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import Confirm from "./Confirm";
@@ -101,7 +101,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
             <>
               <Link to="/profile">
                 {" "}
-                <FontAwesomeIcon icon={faUserPen} className="mx-2 text-4xl" />
+                <FontAwesomeIcon icon={faUser} className="mx-2 text-3xl" />
               </Link>
               <button onClick={logout}>
                 {" "}
