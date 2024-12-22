@@ -3,6 +3,7 @@ import { userLinks } from "../../assets/navLinks.mjs";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
 import { MainPredictionFormValidations } from "../../assets/validations.mjs";
+import { scroller } from "react-scroll";
 
 const initialValues = {
   date: new Date().toISOString().slice(0, 10),
@@ -22,7 +23,7 @@ const PredictMain = () => {
   const [selectedPeriod, setSelectedPeriod] = useState({});
   const [selectedFestival, setSelectedFestival] = useState({});
   const [btnDisabled, setBtnDisabled] = useState(false);
-  const [resultDivVisible, setResultsDivVisible] = useState(true);
+  const [predPeriod, setPredPeriod] = useState();
   const [formErrors, setFormErrors] = useState({});
 
   const getAllMarkets = async () => {
@@ -59,7 +60,6 @@ const PredictMain = () => {
       .replace(/[^0-9.]/g, "")
       .replace(/(\..*?)\..*/g, "$1")
       .replace(/^(\d+\.\d{2})\d*/g, "$1");
-
     setFormValues({ ...formValues, [name]: validNumericValue });
   };
 
@@ -88,14 +88,28 @@ const PredictMain = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = MainPredictionFormValidations(formValues);
     setFormErrors(errors);
     if (Object.keys(errors).length > 0) {
       console.log("Form has validation errors");
     } else {
-      console.log("Submit OK");
+      try {
+        const result = await axios.post(
+          "/api/prediction/getPredictions",
+          formValues
+        );
+        setPredPeriod(result.data.data.type);
+        scroller.scrollTo("resultsDiv", {
+          duration: 1000,
+          delay: 0,
+          smooth: "linear",
+          offset: 0,
+        });
+      } catch (error) {
+        console.log("Internal Server Error", error);
+      }
     }
   };
 
@@ -107,8 +121,8 @@ const PredictMain = () => {
   return (
     <>
       <Navbar publicPage={false} navLinks={userLinks} />
-      <div className="flex flex-col w-full">
-        <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col">
+        <div className="flex flex-col lg:flex-row ">
           <div className="layout-2-in-row">
             <h2 className="form-heading">How to use this prediction tool</h2>
           </div>
@@ -173,7 +187,7 @@ const PredictMain = () => {
                   <label className="form-label">Average Rainfall in mm</label>
                   <input
                     type="text"
-                    placeholder="Enter next weeks average rainfall"
+                    placeholder="Enter next week's average rainfall"
                     className="form-input"
                     name="rainfall"
                     value={formValues.rainfall}
@@ -207,12 +221,8 @@ const PredictMain = () => {
                       <option value="" defaultValue>
                         Select the prediction period
                       </option>
-                      <option value="week" defaultValue>
-                        Next Week
-                      </option>
-                      <option value="4week" defaultValue>
-                        Next 4 Weeks
-                      </option>
+                      <option value="week">Next Week</option>
+                      <option value="4week">Next 4 Weeks</option>
                     </select>
                   </div>
                   <span className="form-error">{formErrors.predType}</span>
@@ -229,17 +239,13 @@ const PredictMain = () => {
                       <option value="" defaultValue>
                         A festival happening within prediction period?
                       </option>
-                      <option value="1" defaultValue>
-                        Yes
-                      </option>
-                      <option value="0" defaultValue>
-                        No
-                      </option>
+                      <option value="1">Yes</option>
+                      <option value="0">No</option>
                     </select>
                   </div>
                   <span className="form-error">{formErrors.festival}</span>
                 </div>
-                <div className="mt-2 lg:my-4 flex justify-center">
+                <div className="my-2 lg:mt-4 flex justify-center">
                   <button
                     type="submit"
                     className="btn-primary"
@@ -252,11 +258,21 @@ const PredictMain = () => {
             </div>
           </div>
         </div>
-        {resultDivVisible && (
-          <div id="resultsDiv" className="layout-2-in-row">
-            Results
-          </div>
-        )}
+        <div id="resultsDiv" className="layout-2-in-row py-4">
+          {predPeriod === "week" && (
+            <div className="flex flex-col w-full sm:w-[70%] lg:w-[40%] bg-slate-100 p-5">
+              <h2 className="form-heading">Weekly Predictable Price</h2>
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                <p>From - 2024-12-23</p>
+                <p>To - 2024-12-30</p>
+              </div>
+              <p>Vegetable - Carrot</p>
+              <p>Market Area - Colombo</p>
+              <p>Predictable Price - 650.00 Rs</p>
+            </div>
+          )}
+          {predPeriod === "4week" && <h2>This is a forecast</h2>}
+        </div>
       </div>
     </>
   );

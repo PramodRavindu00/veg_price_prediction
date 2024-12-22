@@ -41,7 +41,7 @@ export const registerFormValidations = (values) => {
 
 export const loginFormValidations = (values) => {
   const errors = {};
-  if (!values.vegetable) {
+  if (!values.email) {
     errors.email = "Email is required!";
   } else if (!emailRegex.test(values.email)) {
     errors.email = "Invalid Email format!";
@@ -71,10 +71,8 @@ export const MainPredictionFormValidations = (values) => {
   if (!values.predType) {
     errors.predType = "Prediction period is required!";
   }
-  if (!values.festival) {
+  if (values.festival === "") {
     errors.festival = "Festival seasonality is required!";
   }
   return errors;
 };
-
-
