@@ -41,7 +41,7 @@ export const registerFormValidations = (values) => {
 
 export const loginFormValidations = (values) => {
   const errors = {};
-  if (!values.email) {
+  if (!values.vegetable) {
     errors.email = "Email is required!";
   } else if (!emailRegex.test(values.email)) {
     errors.email = "Invalid Email format!";
@@ -53,3 +53,28 @@ export const loginFormValidations = (values) => {
 
   return errors;
 };
+
+export const MainPredictionFormValidations = (values) => {
+  const errors = {};
+  if (!values.vegetable) {
+    errors.vegetable = "Vegetable is required!";
+  }
+  if (!values.location) {
+    errors.location = "Market Area is required!";
+  }
+  if (!values.rainfall) {
+    errors.rainfall = "Average rainfall value is required!";
+  }
+  if (!values.fuelPrice) {
+    errors.fuelPrice = "Fuel price is required!";
+  }
+  if (!values.predType) {
+    errors.predType = "Prediction period is required!";
+  }
+  if (!values.festival) {
+    errors.festival = "Festival seasonality is required!";
+  }
+  return errors;
+};
+
+

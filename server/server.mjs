@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
 import express, { json, urlencoded } from "express";
-import connectDB from "./config/db.js";
+import connectDB from "./config/db.mjs";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import marketRoutes from "./routes/marketRoutes.mjs";
 import authRoutes from "./routes/authRoutes.mjs";
+import vegetableRoutes from "./routes/vegetableRoutes.mjs";
 
 dotenv.config({ path: "../.env" });
 
@@ -17,6 +18,7 @@ app.use(cookieParser());
 
 app.use(marketRoutes);
 app.use(authRoutes);
+app.use(vegetableRoutes);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
