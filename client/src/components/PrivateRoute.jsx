@@ -16,7 +16,7 @@ const PrivateRoute = ({
     return <Navigate to="/login" />;
   }
 
-  //here user is logged,but user role is required and must be matched with auth context usertype.otherwise
+  //here user is logged,but user role is required and must be matched with auth context user type.otherwise
   //redirected to unauthorized even user is logged.In there another redirection will happen based on user type
   if (userTypeRequired && userRole && userRole !== userType) {
     return <Navigate to="/unauthorized" />;

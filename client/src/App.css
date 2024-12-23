@@ -33,3 +33,25 @@
 .layout-2-in-row {
   @apply flex flex-col items-center w-full sm:w-[75%] lg:w-full px-5 py-2 sm:pt-10 sm:pb-0;
 }
+
+.td {
+  @apply px-4 py-2 text-left;
+}
+
+/* Pagination component start */
+.pagination {
+  @apply flex justify-center mt-4;
+}
+
+.page-link {
+  @apply px-4 py-2 cursor-pointer no-underline;
+}
+
+.page-item.active .page-link {
+  @apply bg-blue-500 text-white;
+}
+
+.page-item.disabled .page-link {
+  @apply text-gray-500 cursor-not-allowed;
+}
+/* pagination component end */

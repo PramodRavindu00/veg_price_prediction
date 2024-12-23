@@ -6,7 +6,8 @@ import cors from "cors";
 import marketRoutes from "./routes/marketRoutes.mjs";
 import authRoutes from "./routes/authRoutes.mjs";
 import vegetableRoutes from "./routes/vegetableRoutes.mjs";
-import predictionRoutes from "./routes/predictionRoutes.mjs"
+import predictionRoutes from "./routes/predictionRoutes.mjs";
+import userRoutes from "./routes/userRoutes.mjs";
 
 dotenv.config({ path: "../.env" });
 
@@ -21,6 +22,7 @@ app.use(marketRoutes);
 app.use(authRoutes);
 app.use(vegetableRoutes);
 app.use(predictionRoutes);
+app.use(userRoutes);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

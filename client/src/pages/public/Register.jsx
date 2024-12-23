@@ -18,7 +18,7 @@ const initialValues = {
   password: "",
   confirmPassword: "",
   notification: true,
-  userType: "Admin",
+  userType: "User",
 };
 
 const Register = () => {

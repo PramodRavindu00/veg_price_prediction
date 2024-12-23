@@ -17,6 +17,10 @@ import { AuthContextProvider } from "./components/AuthContextProvider";
 import PrivateRoute from "./components/PrivateRoute";
 import Unauthorized from "./pages/error/Unauthorized";
 import NotFound from "./pages/error/NotFound";
+import Dashboard from "./pages/admin/Dashboard";
+import PredictMultiVeg from "./pages/user/PredictMultiVeg";
+import ShoppingList from "./pages/user/ShoppingList";
+import Users from "./pages/admin/Users";
 //import FadeWrapper from "./components/FadeWrapper";
 
 const App = () => {
@@ -60,7 +64,7 @@ const App = () => {
   // }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen overflow-x-hidden">
       <AuthContextProvider>
         <Router>
           <div className="flex-grow">
@@ -82,11 +86,39 @@ const App = () => {
                   <PrivateRoute userRole="User" component={PredictMain} />
                 }
               />
+              <Route
+                path="/user/predictMultiple"
+                element={
+                  <PrivateRoute userRole="User" component={PredictMultiVeg} />
+                }
+              />
+              <Route
+                path="/user/shoppingList"
+                element={
+                  <PrivateRoute userRole="User" component={ShoppingList} />
+                }
+              />
+              <Route
+                path="/user/support"
+                element={
+                  <PrivateRoute userRole="User" component={ShoppingList} />
+                }
+              />
 
               {/* Admin private Routes which requires login as admin*/}
               <Route
+                path="/admin/dashboard"
+                element={
+                  <PrivateRoute userRole="Admin" component={Dashboard} />
+                }
+              />
+              <Route
                 path="/admin/queries"
                 element={<PrivateRoute userRole="Admin" component={Queries} />}
+              />
+              <Route
+                path="/admin/users"
+                element={<PrivateRoute userRole="Admin" component={Users} />}
               />
 
               {/* common private Routes which requires login only*/}
