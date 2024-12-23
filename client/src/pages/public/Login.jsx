@@ -21,7 +21,7 @@ const Login = () => {
   useEffect(() => {
     if (auth) {
       if (auth.userType === "Admin") {
-        navigate("/admin/queries");
+        navigate("/admin/dashboard");
       } else if (auth.userType === "User") {
         navigate("/user/predict");
       }
@@ -60,11 +60,11 @@ const Login = () => {
           //auth context state updating with logged user data
           setAuth({ ...loggedUser, isLoggedIn: true });
 
-          if (loggedUser.userType === "User") {
-            navigate("/user/predict");
-          } else if (loggedUser.userType === "Admin") {
-            navigate("/admin/queries");
-          }
+          // if (loggedUser.userType === "User") {
+          //   navigate("/user/predict");
+          // } else if (loggedUser.userType === "Admin") {
+          //   navigate("/admin/dashboard");
+          // }
         }
       } catch (error) {
         console.log(error);

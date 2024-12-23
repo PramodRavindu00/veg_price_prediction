@@ -1,6 +1,6 @@
-import axios from "axios";
 import PropTypes from "prop-types";
 import { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -10,33 +10,35 @@ export const AuthContextProvider = ({ children }) => {
     return storedAuth ? JSON.parse(storedAuth) : null; //if saved return it if not null
   });
 
-  useEffect(() => {
-    const checkValidCookieAvailable = async () => {
-      try {
-        //this endpoint verifying a JWT token which was saved inside a valid cookie from back end
-        const res = await axios.post(
-          "/api/auth/validateToken",
-          {},
-          { withCredentials: true }
-        );
-        if (res.data.success) {
-          const token = res.data;
-          setAuth({
-            id: token.data.id,
-            userType: token.data.role,
-            isLoggedIn: true,
-          });
-        }
-      } catch (error) {
-        console.log(
-          `Don't have a valid cookie or token.Need to login`,
-          error.message
-        );
-      }
-    };
+  const [userData, setUserData] = useState(null);
 
-    checkValidCookieAvailable();
-  }, []);
+  // useEffect(() => {
+  //   const checkValidCookieAvailable = async () => {
+  //     try {
+  //       //this endpoint verifying a JWT token which was saved inside a valid cookie from back end
+  //       const res = await axios.post(
+  //         "/api/auth/validateToken",
+  //         {},
+  //         { withCredentials: true }
+  //       );
+  //       if (res.data.success) {
+  //         const token = res.data;
+  //         setAuth({
+  //           id: token.data.id,
+  //           userType: token.data.role,
+  //           isLoggedIn: true,
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.log(
+  //         `Don't have a valid cookie or token.Need to login`,
+  //         error.message
+  //       );
+  //     }
+  //   };
+
+  //   checkValidCookieAvailable();
+  // }, []);
 
   useEffect(() => {
     if (auth) {
@@ -46,9 +48,24 @@ export const AuthContextProvider = ({ children }) => {
     }
   }, [auth]);
 
+  //providing logged user details to every page
+  useEffect(() => {
+    if (auth.id) {
+      const fetchUserDetails = async () => {
+        try {
+          const res = await axios.get(`/api/user/getUserDetails/${auth.id}`);
+          setUserData(res.data.data);
+        } catch (error) {
+          console.log(error.data.message);
+        }
+      };
+      fetchUserDetails();
+    }
+  }, [auth.id]);
+
   //providing the context API to share across the system
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, setAuth, userData, setUserData }}>
       {children}
     </AuthContext.Provider>
   );

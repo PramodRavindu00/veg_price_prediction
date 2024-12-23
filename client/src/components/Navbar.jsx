@@ -15,7 +15,7 @@ import { toast, Toaster } from "sonner";
 import { useAuth } from "../assets/useAuth.mjs";
 
 const Navbar = ({ publicPage = true, navLinks }) => {
-  const { setAuth } = useAuth();
+  const { setAuth,setUserData } = useAuth();
 
   const [toggleBtn, setToggleBtn] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
@@ -51,6 +51,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
               userId: null,
               userType: null,
             });
+            setUserData(null);
             localStorage.removeItem("auth");
             navigate("/login");
           }

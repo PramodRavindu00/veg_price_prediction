@@ -3,9 +3,9 @@ import Navbar from "../../components/Navbar";
 
 const Queries = () => {
   return (
-    <div>
+    <>
       <Navbar publicPage={false} navLinks={adminLinks} />
-    </div>
+    </>
   );
 };
 

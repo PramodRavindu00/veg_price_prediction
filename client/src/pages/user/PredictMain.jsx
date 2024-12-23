@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar";
 import axios from "axios";
 import { MainPredictionFormValidations } from "../../assets/validations.mjs";
 import { scroller } from "react-scroll";
+import Chart from "react-google-charts";
 
 const initialValues = {
   date: new Date().toISOString().slice(0, 10),
@@ -88,6 +89,14 @@ const PredictMain = () => {
     }
   };
 
+  const clearForm = () => {
+    setSelectedVegetable({});
+    setSelectedMarket({});
+    setSelectedPeriod({});
+    setSelectedFestival({});
+    setFormValues(initialValues);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = MainPredictionFormValidations(formValues);
@@ -96,6 +105,7 @@ const PredictMain = () => {
       console.log("Form has validation errors");
     } else {
       try {
+        setBtnDisabled(true);
         const result = await axios.post(
           "/api/prediction/getPredictions",
           formValues
@@ -107,6 +117,8 @@ const PredictMain = () => {
           smooth: "linear",
           offset: 0,
         });
+        setBtnDisabled(false);
+        clearForm();
       } catch (error) {
         console.log("Internal Server Error", error);
       }
@@ -271,7 +283,24 @@ const PredictMain = () => {
               <p>Predictable Price - 650.00 Rs</p>
             </div>
           )}
-          {predPeriod === "4week" && <h2>This is a forecast</h2>}
+          {predPeriod === "4week" && (
+            <Chart
+              className="h-screen"
+              chartType="LineChart"
+              data={[
+                ["Age", "Weight"],
+                [4, 16],
+                [8, 25],
+                [12, 40],
+                [16, 55],
+                [20, 70],
+              ]}
+              options={{
+                title: "Average Weight by Age",
+              }}
+              width={"100%"}
+            />
+          )}
         </div>
       </div>
     </>

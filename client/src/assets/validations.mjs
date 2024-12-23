@@ -60,7 +60,7 @@ export const MainPredictionFormValidations = (values) => {
     errors.vegetable = "Vegetable is required!";
   }
   if (!values.location) {
-    errors.location = "Market Area is required!";
+    errors.location = "Market area is required!";
   }
   if (!values.rainfall) {
     errors.rainfall = "Average rainfall value is required!";
