@@ -22,8 +22,11 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   nearestMarket: {
-    type: String,
-    required: true,
+    market: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Market",
+      required: true,
+    },
   },
   password: {
     type: String,
@@ -37,6 +40,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  preferredVeggies: [
+    {
+      vegetable: { type: mongoose.Schema.Types.ObjectId, ref: "Vegetable" },
+      amount: { type: Number },
+    },
+  ],
 });
 
 const User = mongoose.model("User", UserSchema);

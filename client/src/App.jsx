@@ -22,6 +22,7 @@ import PredictMultiVeg from "./pages/user/PredictMultiVeg";
 import ShoppingList from "./pages/user/ShoppingList";
 import Users from "./pages/admin/Users";
 //import FadeWrapper from "./components/FadeWrapper";
+import Support from "./pages/user/Support";
 
 const App = () => {
   //const [loader, setLoader] = useState(false);
@@ -64,7 +65,7 @@ const App = () => {
   // }
 
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden">
+    <div className="flex flex-col min-h-screen overflow-x-hidden bg-white">
       <AuthContextProvider>
         <Router>
           <div className="flex-grow">
@@ -100,9 +101,7 @@ const App = () => {
               />
               <Route
                 path="/user/support"
-                element={
-                  <PrivateRoute userRole="User" component={ShoppingList} />
-                }
+                element={<PrivateRoute userRole="User" component={Support} />}
               />
 
               {/* Admin private Routes which requires login as admin*/}

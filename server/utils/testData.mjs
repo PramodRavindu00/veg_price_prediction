@@ -20,7 +20,6 @@ export const singleVegMultiWeek = {
 };
 
 export const multiVegSingleWeek = {
-  vegetable: "carrot",
   location: "colombo",
   weekStart: "2024-12-23",
   weekEnd: "2024-12-29",
