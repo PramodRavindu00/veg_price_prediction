@@ -14,7 +14,7 @@ const initialValues = {
   email: "",
   address: "",
   contactNo: "",
-  nearestMarket: "",
+  nearestMarket: null,
   password: "",
   confirmPassword: "",
   notification: true,
@@ -45,7 +45,7 @@ const Register = () => {
       const response = await axios.get("/api/market/getAllMarkets");
       const options = response.data.data.map((market) => ({
         market: market.market,
-        location: market.location,
+        location: market._id,
       }));
 
       setMarketOptions(options);
@@ -70,7 +70,7 @@ const Register = () => {
 
   const handleSelectChange = (e) => {
     setSelectedMarket(e.target.value);
-    setFormValues({ ...formValues, nearestMarket: e.target.value });
+    setFormValues({ ...formValues, nearestMarket: { market: e.target.value } });
   };
 
   const handleCheckBoxChange = (e) => {

@@ -50,7 +50,7 @@ export const AuthContextProvider = ({ children }) => {
 
   //providing logged user details to every page
   useEffect(() => {
-    if (auth.id) {
+    if (auth && auth.id && !userData) {
       const fetchUserDetails = async () => {
         try {
           const res = await axios.get(`/api/user/getUserDetails/${auth.id}`);
@@ -61,7 +61,7 @@ export const AuthContextProvider = ({ children }) => {
       };
       fetchUserDetails();
     }
-  }, [auth.id]);
+  }, [auth,userData]);
 
   //providing the context API to share across the system
   return (

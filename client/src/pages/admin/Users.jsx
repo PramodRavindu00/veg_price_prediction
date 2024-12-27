@@ -93,7 +93,7 @@ const Users = () => {
                         key={index}
                       >
                         <td className="td">{`${user.firstName} ${user.lastName}`}</td>
-                        <td className="td">{user.nearestMarket}</td>
+                        <td className="td">{user.nearestMarket.market.market}</td>
                         <td className="td">{user.email}</td>
                         <td className="td">{user.contactNo}</td>
                         <td className="td">{user.address}</td>

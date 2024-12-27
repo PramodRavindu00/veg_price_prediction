@@ -76,3 +76,57 @@ export const MainPredictionFormValidations = (values) => {
   }
   return errors;
 };
+
+export const MultiplePredictionFormValidations = (values) => {
+  const errors = {};
+  if (values.vegetable.length <= 0) {
+    errors.vegetable = "Select at least one vegetable!";
+  }
+  if (!values.location) {
+    errors.location = "Market area is required!";
+  }
+  if (!values.rainfall) {
+    errors.rainfall = "Average rainfall value is required!";
+  }
+  if (!values.fuelPrice) {
+    errors.fuelPrice = "Fuel price is required!";
+  }
+
+  if (values.festival === "") {
+    errors.festival = "Festival seasonality is required!";
+  }
+  return errors;
+};
+
+export const preferenceFormValidations = (values) => {
+  const errors = {};
+  if (values.preferredVeggies.length <= 0) {
+    errors.vegetable = "Select between 1 to 5 vegetables!";
+  }
+
+  values.preferredVeggies.forEach((veg, index) => {
+    if (!veg.amount) {
+      errors[`amountError${index + 1}`] = "Consuming amount is required!";
+    }
+  });
+
+  return errors;
+};
+
+export const predictFormValidations = (values) => {
+  const errors = {};
+  if (!values.location) {
+    errors.location = "Market area is required!";
+  }
+  if (!values.rainfall) {
+    errors.rainfall = "Average rainfall value is required!";
+  }
+  if (!values.fuelPrice) {
+    errors.fuelPrice = "Fuel price is required!";
+  }
+
+  if (values.festival === "") {
+    errors.festival = "Festival seasonality is required!";
+  }
+  return errors;
+};
