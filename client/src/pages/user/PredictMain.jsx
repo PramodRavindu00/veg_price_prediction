@@ -5,6 +5,8 @@ import axios from "axios";
 import { MainPredictionFormValidations } from "../../assets/validations.mjs";
 import { scroller } from "react-scroll";
 import Chart from "react-google-charts";
+import SelectBox from "../../components/SelectBox";
+import { isFestivalSeason, predType } from "../../assets/Data.mjs";
 
 const initialValues = {
   date: new Date().toISOString().slice(0, 10),
@@ -18,11 +20,11 @@ const initialValues = {
 const PredictMain = () => {
   const [formValues, setFormValues] = useState(initialValues);
   const [marketOptions, setMarketOptions] = useState([]);
-  const [selectedMarket, setSelectedMarket] = useState({});
+  const [selectedMarket, setSelectedMarket] = useState(null);
   const [vegetableOptions, setVegetableOptions] = useState([]);
-  const [selectedVegetable, setSelectedVegetable] = useState({});
-  const [selectedPeriod, setSelectedPeriod] = useState({});
-  const [selectedFestival, setSelectedFestival] = useState({});
+  const [selectedVegetable, setSelectedVegetable] = useState(null);
+  const [selectedPeriod, setSelectedPeriod] = useState(null);
+  const [selectedFestival, setSelectedFestival] = useState(null);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [predPeriod, setPredPeriod] = useState();
   const [formErrors, setFormErrors] = useState({});
@@ -31,8 +33,8 @@ const PredictMain = () => {
     try {
       const response = await axios.get("/api/market/getAllMarkets");
       const options = response.data.data.map((market) => ({
-        market: market.market,
-        location: market.location,
+        label: market.market,
+        value: market.location,
       }));
 
       setMarketOptions(options);
@@ -45,7 +47,7 @@ const PredictMain = () => {
     try {
       const response = await axios.get("/api/vegetables/allVegetables");
       const options = response.data.data.map((vegetable) => ({
-        vegetable: vegetable.vegetableName,
+        label: vegetable.vegetableName,
         value: vegetable.value,
       }));
 
@@ -64,36 +66,35 @@ const PredictMain = () => {
     setFormValues({ ...formValues, [name]: validNumericValue });
   };
 
-  const handleSelectChange = (e, name) => {
+  const handleSelectChange = (option, name) => {
     switch (name) {
       case "vegetable":
-        setSelectedVegetable(e.target.value);
-        setFormValues({ ...formValues, vegetable: e.target.value });
+        setSelectedVegetable(option);
+        setFormValues({ ...formValues, vegetable: option?.value });
         break;
       case "location":
-        setSelectedMarket(e.target.value);
-        setFormValues({ ...formValues, location: e.target.value });
+        setSelectedMarket(option);
+        setFormValues({ ...formValues, location: option?.value });
         break;
       case "predType":
-        setSelectedPeriod(e.target.value);
-        setFormValues({ ...formValues, predType: e.target.value });
+        setSelectedPeriod(option);
+        setFormValues({ ...formValues, predType: option?.value });
         break;
       case "festival":
-        setSelectedFestival(e.target.value);
-        setFormValues({ ...formValues, festival: Number(e.target.value) });
+        setSelectedFestival(option);
+        setFormValues({ ...formValues, festival: Number(option?.value) });
         break;
       default:
         console.log("Not a valid select box change");
-
         break;
     }
   };
 
   const clearForm = () => {
-    setSelectedVegetable({});
-    setSelectedMarket({});
-    setSelectedPeriod({});
-    setSelectedFestival({});
+    setSelectedVegetable(null);
+    setSelectedMarket(null);
+    setSelectedPeriod(null);
+    setSelectedFestival(null);
     setFormValues(initialValues);
   };
 
@@ -138,61 +139,35 @@ const PredictMain = () => {
           <div className="layout-2-in-row">
             <h2 className="form-heading">How to use this prediction tool</h2>
           </div>
-
-          <form onSubmit={handleSubmit} className="w-full">
-            <div className="layout-2-in-row">
+          <div className="layout-2-in-row">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col items-center"
+            >
               <div className="form-group">
                 <label className="form-label">Vegetable</label>
-                <div className="relative">
-                  <select
-                    className="form-input w-full overflow-x-hidden"
-                    name="vegetable"
-                    value={selectedVegetable}
-                    onChange={(e) => handleSelectChange(e, "vegetable")}
-                  >
-                    <option value="" defaultValue>
-                      Select the vegetable
-                    </option>
-                    {vegetableOptions.length > 0 ? (
-                      vegetableOptions.map((vegetable, index) => {
-                        return (
-                          <option value={vegetable.value} key={index}>
-                            {vegetable.vegetable}
-                          </option>
-                        );
-                      })
-                    ) : (
-                      <option disabled>No vegetables available</option>
-                    )}
-                  </select>
-                </div>
+                <SelectBox
+                  name="vegetable"
+                  options={vegetableOptions}
+                  value={selectedVegetable}
+                  placeholder="Select Vegetable"
+                  onChange={(selectedOption) =>
+                    handleSelectChange(selectedOption, "vegetable")
+                  }
+                />
                 <span className="form-error">{formErrors.vegetable}</span>
               </div>
               <div className="form-group">
                 <label className="form-label">Market Area</label>
-                <div className="relative">
-                  <select
-                    className="form-input w-full overflow-x-hidden"
-                    name="location"
-                    value={selectedMarket}
-                    onChange={(e) => handleSelectChange(e, "location")}
-                  >
-                    <option value="" defaultValue>
-                      Select the market
-                    </option>
-                    {marketOptions.length > 0 ? (
-                      marketOptions.map((market, index) => {
-                        return (
-                          <option value={market.location} key={index}>
-                            {market.market}
-                          </option>
-                        );
-                      })
-                    ) : (
-                      <option disabled>No markets available</option>
-                    )}
-                  </select>
-                </div>
+                <SelectBox
+                  name="location"
+                  options={marketOptions}
+                  value={selectedMarket}
+                  placeholder="Select Market Area"
+                  onChange={(selectedOption) =>
+                    handleSelectChange(selectedOption, "location")
+                  }
+                />
                 <span className="form-error">{formErrors.location}</span>
               </div>
               <div className="form-group">
@@ -223,38 +198,28 @@ const PredictMain = () => {
               </div>
               <div className="form-group">
                 <label className="form-label">Prediction Period</label>
-                <div className="relative">
-                  <select
-                    className="form-input w-full overflow-x-hidden"
-                    name="predType"
-                    value={selectedPeriod}
-                    onChange={(e) => handleSelectChange(e, "predType")}
-                  >
-                    <option value="" defaultValue>
-                      Select the prediction period
-                    </option>
-                    <option value="week">Next Week</option>
-                    <option value="4week">Next 4 Weeks</option>
-                  </select>
-                </div>
+                <SelectBox
+                  name="predType"
+                  options={predType}
+                  value={selectedPeriod}
+                  placeholder="Select Prediction Period"
+                  onChange={(selectedOption) =>
+                    handleSelectChange(selectedOption, "predType")
+                  }
+                />
                 <span className="form-error">{formErrors.predType}</span>
               </div>
               <div className="form-group">
                 <label className="form-label">Festival Seasonality</label>
-                <div className="relative">
-                  <select
-                    className="form-input w-full overflow-x-hidden"
-                    name="festival"
-                    value={selectedFestival}
-                    onChange={(e) => handleSelectChange(e, "festival")}
-                  >
-                    <option value="" defaultValue>
-                      A festival happening within prediction period?
-                    </option>
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
-                  </select>
-                </div>
+                <SelectBox
+                  name="festival"
+                  options={isFestivalSeason}
+                  value={selectedFestival}
+                  placeholder="Any festival within prediction period?"
+                  onChange={(selectedOption) =>
+                    handleSelectChange(selectedOption, "festival")
+                  }
+                />
                 <span className="form-error">{formErrors.festival}</span>
               </div>
               <div className="my-2 lg:mt-4 flex justify-center form-group">
@@ -266,8 +231,8 @@ const PredictMain = () => {
                   {btnDisabled ? "Please Wait..." : "Predict Price"}
                 </button>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
         <div id="resultsDiv" className="layout-2-in-row py-4 ">
           {predPeriod === "week" && (
