@@ -25,7 +25,7 @@ const PredictMultiVeg = () => {
   const [vegetableOptions, setVegetableOptions] = useState([]);
   const [selectedVegetables, setSelectedVegetables] = useState([]);
   const [marketOptions, setMarketOptions] = useState([]);
-  const [selectedMarket, setSelectedMarket] = useState({});
+  const [selectedMarket, setSelectedMarket] = useState(null);
   const [selectedFestival, setSelectedFestival] = useState(null);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -36,12 +36,6 @@ const PredictMultiVeg = () => {
         ...prev,
         location: userData.nearestMarket.market.location,
       }));
-
-      setSelectedMarket({
-        id: userData.nearestMarket.market._id,
-        label: userData.nearestMarket.market.market,
-        value: userData.nearestMarket.market.location,
-      });
     }
 
     const getAllVegetables = async () => {
@@ -71,7 +65,6 @@ const PredictMultiVeg = () => {
         const userMarket = options.find(
           (market) => market.id === userData.nearestMarket.market._id
         );
-
         setSelectedMarket(userMarket || "");
       } catch (error) {
         console.log(error.message);
@@ -114,24 +107,16 @@ const PredictMultiVeg = () => {
     }
   };
 
-  // const handleVegetableCheckBox = (e) => {
-  //   const { name, checked } = e.target;
-  //   setFormValues((prev) => {
-  //     const checkedVegetables = checked
-  //       ? [...prev.vegetable, name]
-  //       : prev.vegetable.filter((vegetable) => vegetable !== name);
-  //     return { ...prev, vegetable: checkedVegetables };
-  //   });
-  // };
-
   const clearForm = () => {
-    setFormValues(initialValues);
-    setSelectedVegetables([]);
-    setSelectedMarket({
-      id: userData.nearestMarket.market._id,
-      label: userData.nearestMarket.market.market,
-      value: userData.nearestMarket.market.location,
+    const userMarket = marketOptions.find(
+      (market) => market.id === userData?.nearestMarket?.market?._id
+    );
+    setFormValues({
+      ...initialValues,
+      location: userMarket?.location || "",
     });
+    setSelectedVegetables([]);
+    setSelectedMarket(userMarket || null); 
     setSelectedFestival(null);
   };
 
@@ -162,17 +147,20 @@ const PredictMultiVeg = () => {
         <Loader />
       ) : (
         <>
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col">
-              <div className="flex flex-col lg:flex-row">
-                <div className="layout-2-in-row">
+          <div className="flex flex-col">
+            <div className="flex flex-col lg:flex-row">
+              <div className="layout-2-in-row">
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col items-center"
+                >
                   <div className="form-group">
                     <label className="form-label">Vegetables</label>
                     <SelectBox
                       name="vegetables"
                       options={vegetableOptions}
                       value={selectedVegetables}
-                      placeholder="Select multiple vegetables"
+                      placeholder="Select vegetables"
                       isMulti={true}
                       onChange={(selectedOption) =>
                         handleSelectChange(selectedOption, "vegetables")
@@ -242,11 +230,11 @@ const PredictMultiVeg = () => {
                       {btnDisabled ? "Please Wait..." : "Predict Prices"}
                     </button>
                   </div>
-                </div>
-                <div className="layout-2-in-row">Results table</div>
+                </form>
               </div>
+              <div className="layout-2-in-row">Results table</div>
             </div>
-          </form>
+          </div>
         </>
       )}
     </>
