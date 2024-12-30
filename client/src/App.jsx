@@ -25,47 +25,8 @@ import Users from "./pages/admin/Users";
 import Support from "./pages/user/Support";
 
 const App = () => {
-  //const [loader, setLoader] = useState(false);
-  //const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const checkValidToken = async () => {
-  //     try {
-  //       const res = await axios.post(
-  //         "/api/auth/validateToken",
-  //         {},
-  //         { withCredentials: true }
-  //       );
-  //       if (res.data) {
-  //         const token = res.data;
-
-  //         // Redirect based on userType only if not already on the target route
-  //         if (token.userType === "Admin" && window.location.pathname !== "/admin/queries") {
-  //           navigate("/admin/queries");
-  //         } else if (token.userType === "User" && window.location.pathname !== "/user/predict") {
-  //           navigate("/user/predict");
-  //         }
-  //       } else {
-  //         // If no valid token, navigate to home
-  //         if (window.location.pathname !== "/") navigate("/");
-  //       }
-  //     } catch (error) {
-  //       console.error("Token validation failed:", error.message);
-  //       if (window.location.pathname !== "/") navigate("/");
-  //     } finally {
-  //       setLoader(false); // Hide loader after validation completes
-  //     }
-  //   };
-
-  //   checkValidToken();
-  // }, [navigate]);
-
-  // if (loader) {
-  //   return <Loader loading={loader} />;
-  // }
-
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden bg-white">
+    <div className="flex flex-col min-h-screen bg-slate-50">
       <AuthContextProvider>
         <Router>
           <div className="flex-grow">

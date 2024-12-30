@@ -15,7 +15,7 @@ import { toast, Toaster } from "sonner";
 import { useAuth } from "../assets/useAuth.mjs";
 
 const Navbar = ({ publicPage = true, navLinks }) => {
-  const { setAuth,setUserData } = useAuth();
+  const { setAuth, setUserData } = useAuth();
 
   const [toggleBtn, setToggleBtn] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
@@ -63,11 +63,11 @@ const Navbar = ({ publicPage = true, navLinks }) => {
   };
 
   return (
-    <nav className="flex w-full z-50 text-white top-0 right-0 min-h-[10vh] px-3 sm:p-6 items-center bg-black/60">
+    <nav className="flex w-full fixed sm:sticky top-0 right-0 min-h-[15vh] px-3 sm:p-6 items-center bg-transparent sm:bg-white z-10">
       {/* desktop navbar */}
       <div className="w-full hidden sm:flex items-center justify-between gap-2">
-        <span className="text-3xl">GreenPriceNet</span>
-        <ul className="flex gap-5 md:gap-10 justify-center text-xl">
+        <span className="hidden text-3xl  lg:block text-green-600">GreenPriceNet</span>
+        <ul className="flex  flex-row justify-center gap-5 md:gap-10 text-lg">
           {navLinks.map((link, index) => (
             <li key={index}>
               <Link
@@ -79,7 +79,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
             </li>
           ))}
         </ul>
-        <div className="flex justify-center items-center gap-10">
+        <div className="flex justify-end gap-10">
           {publicPage ? (
             <>
               <Link
@@ -119,22 +119,22 @@ const Navbar = ({ publicPage = true, navLinks }) => {
       {/* mobile nav bar */}
       <div className="w-full h-full flex flex-col sm:hidden">
         {toggleBtn && (
-          <button className="text-xl">
-            <AiOutlineMenu onClick={() => toggleMenu("open")} />
+          <button className="text-2xl text-white px-1">
+            <AiOutlineMenu onClick={() => toggleMenu("open")}/>
           </button>
         )}
 
         <div
-          className={`gradient flex flex-col p-5 fixed top-0 left-0 w-full h-full  z-50 transform ${
+          className={`bg-white gradient flex flex-col p-5 fixed top-0 left-0 w-full h-full  z-50 transform ${
             mobileNav ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-1000 ease-in-out overflow-y-auto`}
+          } transition-transform duration-1000 ease-in-out overflow-y-auto `}
         >
           <button className="ml-auto text-xl mb-5">
             {" "}
             <AiOutlineClose onClick={() => toggleMenu("close")} />
           </button>
 
-          <ul className="flex flex-col w-full  justify-center items-center space-y-3 text-black">
+          <ul className="flex flex-col w-full  justify-center items-center space-y-3 text-black ">
             {navLinks.map((link, index) => (
               <li key={index}>
                 <Link to={link.route} onClick={() => toggleMenu("close")}>
