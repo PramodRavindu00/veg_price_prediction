@@ -90,9 +90,9 @@ const App = () => {
               />
             </Routes>
           </div>
+          <Footer />
         </Router>
       </AuthContextProvider>
-      <Footer />
     </div>
   );
 };
