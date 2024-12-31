@@ -1,7 +1,9 @@
 import Navbar from "../../components/Navbar";
 import { publicLinks } from "../../assets/navLinks.mjs";
+import { useNavigate } from "react-router";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Navbar navLinks={publicLinks} />
@@ -21,7 +23,12 @@ const Home = () => {
           </h2>
           <div className="hidden sm:block mt-6">
             {" "}
-            <button className="btn-secondary">Learn More</button>
+            <button
+              className="btn-secondary"
+              onClick={() => navigate("/about")}
+            >
+              Learn More
+            </button>
           </div>
         </div>
       </div>
@@ -40,14 +47,16 @@ const Home = () => {
           Who benefits from{" "}
           <span className="text-green-600">GreenPriceNet</span>?
         </h2>
-        <div className="flex flex-col lg:flex-row justify-center lg:justify-evenly  items-center gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3">
           <div className="flex flex-col items-center mb-8 lg:mb-0">
             <img
               src="/images/home_farmer.jpg"
               alt=""
               className="w-96 h-72 object-cover rounded-lg"
             />
-            <span>Farmers can value their products</span>
+            <p className="text-center text-gray-700 max-w-96 mt-1">
+              Farmers can forecast trends and set competitive prices
+            </p>
           </div>
           <div className="flex flex-col items-center mb-8 lg:mb-0">
             <img
@@ -55,7 +64,9 @@ const Home = () => {
               alt=""
               className="w-96 h-72 object-cover  rounded-lg"
             />
-            <span>Farmers can value their products</span>
+            <p className="text-center text-gray-700 max-w-96 mt-1">
+              Merchants can optimize inventory and reduce waste
+            </p>
           </div>
           <div className="flex flex-col items-center mb-8 lg:mb-0">
             <img
@@ -63,7 +74,9 @@ const Home = () => {
               alt=""
               className="w-96 h-72 object-cover  rounded-lg"
             />
-            <span>Farmers can value their products</span>
+            <p className="text-center text-gray-700 max-w-96 mt-1">
+              Consumers can plan purchases and save money
+            </p>
           </div>
         </div>
       </div>
