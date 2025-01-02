@@ -118,9 +118,7 @@ export const validateToken = async (req, res) => {
   const token = req.cookies.token;
 
   if (!token) {
-    return res
-      .status(400)
-      .json({ success: false, message: "No token provided" });
+    return res.status(204).end();   //no token in the cookie
   }
 
   try {

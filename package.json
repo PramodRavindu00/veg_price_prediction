@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "decdendencies": {
+  "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
