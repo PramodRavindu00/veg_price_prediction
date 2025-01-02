@@ -52,7 +52,6 @@ const Navbar = ({ publicPage = true, navLinks }) => {
               userType: null,
             });
             setUserData(null);
-            localStorage.removeItem("auth");
             navigate("/login");
           }
         } catch (error) {
@@ -66,7 +65,9 @@ const Navbar = ({ publicPage = true, navLinks }) => {
     <nav className="flex w-full fixed sm:sticky top-0 right-0 min-h-[15vh] px-3 sm:p-6 items-center bg-transparent sm:bg-white z-10">
       {/* desktop navbar */}
       <div className="w-full hidden sm:flex items-center justify-between gap-2">
-        <span className="hidden text-3xl  lg:block text-green-600">GreenPriceNet</span>
+        <span className="hidden text-3xl  lg:block text-green-600">
+          GreenPriceNet
+        </span>
         <ul className="flex  flex-row justify-center gap-5 md:gap-10 text-lg">
           {navLinks.map((link, index) => (
             <li key={index}>
@@ -120,7 +121,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
       <div className="w-full h-full flex flex-col sm:hidden">
         {toggleBtn && (
           <button className="text-2xl text-white px-1">
-            <AiOutlineMenu onClick={() => toggleMenu("open")}/>
+            <AiOutlineMenu onClick={() => toggleMenu("open")} />
           </button>
         )}
 

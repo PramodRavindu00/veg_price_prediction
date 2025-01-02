@@ -7,6 +7,6 @@ const prefix = "/auth";
 router.post(`${prefix}/userRegister`, registerUser);
 router.post(`${prefix}/userLogin`, login);
 router.post(`${prefix}/logOut`, logout);
-router.post(`${prefix}/validateToken`, validateToken);
+router.get(`${prefix}/validateToken`, validateToken);
 
 export default router;

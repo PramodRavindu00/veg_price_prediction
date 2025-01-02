@@ -6,45 +6,42 @@ const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [auth, setAuth] = useState(() => {
-    const storedAuth = localStorage.getItem("auth"); //check theres already an item saved
+    const storedAuth = sessionStorage.getItem("auth"); //check theres already an item saved
     return storedAuth ? JSON.parse(storedAuth) : null; //if saved return it if not null
   });
-
   const [userData, setUserData] = useState(null);
 
-  // useEffect(() => {
-  //   const checkValidCookieAvailable = async () => {
-  //     try {
-  //       //this endpoint verifying a JWT token which was saved inside a valid cookie from back end
-  //       const res = await axios.post(
-  //         "/api/auth/validateToken",
-  //         {},
-  //         { withCredentials: true }
-  //       );
-  //       if (res.data.success) {
-  //         const token = res.data;
-  //         setAuth({
-  //           id: token.data.id,
-  //           userType: token.data.role,
-  //           isLoggedIn: true,
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.log(
-  //         `Don't have a valid cookie or token.Need to login`,
-  //         error.message
-  //       );
-  //     }
-  //   };
+  useEffect(() => {
+    const checkValidCookieAvailable = async () => {
+      try {
+        //this endpoint verifying a JWT token which was saved inside a valid cookie from back end
+        const res = await axios.get("/api/auth/validateToken", {
+          withCredentials: true,
+        });
+        if (res.status === 204) {
+          console.log("No token returned,need to login");
+        } else if (res.data.success) {
+          const token = res.data;
+          setAuth({
+            id: token.data.id,
+            userType: token.data.role,
+            isLoggedIn: true,
+          });
+          sessionStorage.setItem("auth", JSON.stringify(auth));
+        }
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
+    };
 
-  //   checkValidCookieAvailable();
-  // }, []);
+    checkValidCookieAvailable();
+  }, [auth]);
 
   useEffect(() => {
     if (auth) {
-      localStorage.setItem("auth", JSON.stringify(auth)); //set new item if the auth state updated
+      sessionStorage.setItem("auth", JSON.stringify(auth)); //set new item if the auth state updated
     } else {
-      localStorage.removeItem("auth"); //remove the item
+      sessionStorage.removeItem("auth"); //remove the item
     }
   }, [auth]);
 
@@ -61,7 +58,7 @@ export const AuthContextProvider = ({ children }) => {
       };
       fetchUserDetails();
     }
-  }, [auth,userData]);
+  }, [auth, userData]);
 
   //providing the context API to share across the system
   return (
