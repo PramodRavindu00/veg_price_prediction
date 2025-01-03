@@ -9,19 +9,24 @@ import {
 
 const Footer = () => {
   const location = useLocation();
-  let PublicFooterRoutes = publicLinks.map((link) => link.route);
-  PublicFooterRoutes = [...PublicFooterRoutes, "/login", "/register"];
-  const isPublicRoute = PublicFooterRoutes.includes(location.pathname);
+  const  publicFooterLinks = [
+    ...publicLinks,
+    { text: "Login", route: "/login" },
+    { text: "Register", route: "/register" },
+  ];
+
+  const publicFooterRoutes = publicFooterLinks.map((link) => link.route);
+  const isPublicRoute = publicFooterRoutes.includes(location.pathname);
 
   return (
     <footer className="text-center text-white flex flex-col w-full mt-auto bg-green-700 py-5">
       {isPublicRoute && (
         <>
-          <div className="flex flex-col sm:flex-row justify-evenly p-5 gap-5">
+          <div className="flex flex-col sm:flex-row justify-evenly p-3 gap-3">
             <div className="flex flex-col gap-1">
               <h3 className="text-lg ">Quick Links</h3>
               <ul className="flex  flex-col">
-                {publicLinks.map((link, index) => (
+                {publicFooterLinks.map((link, index) => (
                   <li key={index}>
                     <Link
                       to={link.route}
@@ -34,8 +39,8 @@ const Footer = () => {
               </ul>
             </div>
             <div className="hidden sm:block h-auto border-l-2 border-gray-400"></div>
+            <hr className="block sm:hidden w-20 border-t-2 border-gray-400 mx-auto" />
             <div className="flex flex-col gap-1">
-              {" "}
               <h3 className="text-lg">Follow Us</h3>
               <ul className="flex  flex-col text-sm gap-1 items-center sm:items-start ">
                 <li>
