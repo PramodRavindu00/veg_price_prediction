@@ -36,14 +36,14 @@ const Services = () => {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-4 gap-8 my-8 max-w-screen-xl mx-auto"
         id="service_section"
       >
-        <div className="bg-gray-100 p-4 shadow-lg rounded-lg text-center">
+        <div className="bg-white p-4 shadow-lg  text-center">
           <h3 className="text-xl font-semibold text-green-700 mb-2">
             Next Week Prediction Tool
           </h3>
           <img
             src="/images/price.jpg"
             alt=""
-            className="w-full h-40 md:h-52 object-cover rounded-lg mx-auto"
+            className="w-full h-40 md:h-52 object-cover  mx-auto"
           />
           <p className="text-gray-600 mt-2 text-justify">
             Accurately predict the next week&apos;s price of a selected
@@ -51,28 +51,28 @@ const Services = () => {
             Lanka.
           </p>
         </div>
-        <div className="bg-gray-100 p-4 shadow-lg rounded-lg text-center">
+        <div className="bg-white p-4 shadow-lg  text-center">
           <h3 className="text-xl font-semibold text-green-700 mb-2">
             4 Weeks Prediction
           </h3>
           <img
             src="/images/4_week.jpeg"
             alt=""
-            className="w-full h-40 md:h-52 object-cover rounded-lg mx-auto"
+            className="w-full h-40 md:h-52 object-cover  mx-auto"
           />
           <p className="text-gray-600 mt-2 text-justify">
             An extended price prediction for next 4 weeks of a selected
             vegetable in a selected market.
           </p>
         </div>
-        <div className="bg-gray-100 p-4 shadow-lg rounded-lg text-center">
+        <div className="bg-white p-4 shadow-lg  text-center">
           <h3 className="text-xl font-semibold text-green-700 mb-2">
             Advanced Prediction Tool
           </h3>
           <img
             src="/images/multi_pred.jpg"
             alt=""
-            className="w-full h-40 md:h-52 object-cover rounded-lg mx-auto"
+            className="w-full h-40 md:h-52 object-cover  mx-auto"
           />
           <p className="text-gray-600 mt-2 text-justify">
             Prediction Tool advanced into select multiple vegetables in a
@@ -80,14 +80,14 @@ const Services = () => {
             different vegetables.
           </p>
         </div>
-        <div className="bg-gray-100 p-4 shadow-lg rounded-lg text-center">
+        <div className="bg-white p-4 shadow-lg  text-center">
           <h3 className="text-xl font-semibold text-green-700 mb-2">
             Weekly Budget Calculator
           </h3>
           <img
             src="/images/cost.png"
             alt=""
-            className="w-full h-40 md:h-52 object-cover rounded-lg mx-auto"
+            className="w-full h-40 md:h-52 object-cover mx-auto"
           />
           <p className="text-gray-600 mt-2 text-justify">
             Provides users to enter their weekly consuming amount upto 5
