@@ -22,7 +22,7 @@
 }
 
 .form-row-2 {
-  @apply flex flex-col lg:flex-row justify-between items-center lg:items-start space-x-4;
+  @apply flex flex-col lg:flex-row items-center lg:items-start gap-4;
 }
 
 .btn-primary {

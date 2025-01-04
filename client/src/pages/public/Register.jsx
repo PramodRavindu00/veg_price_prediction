@@ -128,12 +128,18 @@ const Register = () => {
   return (
     <>
       <Navbar navLinks={publicLinks} />
-      <div className="flex items-center justify-center">
-        <div className="flex-col bg-white bg-opacity-70 p-8 rounded-lg  w-full sm:w-3/4 lg:w-1/2">
-          <h2 className="form-heading">CREATE ACCOUNT</h2>
-          <form onSubmit={handleSubmit}>
+      <div
+        className="relative w-full h-auto bg-cover bg-center min-h-screen lg:min-h-[85vh] 
+ bg-gradient-to-r from-green-600 via-yellow-200 to-green-400
+    flex items-center justify-center p-5"
+      >
+        <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/2 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+            Create Your Account
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-2">
             <div className="form-row-2">
-              <div className="mb-4 w-full lg:w-1/2">
+              <div className="w-full">
                 <label className="form-label">First Name</label>
                 <input
                   type="text"
@@ -145,7 +151,7 @@ const Register = () => {
                 />
                 <span className="form-error">{formErrors.firstName}</span>
               </div>
-              <div className="mb-4 w-full lg:w-1/2">
+              <div className="w-full">
                 <label className="form-label">Your Last Name</label>
                 <input
                   type="text"
@@ -158,33 +164,35 @@ const Register = () => {
                 <span className="form-error">{formErrors.lastName}</span>
               </div>
             </div>
-
-            <div className="mb-4">
-              <label className="form-label">Email</label>
-              <input
-                type="text"
-                placeholder="Enter your Email"
-                className="form-input"
-                name="email"
-                value={formValues.email}
-                onChange={handleChange}
-              />
-              <span className="form-error">{formErrors.email}</span>
-            </div>
-            <div className="mb-4">
-              <label className="form-label">Address</label>
-              <input
-                type="text"
-                placeholder="Enter your Address"
-                className="form-input"
-                name="address"
-                value={formValues.address}
-                onChange={handleChange}
-              />
-              <span className="form-error">{formErrors.address}</span>
-            </div>
             <div className="form-row-2">
-              <div className="mb-4 w-full lg:w-1/2">
+              <div className="w-full">
+                <label className="form-label">Email</label>
+                <input
+                  type="text"
+                  placeholder="Enter your Email"
+                  className="form-input"
+                  name="email"
+                  value={formValues.email}
+                  onChange={handleChange}
+                />
+                <span className="form-error">{formErrors.email}</span>
+              </div>
+              <div className="w-full">
+                <label className="form-label">Address</label>
+                <input
+                  type="text"
+                  placeholder="Enter your Address"
+                  className="form-input"
+                  name="address"
+                  value={formValues.address}
+                  onChange={handleChange}
+                />
+                <span className="form-error">{formErrors.address}</span>
+              </div>
+            </div>
+
+            <div className="form-row-2">
+              <div className="w-full">
                 <label className="form-label">Contact No</label>
                 <input
                   type="text"
@@ -197,7 +205,7 @@ const Register = () => {
                 <span className="form-error">{formErrors.contactNo}</span>
               </div>
 
-              <div className="mb-4 w-full lg:w-1/2">
+              <div className="w-full">
                 <label className="form-label">Nearest Market</label>
                 <div className="relative">
                   <select
@@ -226,7 +234,7 @@ const Register = () => {
               </div>
             </div>
             <div className="form-row-2">
-              <div className="mb-4 w-full lg:w-1/2">
+              <div className="w-full">
                 <label className="form-label">Password</label>
                 <div className="relative flex items-center">
                   <input
@@ -248,7 +256,7 @@ const Register = () => {
                 </div>
                 <span className="form-error">{formErrors.password}</span>
               </div>
-              <div className="mb-4 w-full lg:w-1/2">
+              <div className="w-full">
                 <label className="form-label">Confirm Password</label>
                 <div className="flex relative items-center">
                   {" "}
@@ -272,30 +280,30 @@ const Register = () => {
                 <span className="form-error">{formErrors.confirmPassword}</span>
               </div>
             </div>
-            <div className="mb-1 flex">
+            <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 name="notification"
                 checked={notification}
                 onChange={handleCheckBoxChange}
-                className="mr-2"
+                className="form-checkbox text-blue-500"
               />
               <label
                 htmlFor="notification"
-                className="form-label text-blue-500"
+                className="text-gray-600 form-label"
               >
-                I agree to the receive Weekly Price Predictions via Emails
+                I agree to receive emails.
               </label>
             </div>
-            <div className="my-4 flex justify-center form-label text-blue-500">
+            <div className="my-1 flex justify-center form-label text-gray-600 mb-2">
               <span>
                 Already Have an Account? &nbsp;
-                <Link to="/login" className="text-black underline">
+                <Link to="/login" className="underline hover:text-black">
                   Login
                 </Link>
               </span>
             </div>
-            <div className="mb-2 flex flex-col items-center justify-center">
+            <div className="mb-1 flex flex-col items-center justify-center">
               <button
                 type="submit"
                 className="btn-primary"

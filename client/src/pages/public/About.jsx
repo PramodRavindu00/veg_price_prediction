@@ -28,7 +28,7 @@ const About = () => {
               Our Vision & Mission
             </h2>
             <div className="flex flex-col lg:flex-row items-center justify-center gap-8 w-full">
-              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-green-200 rounded-lg shadow-lg">
+              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-green-100 shadow-lg">
                 <div className="w-20 h-20 rounded-full bg-green-700 flex items-center justify-center">
                   <img
                     src="/images/vision.png"
@@ -45,7 +45,7 @@ const About = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-green-200 rounded-lg shadow-lg">
+              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-green-100  shadow-lg">
                 <div className="w-20 h-20 rounded-full bg-green-700 flex items-center justify-center">
                   <img
                     src="/images/mission.png"
@@ -74,7 +74,7 @@ const About = () => {
                 <img
                   src="/images/challenge.jpg"
                   alt="Vision Icon"
-                  className="w-96 h-52 sm:h-72 object-cover rounded-lg"
+                  className="w-96 h-52 sm:h-72 object-cover"
                 />
                 <p className="text-gray-700 lg:text-lg lg:w-96">
                   Fluctuating vegetable prices often lead to uncertainty for
@@ -88,7 +88,7 @@ const About = () => {
                 <img
                   src="/images/ml.png"
                   alt="analyzing icon"
-                  className="w-96 h-52 sm:h-72 object-cover rounded-lg"
+                  className="w-96 h-52 sm:h-72 object-cover"
                 />
                 <p className="text-gray-700 lg:text-lg lg:w-96">
                   Our system analyzes past vegetable price data,festival seasonality, fuel cost, and

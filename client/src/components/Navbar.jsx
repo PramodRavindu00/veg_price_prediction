@@ -62,7 +62,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
   };
 
   return (
-    <nav className="flex w-full fixed sm:sticky top-0 right-0 min-h-[15vh] px-3 sm:p-6 items-center bg-transparent sm:bg-white z-10">
+    <nav className="flex w-full fixed sm:sticky top-0 right-0 min-h-[8vh] px-3 sm:p-6 items-center bg-transparent sm:bg-white z-10">
       {/* desktop navbar */}
       <div className="w-full hidden sm:flex items-center justify-between gap-2">
         <span className="hidden text-3xl  lg:block text-green-600">
@@ -118,9 +118,9 @@ const Navbar = ({ publicPage = true, navLinks }) => {
       </div>
 
       {/* mobile nav bar */}
-      <div className="w-full h-full flex flex-col sm:hidden">
+      <div className="h-full flex flex-col sm:hidden">
         {toggleBtn && (
-          <button className="text-2xl text-white px-1">
+          <button className="text-2xl text-white bg-black/50 p-2 rounded">
             <AiOutlineMenu onClick={() => toggleMenu("open")} />
           </button>
         )}

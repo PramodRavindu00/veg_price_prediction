@@ -53,7 +53,7 @@ const Home = () => {
             <img
               src="/images/home_farmer.jpg"
               alt=""
-              className="w-96 h-52 sm:h-72 object-cover rounded-lg"
+              className="w-96 h-52 sm:h-72 object-cover"
             />
             <p className="text-center text-gray-700 max-w-96 mt-1">
               Farmers can forecast trends and set competitive prices
@@ -63,7 +63,7 @@ const Home = () => {
             <img
               src="/images/home_merchant.jpg"
               alt=""
-              className="w-96 h-52 sm:h-72 object-cover  rounded-lg"
+              className="w-96 h-52 sm:h-72 object-cover"
             />
             <p className="text-center text-gray-700 max-w-96 mt-1">
               Merchants can optimize inventory and reduce waste
@@ -73,7 +73,7 @@ const Home = () => {
             <img
               src="/images/home_customer.jpg"
               alt=""
-              className="w-96 h-52 sm:h-72 object-cover  rounded-lg"
+              className="w-96 h-52 sm:h-72 object-cover"
             />
             <p className="text-center text-gray-700 max-w-96 mt-1">
               Consumers can plan purchases and save money

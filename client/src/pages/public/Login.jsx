@@ -78,9 +78,15 @@ const Login = () => {
   return (
     <>
       <Navbar navLinks={publicLinks} />
-      <div className="flex items-center justify-center">
-        <div className="flex-col bg-white bg-opacity-70 p-8 rounded-lg  w-full sm:w-1/2 lg:w-1/3">
-          <h2 className="form-heading">LOG IN</h2>
+      <div
+        className="relative w-full h-auto bg-cover bg-center min-h-screen lg:min-h-[90vh] 
+ bg-gradient-to-r from-green-600 via-yellow-200 to-green-400
+    flex items-center justify-center p-5"
+      >
+        <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/3 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+            Login
+          </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="form-label">Email</label>
@@ -117,15 +123,15 @@ const Login = () => {
               <span className="form-error">{formErrors.password}</span>
             </div>
 
-            <div className="mb-4 flex form-label justify-end text-blue-500">
-              <Link to="/home" className="text-black underline">
+            <div className="mb-4 flex form-label justify-end text-gray-600 form-label">
+              <Link to="/home" className="underline hover:text-black">
                 Reset Password
               </Link>
             </div>
-            <div className="mb-2 flex form-label justify-center text-blue-500">
+            <div className="mb-2 flex justify-center text-gray-600 form-label">
               <span>
                 Don&apos;t have an Account yet?&nbsp;
-                <Link to="/register" className="text-black underline">
+                <Link to="/register" className="underline hover:text-black">
                   Create One
                 </Link>
               </span>{" "}
