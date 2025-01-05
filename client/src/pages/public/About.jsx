@@ -24,11 +24,11 @@ const About = () => {
         </p>
         <div className="flex flex-col lg:flex-row items-center gap-10">
           <div className="w-full flex flex-col items-center gap-2">
-            <h2 className="text-xl sm:text-4xl text-green-700 font-bold text-center mb-4">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center mb-4">
               Our Vision & Mission
             </h2>
             <div className="flex flex-col lg:flex-row items-center justify-center gap-8 w-full">
-              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-green-100 shadow-lg">
+              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-amber-50 rounded-lg shadow-lg">
                 <div className="w-20 h-20 rounded-full bg-green-700 flex items-center justify-center">
                   <img
                     src="/images/vision.png"
@@ -45,7 +45,7 @@ const About = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-green-100  shadow-lg">
+              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-amber-50  rounded-lg shadow-lg">
                 <div className="w-20 h-20 rounded-full bg-green-700 flex items-center justify-center">
                   <img
                     src="/images/mission.png"
@@ -66,7 +66,7 @@ const About = () => {
         </div>
         <div className="flex flex-col lg:flex-row items-center gap-5">
           <div className="w-full flex flex-col items-center gap-2">
-            <h2 className="text-xl sm:text-4xl text-green-700 font-bold text-center my-4">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center my-4">
               Solving Price Uncertainty with Data-Driven Insights
             </h2>
             <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-0 w-full">
@@ -74,7 +74,7 @@ const About = () => {
                 <img
                   src="/images/challenge.jpg"
                   alt="Vision Icon"
-                  className="w-96 h-52 sm:h-72 object-cover"
+                  className="w-96 h-52 sm:h-72 object-cover rounded-lg shadow-lg"
                 />
                 <p className="text-gray-700 lg:text-lg lg:w-96">
                   Fluctuating vegetable prices often lead to uncertainty for
@@ -88,12 +88,13 @@ const About = () => {
                 <img
                   src="/images/ml.png"
                   alt="analyzing icon"
-                  className="w-96 h-52 sm:h-72 object-cover"
+                  className="w-96 h-52 sm:h-72 object-cover rounded-lg shadow-lg"
                 />
                 <p className="text-gray-700 lg:text-lg lg:w-96">
-                  Our system analyzes past vegetable price data,festival seasonality, fuel cost, and
-                  environmental conditions like rainfall to
-                  predict future prices using machine learning algorithms.
+                  Our system analyzes past vegetable price data,festival
+                  seasonality, fuel cost, and environmental conditions like
+                  rainfall to predict future prices using machine learning
+                  algorithms.
                 </p>
               </div>
             </div>

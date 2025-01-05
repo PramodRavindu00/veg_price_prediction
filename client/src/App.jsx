@@ -35,9 +35,9 @@ const App = () => {
   return (
     <AuthContextProvider>
       <div
-        className={`flex flex-col bg-green-50 min-h-screen  flex-grow ${
+        className={`flex flex-col min-h-screen  flex-grow ${
           fadeIn ? "animate-fade" : ""
-        }`}
+        } bg-[#ede9e9]`}
       >
         <Routes>
           {/* Public routes which are not required a login */}

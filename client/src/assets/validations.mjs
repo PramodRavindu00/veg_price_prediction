@@ -21,7 +21,7 @@ export const registerFormValidations = (values) => {
   }
 
   if (!values.nearestMarket) {
-    errors.nearestMarket = "Nearest Market is required!";
+    errors.nearestMarket = "Market Area is required!";
   }
   if (!values.password) {
     errors.password = "Password is required!";
@@ -127,6 +127,23 @@ export const predictFormValidations = (values) => {
 
   if (values.festival === "") {
     errors.festival = "Festival seasonality is required!";
+  }
+  return errors;
+};
+
+export const guestContactFormValidations = (values) => {
+  const errors = {};
+  if (!values.email) {
+    errors.email = "Email is required!";
+  } else if (!emailRegex.test(values.email)) {
+    errors.email = "Invalid Email format!";
+  }
+  if (!values.contactNo) {
+    errors.contactNo = "Contact No is required!";
+  }
+
+  if (!values.message) {
+    errors.message = "Message is required!";
   }
   return errors;
 };
