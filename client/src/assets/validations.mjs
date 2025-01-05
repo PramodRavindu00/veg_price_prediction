@@ -133,6 +133,12 @@ export const predictFormValidations = (values) => {
 
 export const guestContactFormValidations = (values) => {
   const errors = {};
+  if (!values.firstName) {
+    errors.firstName = "First Name is required!";
+  }
+  if (!values.lastName) {
+    errors.lastName = "Last Name is required!";
+  }
   if (!values.email) {
     errors.email = "Email is required!";
   } else if (!emailRegex.test(values.email)) {
