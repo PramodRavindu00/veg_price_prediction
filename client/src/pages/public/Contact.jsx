@@ -4,10 +4,13 @@ import { useState } from "react";
 import { guestContactFormValidations } from "../../assets/validations.mjs";
 
 const initialValues = {
+  firstName: "",
+  lastName: "",
   email: "",
   contactNo: "",
   message: "",
-  userType: "guest",
+  reply: "",
+  date: new Date().toISOString().slice(0, 10),
 };
 
 const Contact = () => {
@@ -56,12 +59,38 @@ const Contact = () => {
           <h2 className="text-center">Having a problem? Ask our experts</h2>
         </div>
       </div>
-      <div className="w-full flex flex-col min-h-[86vh]  items-center justify-center gap-4 px-5">
+      <div className="w-full flex flex-col  items-center justify-center gap-4 p-5">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center">
           Get in Touch with Us
         </h2>
         <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/2 rounded-lg shadow-lg">
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <div className="form-row-2">
+              <div className="w-full">
+                <label className="form-label">First Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter your First Name"
+                  className="form-input"
+                  name="firstName"
+                  value={formValues.firstName}
+                  onChange={handleChange}
+                />
+                <span className="form-error">{formErrors.firstName}</span>
+              </div>
+              <div className="w-full">
+                <label className="form-label">Last Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter your Last Name"
+                  className="form-input"
+                  name="lastName"
+                  value={formValues.lastName}
+                  onChange={handleChange}
+                />
+                <span className="form-error">{formErrors.lastName}</span>
+              </div>
+            </div>
             <div className="form-row-2">
               <div className="w-full">
                 <label className="form-label">Email</label>
