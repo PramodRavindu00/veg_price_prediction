@@ -7,6 +7,7 @@ import { registerFormValidations } from "../../assets/validations.mjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { toast, Toaster } from "sonner";
+import SelectBox from "../../components/SelectBox";
 
 const initialValues = {
   firstName: "",
@@ -44,8 +45,8 @@ const Register = () => {
     try {
       const response = await axios.get("/api/market/getAllMarkets");
       const options = response.data.data.map((market) => ({
-        market: market.market,
-        location: market._id,
+        label: market.market,
+        value: market._id,
       }));
 
       setMarketOptions(options);
@@ -68,9 +69,9 @@ const Register = () => {
     }
   };
 
-  const handleSelectChange = (e) => {
-    setSelectedMarket(e.target.value);
-    setFormValues({ ...formValues, nearestMarket: { market: e.target.value } });
+  const handleSelectChange = (option) => {
+    setSelectedMarket(option);
+    setFormValues({ ...formValues, nearestMarket: { market: option?.value } });
   };
 
   const handleCheckBoxChange = (e) => {
@@ -92,6 +93,8 @@ const Register = () => {
     if (Object.keys(errors).length > 0) {
       console.log("Form has validation errors");
     } else {
+      console.log(formValues);
+
       const { confirmPassword, ...valuesToSubmit } = formValues;
       try {
         setBtnDisabled(true);
@@ -109,6 +112,7 @@ const Register = () => {
               email: errorRes.message,
             });
             setFormValues({ ...formValues, email: "" });
+            return;
           }
 
           if (errorRes.type === "contact") {
@@ -117,10 +121,10 @@ const Register = () => {
               contactNo: errorRes.message,
             });
             setFormValues({ ...formValues, contactNo: "" });
+            return;
           }
-        } else {
-          toast.error("Internal Server Error, Please try again later");
         }
+        toast.error("Internal Server Error, Please try again later");
       }
     }
   };
@@ -205,7 +209,7 @@ const Register = () => {
                 <span className="form-error">{formErrors.contactNo}</span>
               </div>
 
-              <div className="w-full">
+              {/* <div className="w-full">
                 <label className="form-label">Nearest Market</label>
                 <div className="relative">
                   <select
@@ -230,6 +234,19 @@ const Register = () => {
                     )}
                   </select>
                 </div>
+                <span className="form-error">{formErrors.nearestMarket}</span>
+              </div> */}
+              <div className="w-full">
+                <label className="form-label">Closest Market Area</label>
+                <SelectBox
+                  name="nearestMarket"
+                  options={marketOptions}
+                  value={selectedMarket}
+                  placeholder="Select Market Area"
+                  onChange={(selectedOption) =>
+                    handleSelectChange(selectedOption)
+                  }
+                />
                 <span className="form-error">{formErrors.nearestMarket}</span>
               </div>
             </div>

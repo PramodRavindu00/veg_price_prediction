@@ -16,7 +16,7 @@ const Services = () => {
       <Navbar navLinks={publicLinks} />
       <div
         className="relative
-    w-full h-[50vh] md:h-[85vh] bg-cover bg-center 
+    w-full h-[50vh] md:h-[90vh] bg-cover bg-center 
     bg-[url('/images/services.jpg')] 
    flex items-center "
       >
@@ -36,7 +36,7 @@ const Services = () => {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-4 gap-8 my-8 max-w-screen-xl mx-auto"
         id="service_section"
       >
-        <div className="bg-white p-4 shadow-lg  text-center">
+        <div className="bg-white p-4 shadow-lg  text-center rounded-lg">
           <h3 className="text-xl font-semibold text-green-700 mb-2">
             Next Week Prediction Tool
           </h3>
@@ -51,7 +51,7 @@ const Services = () => {
             Lanka.
           </p>
         </div>
-        <div className="bg-white p-4 shadow-lg  text-center">
+        <div className="bg-white p-4 shadow-lg  text-center rounded-lg">
           <h3 className="text-xl font-semibold text-green-700 mb-2">
             4 Weeks Prediction
           </h3>
@@ -65,7 +65,7 @@ const Services = () => {
             vegetable in a selected market.
           </p>
         </div>
-        <div className="bg-white p-4 shadow-lg  text-center">
+        <div className="bg-white p-4 shadow-lg  text-center rounded-lg">
           <h3 className="text-xl font-semibold text-green-700 mb-2">
             Advanced Prediction Tool
           </h3>
@@ -80,7 +80,7 @@ const Services = () => {
             different vegetables.
           </p>
         </div>
-        <div className="bg-white p-4 shadow-lg  text-center">
+        <div className="bg-white p-4 shadow-lg  text-center rounded-lg">
           <h3 className="text-xl font-semibold text-green-700 mb-2">
             Weekly Budget Calculator
           </h3>
