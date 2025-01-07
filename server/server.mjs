@@ -3,11 +3,12 @@ import express, { json, urlencoded } from "express";
 import connectDB from "./config/db.mjs";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import marketRoutes from "./routes/marketRoutes.mjs";
-import authRoutes from "./routes/authRoutes.mjs";
-import vegetableRoutes from "./routes/vegetableRoutes.mjs";
-import predictionRoutes from "./routes/predictionRoutes.mjs";
-import userRoutes from "./routes/userRoutes.mjs";
+import MarketRoutes from "./routes/MarketRoutes.mjs";
+import AuthRoutes from "./routes/AuthRoutes.mjs";
+import VegetableRoutes from "./routes/VegetableRoutes.mjs";
+import PredictionRoutes from "./routes/PredictionRoutes.mjs";
+import UserRoutes from "./routes/UserRoutes.mjs";
+import QueryRoutes from "./routes/QueryRoutes.mjs";
 
 dotenv.config({ path: "../.env" });
 
@@ -18,11 +19,12 @@ app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(cookieParser());
 
-app.use(marketRoutes);
-app.use(authRoutes);
-app.use(vegetableRoutes);
-app.use(predictionRoutes);
-app.use(userRoutes);
+app.use(MarketRoutes);
+app.use(AuthRoutes);
+app.use(VegetableRoutes);
+app.use(PredictionRoutes);
+app.use(UserRoutes);
+app.use(QueryRoutes)
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

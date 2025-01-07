@@ -30,3 +30,7 @@ const QuerySchema = new mongoose.Schema({
     required: false,
   },
 });
+
+const Query = mongoose.model("Query", QuerySchema);
+
+export default Query;
