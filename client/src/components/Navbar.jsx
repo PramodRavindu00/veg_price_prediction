@@ -52,6 +52,8 @@ const Navbar = ({ publicPage = true, navLinks }) => {
               userType: null,
             });
             setUserData(null);
+            console.log(res.data.message);
+            
             navigate("/login");
           }
         } catch (error) {
@@ -62,7 +64,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
   };
 
   return (
-    <nav className="flex w-full fixed sm:sticky top-0 right-0 min-h-[8vh] px-3 sm:p-6 items-center bg-transparent sm:bg-[#ede9e9] z-10">
+    <nav className="flex w-full sticky top-0 right-0 min-h-[8vh] px-3 sm:p-6 items-center bg-transparent sm:bg-[#ede9e9] z-10">
       {/* desktop navbar */}
       <div className="w-full hidden sm:flex items-center justify-between gap-2">
         <span className="hidden text-3xl  lg:block text-green-600">

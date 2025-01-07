@@ -2,6 +2,8 @@ import Navbar from "../../components/Navbar";
 import { publicLinks } from "../../assets/navLinks.mjs";
 import { useState } from "react";
 import { guestContactFormValidations } from "../../assets/validations.mjs";
+import axios from "axios";
+import { toast, Toaster } from "sonner";
 
 const initialValues = {
   firstName: "",
@@ -9,7 +11,6 @@ const initialValues = {
   email: "",
   contactNo: "",
   message: "",
-  reply: "",
   date: new Date().toISOString().slice(0, 10),
 };
 
@@ -34,14 +35,23 @@ const Contact = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = guestContactFormValidations(formValues);
-    setFormErrors(errors)
+    setFormErrors(errors);
     if (Object.keys(errors).length > 0) {
       console.log("form has validation errors");
     } else {
-      console.log("submit ok");
+      setBtnDisabled(true);
+      try {
+        await axios.post("/api/query/submitQuery", formValues);
+        toast.success("Your Message has been sent");
+      } catch (error) {
+        toast.error(error.response.data.message);
+      } finally {
+        setFormValues(initialValues);
+        setBtnDisabled(false);
+      }
     }
   };
   return (
@@ -146,6 +156,7 @@ const Contact = () => {
           </form>
         </div>
       </div>
+      <Toaster richColors position="top-right" />
     </>
   );
 };

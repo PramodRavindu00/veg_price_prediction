@@ -96,13 +96,13 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
+export const logout = (req, res) => {
   try {
     res.cookie("token", "", {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
-      maxAge: new Date(0),
+      maxAge: 0,
     });
 
     res
