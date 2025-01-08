@@ -2,12 +2,12 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-const Modal = ({ isOpen, closeModal, children }) => {
+const Modal = ({ isOpen, closeModal, minHeight = "75", children }) => {
   const [showModel, setShowModal] = useState(isOpen);
 
   useEffect(() => {
     if (isOpen) {
-     setShowModal(true)
+      setShowModal(true);
     } else {
       setTimeout(() => setShowModal(false), 300);
     }
@@ -23,7 +23,7 @@ const Modal = ({ isOpen, closeModal, children }) => {
       onClick={closeModal}
     >
       <div
-        className={`modal bg-white w-full sm:w-2/3 lg:w-1/2 min-h-[75%] max-h-[90vh] overflow-x-hidden overflow-y-auto mx-auto rounded-lg shadow-lg relative p-5 md:p-8 transform transition-all duration-300 ${
+        className={`modal bg-white w-full sm:w-2/3 lg:w-1/2 min-h-[${minHeight}vh] max-h-[80vh] overflow-x-hidden overflow-y-auto mx-auto rounded-lg shadow-lg relative p-5 md:p-8 transform transition-all duration-300 ${
           isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -44,7 +44,8 @@ const Modal = ({ isOpen, closeModal, children }) => {
 
 Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  closeModal:PropTypes.func.isRequired,
+  minHeight: PropTypes.string,
+  closeModal: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };
 

@@ -29,7 +29,11 @@ const QuerySchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-});
+  replyDate: {
+    type: Date,
+    required: false,
+  },
+}, {timestamps:true});
 
 const Query = mongoose.model("Query", QuerySchema);
 

@@ -157,68 +157,69 @@ const Users = () => {
         />
       </div>
       <Modal isOpen={modalOpen} closeModal={closeModal}>
-        <div className="px-1 flex flex-col w-full  mx-auto gap-2">
+        <div className="flex flex-col w-full  mx-auto gap-2 bg">
           <h2 className="text-center text-2xl font-semibold text-gray-800 mb-4">
             User Details
           </h2>
           <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <span className="text-gray-800 font-medium">Name</span>
-              <span>:</span>
-              <span className="text-gray-600">{`${clickedUser.firstName} ${clickedUser.lastName}`}</span>
-            </div>
-            <div className="flex  items-center space-x-2">
-              <span className="text-gray-800 font-medium">Market Area</span>
-              <span>:</span>
-              <span className="text-gray-600">
-                {clickedUser?.nearestMarket?.market?.market}
-              </span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <span className="text-gray-800 font-medium">Contact No</span>
-              <span>:</span>
-              <span className="text-gray-600">{clickedUser.contactNo}</span>
-            </div>
-            <div className="flex flex-col sm:flex-row space-x-1">
-              <span className="text-gray-800 font-medium">Email</span>
-              <span className="hidden sm:block">:</span>
-              <span className="text-gray-600 flex-1">{clickedUser.email}</span>
-            </div>
-            <div className="flex flex-col sm:flex-row space-x-1">
-              <span className="text-gray-800 font-medium">Address</span>
-              <span className="hidden sm:block">:</span>
-              <span className="text-gray-600">{clickedUser.address}</span>
+            <div className="min-w-full border border-gray-300 bg-white shadow-md">
+              {[
+                {
+                  label: "Name",
+                  value: `${clickedUser.firstName} ${clickedUser.lastName}`,
+                },
+                {
+                  label: "Market Area",
+                  value:
+                    clickedUser?.nearestMarket?.market?.market || "Unknown",
+                },
+                { label: "Contact No", value: clickedUser.contactNo },
+                { label: "Email", value: clickedUser.email },
+                { label: "Address", value: clickedUser.address },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col border-b border-gray-300 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer"
+                >
+                  <div className="flex gap-2 w-full">
+                    <span className="font-medium text-gray-900 w-1/3">
+                      {item.label}
+                    </span>
+                    <span className="text-gray-700 break-words w-2/3 text-left overflow-x-hidden">
+                      {item.value}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {clickedUser.preferredVeggies?.length === 0 && (
-              <div className="flex items-center space-x-1">
-                {" "}
-                <span className="text-gray-800 font-medium">
-                  Preferred Vegetables
-                </span>
-                <span>:</span>
-                <span className="text-gray-600">Not available</span>
-              </div>
+              <h1 className="px-6 py-4 text-center bg-orange-300 font-semibold rounded-md">
+                No personalized vegetable list added yet
+              </h1>
             )}
             {clickedUser.preferredVeggies?.length > 0 && (
               <table className="min-w-full table-auto border-collapse">
                 <thead>
-                  <tr className="bg-gray-100">
+                  <tr className="bg-gray-300">
                     <th className="px-2 py-1 text-gray-700 font-semibold text-center border">
                       Vegetable
                     </th>
                     <th className="px-2 py-1 text-gray-700 font-semibold text-center border">
-                      Qty/Week
+                      Qty/week
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {clickedUser.preferredVeggies?.map((veg, index) => (
-                    <tr key={index} className="hover:bg-gray-50">
-                      <td className="px-2 py-1 text-gray-800 text-center font-medium border">
+                    <tr
+                      key={index}
+                      className="hover:bg-gray-200 hover:cursor-pointer"
+                    >
+                      <td className="px-2 py-1 text-gray-800 font-medium border">
                         {veg?.vegetable?.vegetableName || "Unknown"}
                       </td>
-                      <td className="px-2 py-1 text-gray-600 text-center font-medium border">
+                      <td className="px-2 py-1 text-gray-600 font-medium border">
                         {veg.amount !== 1000
                           ? `${veg.amount} g`
                           : `${veg.amount / 1000} KG`}
