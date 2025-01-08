@@ -4,8 +4,11 @@ import User from "../models/UserModel.mjs";
 export const getAllUsers = async (req, res) => {
   try {
     const allUsers = await User.find({ userType: { $ne: "Admin" } })
-      .select("-password")
-      .populate("nearestMarket.market"); //removed the password from result and excluded Admin userType
+      .select("-password") //removed the password from result and excluded Admin userType
+      .populate([
+        { path: "preferredVeggies.vegetable" },
+        { path: "nearestMarket.market" },
+      ]);
     res.status(200).json({
       success: true,
       message: "Data retrieved successfully",

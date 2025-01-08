@@ -197,7 +197,7 @@ const ShoppingList = () => {
                         Vegetable
                       </span>
                       <span className="flex flex-1 font-semibold text-gray-700 text-center">
-                        Weekly Consumption
+                        Qty/Week
                       </span>
                     </div>
                     {userData.preferredVeggies.map((veg, index) => (
