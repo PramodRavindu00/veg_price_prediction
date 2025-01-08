@@ -13,8 +13,8 @@ export const submitQuery = async (req, res) => {
 
 export const viewQueries = async (req, res) => {
   try {
-    const data = await Query.find({});
-    res.status(201).json({ success: true, data:data });
+    const data = await Query.find({}).sort({ createdAt: -1 });
+    res.status(201).json({ success: true, data: data });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
