@@ -139,10 +139,10 @@ const Contact = () => {
               >
                 {formValues.message}
               </textarea>
-              <div className="text-xs form-label">
+              <span className="form-error">{formErrors.message}</span>
+              <div className="text-xs text-gray-500">
                 {charCount} characters remaining
               </div>
-              <span className="form-error">{formErrors.message}</span>
             </div>
             <div className="flex flex-col items-center justify-center">
               <button
