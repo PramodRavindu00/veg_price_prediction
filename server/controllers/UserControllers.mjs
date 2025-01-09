@@ -38,10 +38,9 @@ export const getSingleUser = async (req, res) => {
       ]);
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: "Not Found" });
     }
+
     res.status(200).json({
       success: true,
       message: "Data retrieved successfully",
@@ -63,6 +62,12 @@ export const updateUserPreferences = async (req, res) => {
     return res.status(400).json({ success: false, message: "Invalid user ID" });
   }
   try {
+    const isIdFound = await User.findById(id);
+
+    if (!isIdFound) {
+      return res.status(404).json({ success: false, message: "Not Found" });
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { $set: { preferredVeggies } },

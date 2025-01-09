@@ -84,7 +84,7 @@ const Users = () => {
         {loading ? (
           <Loader />
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto  rounded-md">
             {filteredData.length == 0 ? (
               <p className="text-center text-gray-500 py-4">
                 No data available.
@@ -106,7 +106,7 @@ const Users = () => {
                   {currentPageItems.map((user, index) => {
                     return (
                       <tr
-                        className="border-t hover:bg-gray-200 hover:cursor-pointer"
+                        className="border-t hover:bg-blue-200 hover:cursor-pointer"
                         key={index}
                       >
                         <td className="td">{`${user.firstName} ${user.lastName}`}</td>
