@@ -23,6 +23,7 @@ const Queries = () => {
   const [formValues, setFormValues] = useState(initialValues);
   const [formError, setFormError] = useState("");
   const [charCount, setCharCount] = useState(400);
+  const [btnDisabled,setBtnDisabled] = useState(false)
 
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -74,6 +75,7 @@ const Queries = () => {
     setTimeout(() => setClickedQuery({}), 100);
     setFormValues(initialValues);
     setFormError("");
+    setCharCount(400)
   };
 
   const handleChange = (e) => {
@@ -90,6 +92,7 @@ const Queries = () => {
       setFormError("Reply is required!");
       console.log("Form has validation errors");
     } else {
+      setBtnDisabled(true);
       try {
         const { data } = await axios.patch(
           `/api/query/replyToQuery/${clickedQuery._id}`,
@@ -100,6 +103,7 @@ const Queries = () => {
         toast.error("Internal Server Error");
       } finally {
         closeModal();
+        setBtnDisabled(false)
       }
     }
   };
@@ -224,7 +228,7 @@ const Queries = () => {
                 </p>
               </>
             ) : (
-              <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+              <form className="flex flex-col gap-4 mt-1" onSubmit={handleSubmit}>
                 <div className="w-full">
                   <textarea
                     className="form-input"
@@ -242,15 +246,16 @@ const Queries = () => {
                 <button
                   type="submit"
                   className="self-end bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700"
+                  disabled={btnDisabled}
                 >
-                  Send Reply
+                  {btnDisabled ? "Please Wait..." : "Send Reply"}
                 </button>
               </form>
             )}
           </div>
         </div>
       </Modal>
-      <Toaster richColors position="top-right"/>
+      <Toaster richColors position="top-right" />
     </>
   );
 };

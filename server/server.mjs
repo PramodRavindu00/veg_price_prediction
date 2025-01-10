@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import "dotenv/config";
 import express, { json, urlencoded } from "express";
 import connectDB from "./config/db.mjs";
 import cookieParser from "cookie-parser";
@@ -10,8 +10,7 @@ import PredictionRoutes from "./routes/PredictionRoutes.mjs";
 import UserRoutes from "./routes/UserRoutes.mjs";
 import QueryRoutes from "./routes/QueryRoutes.mjs";
 
-dotenv.config({ path: "../.env" });
-
+const port = process.env.PORT || 8080;
 const app = express();
 
 app.use(cors());
@@ -24,9 +23,9 @@ app.use(AuthRoutes);
 app.use(VegetableRoutes);
 app.use(PredictionRoutes);
 app.use(UserRoutes);
-app.use(QueryRoutes)
+app.use(QueryRoutes);
 
-const port = process.env.PORT || 8080;
+
 app.listen(port, () => {
   console.log(`Server started running on port : ${port}`);
   connectDB();

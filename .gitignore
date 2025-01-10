@@ -1,5 +1,5 @@
  **dot ENV **
- .env
+ server/.env
 
 # Logs
 logs
