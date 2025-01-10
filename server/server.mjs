@@ -25,7 +25,6 @@ app.use(PredictionRoutes);
 app.use(UserRoutes);
 app.use(QueryRoutes);
 
-
 app.listen(port, () => {
   console.log(`Server started running on port : ${port}`);
   connectDB();
