@@ -1,6 +1,7 @@
  **dot ENV **
  server/.env
 
+
 # Logs
 logs
 *.log
