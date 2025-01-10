@@ -10,6 +10,7 @@ import { toast, Toaster } from "sonner";
 const itemsPerPage = 7;
 const initialValues = {
   reply: "",
+  emailToSend: "",
   replyDate: new Date().toISOString().slice(0, 10),
 };
 
@@ -23,7 +24,7 @@ const Queries = () => {
   const [formValues, setFormValues] = useState(initialValues);
   const [formError, setFormError] = useState("");
   const [charCount, setCharCount] = useState(400);
-  const [btnDisabled,setBtnDisabled] = useState(false)
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -69,13 +70,14 @@ const Queries = () => {
     setModalOpen(true);
     const query = queries.find((query) => query._id === queryId);
     setClickedQuery(query);
+    setFormValues((prev) => ({ ...prev, emailToSend: query.email }));
   };
   const closeModal = () => {
     setModalOpen(false);
     setTimeout(() => setClickedQuery({}), 100);
     setFormValues(initialValues);
     setFormError("");
-    setCharCount(400)
+    setCharCount(400);
   };
 
   const handleChange = (e) => {
@@ -98,12 +100,13 @@ const Queries = () => {
           `/api/query/replyToQuery/${clickedQuery._id}`,
           formValues
         );
+
+        closeModal();
+        setBtnDisabled(false);
+
         if (data.success) toast.success("Reply Submitted Successfully");
       } catch (error) {
         toast.error("Internal Server Error");
-      } finally {
-        closeModal();
-        setBtnDisabled(false)
       }
     }
   };
@@ -228,7 +231,10 @@ const Queries = () => {
                 </p>
               </>
             ) : (
-              <form className="flex flex-col gap-4 mt-1" onSubmit={handleSubmit}>
+              <form
+                className="flex flex-col gap-4 mt-1"
+                onSubmit={handleSubmit}
+              >
                 <div className="w-full">
                   <textarea
                     className="form-input"

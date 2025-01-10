@@ -59,7 +59,7 @@ export const login = async (req, res) => {
         .status(401)
         .json({ success: false, message: "Incorrect email or password" });
     }
-
+  
     const token = jwt.sign(
       { id: validUser._id, role: validUser.userType },
       process.env.JWT_SECRET,
