@@ -46,7 +46,7 @@ export const replyToQuery = async (req, res) => {
     await Query.findByIdAndUpdate(id, {
       //updating database with reply
       $set: { reply: reply, replyDate: replyDate },
-    });
+    }, {session});
 
     const emailSent = await sendEmail(
       //sending the email
