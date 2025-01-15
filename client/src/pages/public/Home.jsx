@@ -15,8 +15,8 @@ const Home = () => {
    flex items-center "
       >
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-        <div className="flex flex-col items-center  w-full xl:w-1/2 font-bold gap-2 absolute bottom-[10%] sm:bottom-[20%] text-white">
-          <h1 className="text-2xl sm:text-5xl text-center">
+        <div className="flex flex-col items-center w-full font-bold xl:w-1/2 gap-2 absolute bottom-[10%] sm:bottom-[20%] text-white">
+          <h1 className="text-2xl sm:text-5xl text-center ">
             PLAN BETTER,SAVE MORE
           </h1>
           <h2 className="sm:text-3xl text-center">

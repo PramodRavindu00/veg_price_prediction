@@ -64,10 +64,9 @@ const Navbar = ({ publicPage = true, navLinks }) => {
   };
 
   return (
-    <nav className="flex w-full sticky top-0 right-0 min-h-[8vh] px-3 sm:p-6 items-center bg-transparent sm:bg-[#ede9e9] z-10">
-      {/* desktop navbar */}
+    <nav className="flex w-full fixed sm:sticky top-0 right-0 p-3 sm:p-6 items-center bg-transparent sm:bg-[#1d362e] z-10 text-white">
       <div className="w-full hidden sm:flex items-center justify-between gap-2">
-        <span className="hidden text-3xl  lg:block text-green-600">
+        <span className="hidden text-3xl  lg:block">
           GreenPriceNet
         </span>
         <ul className="flex  flex-row justify-center gap-5 md:gap-10 text-lg">
@@ -128,7 +127,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
         )}
 
         <div
-          className={`bg-white gradient flex flex-col p-5 fixed top-0 left-0 w-full h-full  z-50 transform ${
+          className={`bg-[#1d362e] flex flex-col p-5 fixed top-0 left-0 w-full h-full  z-50 transform ${
             mobileNav ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-1000 ease-in-out overflow-y-auto `}
         >
@@ -137,7 +136,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
             <AiOutlineClose onClick={() => toggleMenu("close")} />
           </button>
 
-          <ul className="flex flex-col w-full  justify-center items-center space-y-3 text-black ">
+          <ul className="flex flex-col w-full  justify-center items-center space-y-3">
             {navLinks.map((link, index) => (
               <li key={index}>
                 <Link to={link.route} onClick={() => toggleMenu("close")}>
