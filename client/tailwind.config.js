@@ -7,6 +7,10 @@ export default {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
       },
+      backgroundImage: {
+        "bg-content":
+          "linear-gradient(to bottom, #0e3c2c  0%, #456e68  50%, #092922 100%)",
+      },
       animation: {
         fade: "fadeIn 0.5s ease-in-out",
       },

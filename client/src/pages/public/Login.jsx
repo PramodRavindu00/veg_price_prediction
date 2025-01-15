@@ -79,8 +79,7 @@ const Login = () => {
     <>
       <Navbar navLinks={publicLinks} />
       <div
-        className="relative w-full h-auto bg-cover bg-center min-h-screen lg:min-h-[90vh] 
- bg-gradient-to-r from-green-600 via-yellow-200 to-green-400
+        className="relative w-full h-auto bg-cover bg-center min-h-screen lg:min-h-[90vh] bg-bg-content
     flex items-center justify-center p-5"
       >
         <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/3 rounded-lg shadow-lg">
@@ -132,7 +131,7 @@ const Login = () => {
               <span>
                 Don&apos;t have an Account yet?&nbsp;
                 <Link to="/register" className="underline hover:text-black">
-                  Create One
+                  Register
                 </Link>
               </span>{" "}
             </div>

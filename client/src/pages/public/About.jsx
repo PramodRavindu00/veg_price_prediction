@@ -10,8 +10,8 @@ const About = () => {
    flex items-center mb-2"
       >
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-        <div className="flex flex-col w-full items-center absolute bottom-[5%] sm:top-[20%] text-white">
-          <h1 className="text-2xl sm:text-6xl text-center">
+        <div className="flex flex-col w-full items-center absolute bottom-[5%] sm:top-[20%] text-white ">
+          <h1 className="text-2xl sm:text-5xl text-center font-bold">
             About GreenPriceNet
           </h1>
         </div>
@@ -28,7 +28,7 @@ const About = () => {
               Our Vision & Mission
             </h2>
             <div className="flex flex-col lg:flex-row items-center justify-center gap-8 w-full">
-              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-amber-50 rounded-lg shadow-lg">
+              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-white rounded-lg shadow-lg">
                 <div className="w-20 h-20 rounded-full bg-green-700 flex items-center justify-center">
                   <img
                     src="/images/vision.png"
@@ -45,7 +45,7 @@ const About = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-amber-50  rounded-lg shadow-lg">
+              <div className="flex flex-col items-center text-center gap-4 flex-1 p-6 bg-white  rounded-lg shadow-lg">
                 <div className="w-20 h-20 rounded-full bg-green-700 flex items-center justify-center">
                   <img
                     src="/images/mission.png"

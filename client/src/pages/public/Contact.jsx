@@ -59,7 +59,7 @@ const Contact = () => {
       <Navbar navLinks={publicLinks} />
       <div
         className="relative
-    w-full h-[50vh] md:h-[70vh] bg-cover bg-center 
+    w-full h-[50vh] md:h-[90vh] bg-cover bg-center 
     bg-[url('/images/contact.png')] 
    flex items-center"
       >
@@ -69,11 +69,14 @@ const Contact = () => {
           <h2 className="text-center">Having a problem? Ask our experts</h2>
         </div>
       </div>
-      <div className="w-full flex flex-col  items-center justify-center gap-4 p-5">
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center">
-          Get in Touch with Us
-        </h2>
-        <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/2 rounded-lg shadow-lg">
+      <div
+        className="w-full flex flex-col  items-center justify-center p-5 bg-bg-content
+"
+      >
+        <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/2 rounded-lg shadow-lg gap-5">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center">
+            Get in Touch with Us
+          </h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="form-row-2">
               <div className="w-full">
