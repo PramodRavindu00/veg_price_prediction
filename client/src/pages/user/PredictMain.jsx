@@ -57,6 +57,22 @@ const PredictMain = () => {
     }
   };
 
+  const getFuelPrice = async () => {
+    try {
+      const { data } = await axios.get("/api/maintenance/getFuelPrice");
+      setFormValues((prev) => ({
+        ...prev,
+        fuelPrice: Number(data.price).toFixed(2),
+      }));
+    } catch (error) {
+      console.log(error.message);
+      setFormErrors((prev) => ({
+        ...prev,
+        fuelPrice: "Failed receiving fuel price.Enter it manually",
+      }));
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     const validNumericValue = value
@@ -64,6 +80,7 @@ const PredictMain = () => {
       .replace(/(\..*?)\..*/g, "$1")
       .replace(/^(\d+\.\d{2})\d*/g, "$1");
     setFormValues({ ...formValues, [name]: validNumericValue });
+    setFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSelectChange = (option, name) => {
@@ -88,6 +105,7 @@ const PredictMain = () => {
         console.log("Not a valid select box change");
         break;
     }
+    setFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const clearForm = () => {
@@ -95,7 +113,7 @@ const PredictMain = () => {
     setSelectedMarket(null);
     setSelectedPeriod(null);
     setSelectedFestival(null);
-    setFormValues(initialValues);
+    setFormValues((prev) => ({ ...initialValues,["fuelPrice"]:prev.fuelPrice }));
   };
 
   const handleSubmit = async (e) => {
@@ -129,13 +147,14 @@ const PredictMain = () => {
   useEffect(() => {
     getAllMarkets();
     getAllVegetables();
+    getFuelPrice();
   }, []);
 
   return (
     <>
       <Navbar publicPage={false} navLinks={userLinks} />
       <div className="flex flex-col p-5">
-        <div className="flex flex-col lg:flex-row gap-5 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
           <div className="layout-2-in-row">
             <h2 className="form-heading">How to use this prediction tool</h2>
           </div>

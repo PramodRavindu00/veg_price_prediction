@@ -76,14 +76,15 @@
 }
 
 /* Confirm alert overriding */
+@media (max-width: 640px) {
+  .react-confirm-alert-overlay {
+    padding-right: 1.25rem;
+    padding-left: 1.25rem;
+  }
 
-.react-confirm-alert-overlay {
-  padding-right: 1.25rem;
-  padding-left: 1.25rem;
-}
-
-.react-confirm-alert {
-  width: 95%;
-  margin: 0 auto;
-  display: flex;
+  .react-confirm-alert {
+    min-width: 90%;
+    margin: 0 auto;
+    display: flex;
+  }
 }

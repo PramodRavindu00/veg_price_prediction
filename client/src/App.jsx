@@ -35,7 +35,7 @@ const App = () => {
   return (
     <AuthContextProvider>
       <div
-        className={`flex flex-col min-h-screen bg-[#dcdcdb] flex-grow ${
+        className={`flex flex-col min-h-[90vh] bg-[#dcdcdb] flex-grow ${
           fadeIn ? "animate-fade" : ""
         } `}
       >

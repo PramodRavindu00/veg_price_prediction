@@ -9,6 +9,7 @@ import VegetableRoutes from "./routes/VegetableRoutes.mjs";
 import PredictionRoutes from "./routes/PredictionRoutes.mjs";
 import UserRoutes from "./routes/UserRoutes.mjs";
 import QueryRoutes from "./routes/QueryRoutes.mjs";
+import MaintenanceRoutes from "./routes/MaintenanceRoutes.mjs";
 
 const port = process.env.PORT || 8080;
 const app = express();
@@ -24,8 +25,11 @@ app.use(VegetableRoutes);
 app.use(PredictionRoutes);
 app.use(UserRoutes);
 app.use(QueryRoutes);
+app.use(MaintenanceRoutes)
 
 app.listen(port, () => {
   console.log(`Server started running on port : ${port}`);
   connectDB();
 });
+
+
