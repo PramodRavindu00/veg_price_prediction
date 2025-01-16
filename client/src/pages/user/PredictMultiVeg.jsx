@@ -147,80 +147,88 @@ const PredictMultiVeg = () => {
         <Loader />
       ) : (
         <>
-          <div className="flex flex-col">
-            <div className="flex flex-col lg:flex-row">
-              <div className="layout-2-in-row">
-                <form
-                  onSubmit={handleSubmit}
-                  className="flex flex-col items-center"
-                >
-                  <div className="form-group">
-                    <label className="form-label">Vegetables</label>
-                    <SelectBox
-                      name="vegetables"
-                      options={vegetableOptions}
-                      value={selectedVegetables}
-                      placeholder="Select vegetables"
-                      isMulti={true}
-                      onChange={(selectedOption) =>
-                        handleSelectChange(selectedOption, "vegetables")
-                      }
-                    />
-                    <span className="form-error">{formErrors.vegetable}</span>
+          <div className="flex flex-col p-5">
+            <div className="flex flex-col lg:flex-row items-center gap-5">
+              <div className="flex flex-col bg-white p-6 w-full rounded-lg shadow-lg gap-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="form-row-2">
+                    {" "}
+                    <div className="w-full">
+                      <label className="form-label">Vegetables</label>
+                      <SelectBox
+                        name="vegetables"
+                        options={vegetableOptions}
+                        value={selectedVegetables}
+                        placeholder="Select vegetables"
+                        isMulti={true}
+                        onChange={(selectedOption) =>
+                          handleSelectChange(selectedOption, "vegetables")
+                        }
+                      />
+                      <span className="form-error">{formErrors.vegetable}</span>
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">Market Area</label>
+                  <div className="form-row-2">
+                    <div className="w-full">
+                      <label className="form-label">Market Area</label>
 
-                    <SelectBox
-                      name="location"
-                      options={marketOptions}
-                      value={selectedMarket}
-                      placeholder="Select Market Area"
-                      onChange={(selectedOption) =>
-                        handleSelectChange(selectedOption, "location")
-                      }
-                    />
-                    <span className="form-error">{formErrors.location}</span>
+                      <SelectBox
+                        name="location"
+                        options={marketOptions}
+                        value={selectedMarket}
+                        placeholder="Select Market Area"
+                        onChange={(selectedOption) =>
+                          handleSelectChange(selectedOption, "location")
+                        }
+                      />
+                      <span className="form-error">{formErrors.location}</span>
+                    </div>{" "}
+                    <div className="w-full">
+                      <label className="form-label">
+                        Average Rainfall in mm
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter next week's average rainfall"
+                        className="form-input"
+                        name="rainfall"
+                        value={formValues.rainfall}
+                        onChange={handleChange}
+                      />
+                      <span className="form-error">{formErrors.rainfall}</span>
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">Average Rainfall in mm</label>
-                    <input
-                      type="text"
-                      placeholder="Enter next week's average rainfall"
-                      className="form-input"
-                      name="rainfall"
-                      value={formValues.rainfall}
-                      onChange={handleChange}
-                    />
-                    <span className="form-error">{formErrors.rainfall}</span>
+                  <div className="form-row-2">
+                    {" "}
+                    <div className="w-full">
+                      <label className="form-label">
+                        Fuel Price (Lanka Auto Diesel) in Rs
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter fuel price"
+                        className="form-input"
+                        name="fuelPrice"
+                        value={formValues.fuelPrice}
+                        onChange={handleChange}
+                      />
+                      <span className="form-error">{formErrors.fuelPrice}</span>
+                    </div>
+                    <div className="w-full">
+                      <label className="form-label">Festival Seasonality</label>
+                      <SelectBox
+                        name="festival"
+                        options={isFestivalSeason}
+                        value={selectedFestival}
+                        placeholder="Any festival in next week?"
+                        onChange={(selectedOption) =>
+                          handleSelectChange(selectedOption, "festival")
+                        }
+                      />
+                      <span className="form-error">{formErrors.festival}</span>
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">
-                      Current Fuel Price (Lanka Auto Diesel) in Rs
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter fuel price"
-                      className="form-input"
-                      name="fuelPrice"
-                      value={formValues.fuelPrice}
-                      onChange={handleChange}
-                    />
-                    <span className="form-error">{formErrors.fuelPrice}</span>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Festival Seasonality</label>
-                    <SelectBox
-                      name="festival"
-                      options={isFestivalSeason}
-                      value={selectedFestival}
-                      placeholder="Any festival in next week?"
-                      onChange={(selectedOption) =>
-                        handleSelectChange(selectedOption, "festival")
-                      }
-                    />
-                    <span className="form-error">{formErrors.festival}</span>
-                  </div>
+
                   <div className="my-2 lg:mt-4 flex justify-center form-group">
                     <button
                       type="submit"

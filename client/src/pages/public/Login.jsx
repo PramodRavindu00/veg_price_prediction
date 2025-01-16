@@ -82,12 +82,12 @@ const Login = () => {
         className="relative w-full h-auto bg-cover bg-center min-h-screen lg:min-h-screen bg-bg-content
     flex items-center justify-center p-5"
       >
-        <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/3 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+        <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/3 rounded-lg shadow-lg gap-4">
+          <h2 className="text-2xl font-bold text-gray-800 text-center">
             Login
           </h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="w-full">
               <label className="form-label">Email</label>
               <input
                 type="text"
@@ -99,7 +99,7 @@ const Login = () => {
               />
               <span className="form-error">{formErrors.email}</span>
             </div>
-            <div className="mb-4">
+            <div className="w-full">
               <label className="form-label">Password</label>
               <div className="relative flex items-center">
                 <input

@@ -23,7 +23,7 @@
 }
 
 .form-row-2 {
-  @apply flex flex-col lg:flex-row items-center lg:items-start gap-4;
+  @apply flex flex-col lg:flex-row flex-1 items-center lg:items-start gap-4;
 }
 
 .btn-primary {
@@ -40,7 +40,7 @@
 }
 
 .form-group {
-  @apply mb-4 w-full lg:w-3/4;
+  @apply mb-4 w-full;
 }
 
 .td {
@@ -65,6 +65,7 @@
 }
 /* pagination component end */
 
+/* Modal webkit */
 .modal::-webkit-scrollbar {
   display: none;
 }
@@ -72,4 +73,17 @@
 .modal {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Confirm alert overriding */
+
+.react-confirm-alert-overlay {
+  padding-right: 1.25rem;
+  padding-left: 1.25rem;
+}
+
+.react-confirm-alert {
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
 }

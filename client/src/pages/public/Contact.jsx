@@ -73,11 +73,11 @@ const Contact = () => {
         className="w-full flex flex-col  items-center justify-center p-5 bg-bg-content
 "
       >
-        <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/2 rounded-lg shadow-lg gap-5">
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+        <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/2 rounded-lg shadow-lg gap-4">
+          <h2 className="text-2xl font-bold text-gray-800 text-center">
             Get in Touch with Us
           </h2>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="form-row-2">
               <div className="w-full">
                 <label className="form-label">First Name</label>

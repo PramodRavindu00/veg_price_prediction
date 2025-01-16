@@ -173,10 +173,10 @@ const ShoppingList = () => {
       {loading && !predictFormValues && !preferenceFormValues ? (
         <Loader />
       ) : (
-        <div className="flex flex-col">
-          <div className="flex flex-col lg:flex-row">
-            <div className="layout-2-in-row">
-              <div className="mb-6">
+        <div className="flex flex-col p-5">
+          <div className="flex flex-col lg:flex-row gap-5">
+            <div className="flex flex-col w-full">
+              <div className="flex justify-end lg:justify-start mb-6">
                 {" "}
                 <button className="btn-secondary" onClick={openModal}>
                   {submitBtnTxt}
@@ -184,7 +184,7 @@ const ShoppingList = () => {
               </div>
               <div>
                 {userData.preferredVeggies.length <= 0 ? (
-                  <h1 className="px-6 py-4 text-center bg-orange-300 font-semibold rounded-md">
+                  <h1 className="px-6 py-4 text-center bg-orange-300 font-semibold rounded-lg">
                     No personalized vegetable list added yet
                   </h1>
                 ) : (
@@ -220,74 +220,77 @@ const ShoppingList = () => {
                 )}
               </div>
             </div>
-            <div className="layout-2-in-row">
-              <h2 className="form-heading">
-                Fill this form to predict your preferred vegetables prices &
-                plan your cost
+            <div className="flex flex-col bg-white p-6 w-full rounded-lg shadow-lg gap-4">
+              <h2 className="text-base sm:text-2xl font-bold text-gray-800 text-center">
+                Fill this form to predict your preferred vegetables
               </h2>
-              <form
-                className="flex flex-col items-center"
-                onSubmit={handlePredictSubmit}
-              >
-                <div className="form-group">
-                  <label className="form-label">Market Area</label>
-                  <input
-                    type="text"
-                    disabled
-                    name="location"
-                    value={userData.nearestMarket.market.market}
-                    className="form-input"
-                  />
-                  <span className="form-error">
-                    {predictFormErrors.location}
-                  </span>
+              <form className="space-y-4" onSubmit={handlePredictSubmit}>
+                <div className="form-row-2">
+                  {" "}
+                  <div className="w-full">
+                    <label className="form-label">Market Area</label>
+                    <input
+                      type="text"
+                      disabled
+                      name="location"
+                      value={userData.nearestMarket.market.market}
+                      className="form-input"
+                    />
+                    <span className="form-error">
+                      {predictFormErrors.location}
+                    </span>
+                  </div>
+                  <div className="w-full">
+                    <label className="form-label">Average Rainfall in mm</label>
+                    <input
+                      type="text"
+                      placeholder="Enter next week's average rainfall"
+                      className="form-input"
+                      name="rainfall"
+                      value={predictFormValues.rainfall}
+                      onChange={handleChange}
+                    />
+                    <span className="form-error">
+                      {predictFormErrors.rainfall}
+                    </span>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Average Rainfall in mm</label>
-                  <input
-                    type="text"
-                    placeholder="Enter next week's average rainfall"
-                    className="form-input"
-                    name="rainfall"
-                    value={predictFormValues.rainfall}
-                    onChange={handleChange}
-                  />
-                  <span className="form-error">
-                    {predictFormErrors.rainfall}
-                  </span>
+                <div className="form-row-2">
+                  {" "}
+                  <div className="w-full">
+                    <label className="form-label">
+                      Fuel Price (Lanka Auto Diesel) in Rs
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter fuel price"
+                      className="form-input"
+                      name="fuelPrice"
+                      value={predictFormValues.fuelPrice}
+                      onChange={handleChange}
+                    />
+                    <span className="form-error">
+                      {predictFormErrors.fuelPrice}
+                    </span>
+                  </div>
+                  <div className="w-full">
+                    <label className="form-label">Festival Seasonality</label>
+                    <SelectBox
+                      name="festival"
+                      options={isFestivalSeason}
+                      value={selectedFestival}
+                      placeholder="Any festival in next week?"
+                      onChange={(selectedOption) =>
+                        handleSelectChange(selectedOption, "festival")
+                      }
+                    />
+                    <span className="form-error">
+                      {predictFormErrors.festival}
+                    </span>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">
-                    Current Fuel Price (Lanka Auto Diesel) in Rs
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter fuel price"
-                    className="form-input"
-                    name="fuelPrice"
-                    value={predictFormValues.fuelPrice}
-                    onChange={handleChange}
-                  />
-                  <span className="form-error">
-                    {predictFormErrors.fuelPrice}
-                  </span>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Festival Seasonality</label>
-                  <SelectBox
-                    name="festival"
-                    options={isFestivalSeason}
-                    value={selectedFestival}
-                    placeholder="Any festival in next week?"
-                    onChange={(selectedOption) =>
-                      handleSelectChange(selectedOption, "festival")
-                    }
-                  />
-                  <span className="form-error">
-                    {predictFormErrors.festival}
-                  </span>
-                </div>
-                <div className="my-2 lg:mt-4 flex justify-center form-group">
+
+                <div className="my-2 flex justify-center form-group">
                   <button
                     type="submit"
                     className="btn-primary"
@@ -308,7 +311,7 @@ const ShoppingList = () => {
       >
         <form
           onSubmit={handlePreferenceSubmit}
-          className="flex flex-col justify-center items-center"
+          className="flex flex-col overflow-y-hidden"
         >
           <h1 className="form-heading">{submitBtnTxt}</h1>
           <div className="form-group">
