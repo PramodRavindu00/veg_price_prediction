@@ -15,7 +15,7 @@ import { toast, Toaster } from "sonner";
 import { useAuth } from "../assets/useAuth.mjs";
 
 const Navbar = ({ publicPage = true, navLinks }) => {
-  const { setAuth, setUserData } = useAuth();
+  const { auth,setAuth, setUserData } = useAuth();
 
   const [toggleBtn, setToggleBtn] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
@@ -34,44 +34,40 @@ const Navbar = ({ publicPage = true, navLinks }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     Confirm({
       title: "Confirm Log out",
       message: "Are you sure you want to log out?",
       onConfirm: async () => {
-        //console.log("confirmed logging out");
 
-        try {
-          const res = await axios.post(
-            "/api/auth/logOut",
-            {},
-            { withCredentials: true }
-          );
-        //  console.log(res.data.success);
+    try {
+      const res = await axios.post(
+        "/api/auth/logOut",
+        {},
+        { withCredentials: true }
+      );
 
-          if (res.data.success) {
-            sessionStorage.clear();
-            setAuth({
-              isLoggedIn: false,
-              userId: null,
-              userType: null,
-            });
-            setUserData(null);
+     if (res.data.success) {
+      sessionStorage.clear();
+      setAuth({
+        isLoggedIn: false,
+        userId: null,
+        userType: null,
+      });
+      setUserData(null);
 
-            navigate("/login");
-            console.log(res.data.message);
-            // toast.success("successfully logged out");
-          }
-        } catch (error) {
-          console.log(error);
-          // toast.error("An error occurred during log out.");
-        }
-      },
-    });
+      console.log(res.data.message);
+      navigate("/login");
+       }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  });
   };
 
   return (
-    <nav className="flex w-full fixed sm:sticky top-0 right-0 p-3 sm:p-6 items-center bg-transparent sm:bg-[#1d362e] z-10 text-white">
+    <nav className="flex fixed sm:sticky top-0 left-0 p-3 sm:p-6 items-center bg-transparent sm:bg-[#1d362e] z-10 text-white">
       <div className="w-full hidden sm:flex items-center justify-between gap-2">
         <span className="hidden text-3xl  lg:block">GreenPriceNet</span>
         <ul className="flex  flex-row justify-center gap-5 md:gap-10 text-lg">
@@ -124,9 +120,9 @@ const Navbar = ({ publicPage = true, navLinks }) => {
       </div>
 
       {/* mobile nav bar */}
-      <div className="h-full flex flex-col sm:hidden">
+      <div className="h-full flex flex-col sm:hidden items-start">
         {toggleBtn && (
-          <button className="text-2xl text-white bg-black/50 p-2 rounded">
+          <button className="text-2xl text-white bg-black/50 p-2 mt-2 rounded">
             <AiOutlineMenu onClick={() => toggleMenu("open")} />
           </button>
         )}

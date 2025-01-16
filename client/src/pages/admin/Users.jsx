@@ -68,7 +68,7 @@ const Users = () => {
       <Navbar publicPage={false} navLinks={adminLinks} />
       <div className="flex flex-col p-5 gap-5">
         <div className="flex justify-end ">
-          <div className="w-full md:w-1/2 lg:w-1/3">
+          <div className="w-4/5 md:w-1/2 lg:w-1/4">
             <input
               type="text"
               placeholder="Search Users...."

@@ -34,7 +34,9 @@ export const AuthContextProvider = ({ children }) => {
       }
     };
 
-    checkValidCookieAvailable();
+    if (!auth) {
+      checkValidCookieAvailable();
+    }
   }, [auth]);
 
   useEffect(() => {

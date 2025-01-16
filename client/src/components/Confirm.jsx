@@ -1,7 +1,7 @@
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
-function Confirm({ title, message, onConfirm }) {
+const Confirm = ({ title, message, onConfirm }) => {
   return confirmAlert({
     title: title,
     message: message,

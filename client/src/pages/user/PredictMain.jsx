@@ -134,93 +134,96 @@ const PredictMain = () => {
   return (
     <>
       <Navbar publicPage={false} navLinks={userLinks} />
-      <div className="flex flex-col">
-        <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col p-5">
+        <div className="flex flex-col lg:flex-row gap-5 items-center">
           <div className="layout-2-in-row">
             <h2 className="form-heading">How to use this prediction tool</h2>
           </div>
-          <div className="layout-2-in-row">
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col items-center"
-            >
-              <div className="form-group">
-                <label className="form-label">Vegetable</label>
-                <SelectBox
-                  name="vegetable"
-                  options={vegetableOptions}
-                  value={selectedVegetable}
-                  placeholder="Select Vegetable"
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "vegetable")
-                  }
-                />
-                <span className="form-error">{formErrors.vegetable}</span>
+          <div className="flex flex-col bg-white p-6 w-full rounded-lg shadow-lg gap-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="form-row-2">
+                <div className="w-full">
+                  <label className="form-label">Vegetable</label>
+                  <SelectBox
+                    name="vegetable"
+                    options={vegetableOptions}
+                    value={selectedVegetable}
+                    placeholder="Select Vegetable"
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "vegetable")
+                    }
+                  />
+                  <span className="form-error">{formErrors.vegetable}</span>
+                </div>
+                <div className="w-full">
+                  <label className="form-label">Market Area</label>
+                  <SelectBox
+                    name="location"
+                    options={marketOptions}
+                    value={selectedMarket}
+                    placeholder="Select Market Area"
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "location")
+                    }
+                  />
+                  <span className="form-error">{formErrors.location}</span>
+                </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">Market Area</label>
-                <SelectBox
-                  name="location"
-                  options={marketOptions}
-                  value={selectedMarket}
-                  placeholder="Select Market Area"
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "location")
-                  }
-                />
-                <span className="form-error">{formErrors.location}</span>
+              <div className="form-row-2">
+                <div className="w-full">
+                  <label className="form-label">Average Rainfall in mm</label>
+                  <input
+                    type="text"
+                    placeholder="Enter next week's average rainfall"
+                    className="form-input"
+                    name="rainfall"
+                    value={formValues.rainfall}
+                    onChange={handleChange}
+                  />
+                  <span className="form-error">{formErrors.rainfall}</span>
+                </div>
+                <div className="w-full">
+                  <label className="form-label">
+                    Fuel Price (Lanka Auto Diesel) in Rs
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter fuel price"
+                    className="form-input"
+                    name="fuelPrice"
+                    value={formValues.fuelPrice}
+                    onChange={handleChange}
+                  />
+                  <span className="form-error">{formErrors.fuelPrice}</span>
+                </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">Average Rainfall in mm</label>
-                <input
-                  type="text"
-                  placeholder="Enter next week's average rainfall"
-                  className="form-input"
-                  name="rainfall"
-                  value={formValues.rainfall}
-                  onChange={handleChange}
-                />
-                <span className="form-error">{formErrors.rainfall}</span>
-              </div>
-              <div className="form-group">
-                <label className="form-label">
-                  Current Fuel Price (Lanka Auto Diesel) in Rs
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter fuel price"
-                  className="form-input"
-                  name="fuelPrice"
-                  value={formValues.fuelPrice}
-                  onChange={handleChange}
-                />
-                <span className="form-error">{formErrors.fuelPrice}</span>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Prediction Period</label>
-                <SelectBox
-                  name="predType"
-                  options={predType}
-                  value={selectedPeriod}
-                  placeholder="Select Prediction Period"
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "predType")
-                  }
-                />
-                <span className="form-error">{formErrors.predType}</span>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Festival Seasonality</label>
-                <SelectBox
-                  name="festival"
-                  options={isFestivalSeason}
-                  value={selectedFestival}
-                  placeholder="Any festival within prediction period?"
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "festival")
-                  }
-                />
-                <span className="form-error">{formErrors.festival}</span>
+              <div className="form-row-2">
+                <div className="w-full">
+                  <label className="form-label">Prediction Period</label>
+                  <SelectBox
+                    name="predType"
+                    options={predType}
+                    value={selectedPeriod}
+                    placeholder="Select Prediction Period"
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "predType")
+                    }
+                  />
+                  <span className="form-error">{formErrors.predType}</span>
+                </div>
+                <div className="w-full">
+                  <label className="form-label">Festival Seasonality</label>
+                  <SelectBox
+                    name="festival"
+                    options={isFestivalSeason}
+                    value={selectedFestival}
+                    placeholder="Any festival happening?"
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "festival")
+                    }
+                  />
+                  <span className="form-error">{formErrors.festival}</span>
+                </div>
               </div>
               <div className="my-2 lg:mt-4 flex justify-center form-group">
                 <button
@@ -234,9 +237,9 @@ const PredictMain = () => {
             </form>
           </div>
         </div>
-        <div id="resultsDiv" className="layout-2-in-row py-4 ">
+        <div id="resultsDiv" className="py-4 items-center flex flex-col">
           {predPeriod === "week" && (
-            <div className="flex flex-col w-full sm:w-[70%] lg:w-[40%] bg-slate-100 p-5">
+            <div className="flex flex-col w-full sm:w-[70%] lg:w-[40%] bg-slate-100 p-5 rounded-lg">
               <h2 className="form-heading">Weekly Predictable Price</h2>
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <p>From - 2024-12-23</p>
@@ -249,7 +252,7 @@ const PredictMain = () => {
           )}
           {predPeriod === "4week" && (
             <Chart
-              className="h-screen"
+              className="h-[50vh] rounded-lg"
               chartType="LineChart"
               data={[
                 ["Age", "Weight"],
