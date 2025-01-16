@@ -53,7 +53,7 @@ const Login = () => {
       try {
         setBtnDisabled(true);
         const res = await axios.post("/api/auth/userLogin", formValues);
-        toast.success(res.data.message);
+        //toast.success(res.data.message);
         if (res.data.success) {
           const loggedUser = res.data.loggedUser;
 

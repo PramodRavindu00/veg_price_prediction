@@ -72,6 +72,22 @@ const ShoppingList = () => {
     }
   };
 
+    const getFuelPrice = async () => {
+      try {
+        const { data } = await axios.get("/api/maintenance/getFuelPrice");
+        setPredictFormValues((prev) => ({
+          ...prev,
+          fuelPrice: Number(data.price).toFixed(2),
+        }));
+      } catch (error) {
+        console.log(error.message);
+        setPredictFormErrors((prev) => ({
+          ...prev,
+          fuelPrice: "Failed receiving fuel price.Enter it manually",
+        }));
+      }
+    };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     const validNumericValue = value
@@ -79,6 +95,7 @@ const ShoppingList = () => {
       .replace(/(\..*?)\..*/g, "$1")
       .replace(/^(\d+\.\d{2})\d*/g, "$1");
     setPredictFormValues({ ...predictFormValues, [name]: validNumericValue });
+    setPredictFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSelectChange = (option, name) => {
@@ -112,6 +129,7 @@ const ShoppingList = () => {
     } else {
       console.log("Not a valid select box change");
     }
+    setPredictFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleAmountChange = (option, index) => {
@@ -165,6 +183,7 @@ const ShoppingList = () => {
 
   useEffect(() => {
     getAllVegetables();
+    getFuelPrice();
   }, []);
 
   return (
@@ -174,7 +193,7 @@ const ShoppingList = () => {
         <Loader />
       ) : (
         <div className="flex flex-col p-5">
-          <div className="flex flex-col lg:flex-row gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
             <div className="flex flex-col w-full">
               <div className="flex justify-end lg:justify-start mb-6">
                 {" "}

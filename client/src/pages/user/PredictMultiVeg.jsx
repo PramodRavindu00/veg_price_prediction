@@ -70,9 +70,25 @@ const PredictMultiVeg = () => {
         console.log(error.message);
       }
     };
+    const getFuelPrice = async () => {
+      try {
+        const { data } = await axios.get("/api/maintenance/getFuelPrice");
+        setFormValues((prev) => ({
+          ...prev,
+          fuelPrice: Number(data.price).toFixed(2),
+        }));
+      } catch (error) {
+        console.log(error.message);
+        setFormErrors((prev) => ({
+          ...prev,
+          fuelPrice: "Failed receiving fuel price.Enter it manually",
+        }));
+      }
+    };
 
     getAllVegetables();
     getAllMarkets();
+    getFuelPrice();
 
     if (userData && userData.nearestMarket) {
       setLoading(false);
@@ -86,6 +102,7 @@ const PredictMultiVeg = () => {
       .replace(/(\..*?)\..*/g, "$1")
       .replace(/^(\d+\.\d{2})\d*/g, "$1");
     setFormValues({ ...formValues, [name]: validNumericValue });
+    setFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSelectChange = (option, name) => {
@@ -105,16 +122,17 @@ const PredictMultiVeg = () => {
     } else {
       console.log("Not a valid select box change");
     }
+    setFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const clearForm = () => {
     const userMarket = marketOptions.find(
       (market) => market.id === userData?.nearestMarket?.market?._id
     );
-    setFormValues({
+    setFormValues((prev)=>({
       ...initialValues,
-      location: userMarket?.location || "",
-    });
+      location: userMarket?.location || "",["fuelPrice"]:prev.fuelPrice
+    }));
     setSelectedVegetables([]);
     setSelectedMarket(userMarket || null); 
     setSelectedFestival(null);
@@ -148,7 +166,7 @@ const PredictMultiVeg = () => {
       ) : (
         <>
           <div className="flex flex-col p-5">
-            <div className="flex flex-col lg:flex-row items-center gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
               <div className="flex flex-col bg-white p-6 w-full rounded-lg shadow-lg gap-4">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="form-row-2">
@@ -165,7 +183,7 @@ const PredictMultiVeg = () => {
                           handleSelectChange(selectedOption, "vegetables")
                         }
                       />
-                      <span className="form-error">{formErrors.vegetable}</span>
+                      <span className="form-error">{formErrors.vegetables}</span>
                     </div>
                   </div>
                   <div className="form-row-2">

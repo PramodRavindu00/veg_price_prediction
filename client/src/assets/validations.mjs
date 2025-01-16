@@ -80,7 +80,7 @@ export const MainPredictionFormValidations = (values) => {
 export const MultiplePredictionFormValidations = (values) => {
   const errors = {};
   if (values.vegetable.length <= 0) {
-    errors.vegetable = "Select at least one vegetable!";
+    errors.vegetables = "Select at least one vegetable!";
   }
   if (!values.location) {
     errors.location = "Market area is required!";
