@@ -39,25 +39,32 @@ const Navbar = ({ publicPage = true, navLinks }) => {
       title: "Confirm Log out",
       message: "Are you sure you want to log out?",
       onConfirm: async () => {
+        //console.log("confirmed logging out");
+
         try {
           const res = await axios.post(
             "/api/auth/logOut",
             {},
             { withCredentials: true }
           );
+        //  console.log(res.data.success);
+
           if (res.data.success) {
+            sessionStorage.clear();
             setAuth({
               isLoggedIn: false,
               userId: null,
               userType: null,
             });
             setUserData(null);
-            console.log(res.data.message);
-            
+
             navigate("/login");
+            console.log(res.data.message);
+            // toast.success("successfully logged out");
           }
         } catch (error) {
-          toast.error(error);
+          console.log(error);
+          // toast.error("An error occurred during log out.");
         }
       },
     });
@@ -66,9 +73,7 @@ const Navbar = ({ publicPage = true, navLinks }) => {
   return (
     <nav className="flex w-full fixed sm:sticky top-0 right-0 p-3 sm:p-6 items-center bg-transparent sm:bg-[#1d362e] z-10 text-white">
       <div className="w-full hidden sm:flex items-center justify-between gap-2">
-        <span className="hidden text-3xl  lg:block">
-          GreenPriceNet
-        </span>
+        <span className="hidden text-3xl  lg:block">GreenPriceNet</span>
         <ul className="flex  flex-row justify-center gap-5 md:gap-10 text-lg">
           {navLinks.map((link, index) => (
             <li key={index}>
