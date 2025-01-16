@@ -59,7 +59,7 @@ export const login = async (req, res) => {
         .status(401)
         .json({ success: false, message: "Incorrect email or password" });
     }
-  
+
     const token = jwt.sign(
       { id: validUser._id, role: validUser.userType },
       process.env.JWT_SECRET,
@@ -102,7 +102,7 @@ export const logout = (req, res) => {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
-      maxAge: 0,
+      expires: new Date(0),
     });
 
     res
@@ -118,7 +118,7 @@ export const validateToken = async (req, res) => {
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(204).end();   //no token in the cookie
+    return res.status(204).end(); //no token in the cookie
   }
 
   try {

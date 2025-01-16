@@ -9,7 +9,7 @@ const About = () => {
     relative w-full h-[50vh] md:h-[70vh] bg-cover bg-center bg-[url('/images/about_top.jpg')] 
    flex items-center mb-2"
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-70"></div>
         <div className="flex flex-col w-full items-center absolute bottom-[5%] sm:top-[20%] text-white ">
           <h1 className="text-2xl sm:text-5xl text-center font-bold">
             About GreenPriceNet

@@ -74,7 +74,7 @@ const Contact = () => {
 "
       >
         <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/2 rounded-lg shadow-lg gap-5">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center">
+          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
             Get in Touch with Us
           </h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">

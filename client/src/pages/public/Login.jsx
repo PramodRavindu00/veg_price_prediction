@@ -79,7 +79,7 @@ const Login = () => {
     <>
       <Navbar navLinks={publicLinks} />
       <div
-        className="relative w-full h-auto bg-cover bg-center min-h-screen lg:min-h-[90vh] bg-bg-content
+        className="relative w-full h-auto bg-cover bg-center min-h-screen lg:min-h-screen bg-bg-content
     flex items-center justify-center p-5"
       >
         <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/3 rounded-lg shadow-lg">
