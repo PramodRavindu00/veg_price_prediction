@@ -22,6 +22,7 @@ import {
   LinearScale,
   plugins,
 } from "chart.js";
+import Loader from "../../components/Loader";
 
 ChartJS.register(
   Title,
@@ -36,6 +37,7 @@ const Dashboard = () => {
   const [counts, setCounts] = useState(null);
   const [marketDistribution, setMarketDistribution] = useState(null);
   const [pieChartData, setPieChartData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const getCounts = async () => {
     try {
@@ -44,13 +46,16 @@ const Dashboard = () => {
     } catch (error) {
       console.log(error.message);
       toast.error("Error receiving counts");
+    } finally {
+      setLoading(false);
     }
   };
 
   const userDistribution = async () => {
     try {
       const res = await axios.get("/api/user/getUserDistribution");
-      setMarketDistribution(res.data.data);
+      const data = res.data.data;
+      setMarketDistribution(data);
     } catch (error) {
       console.log(error.message);
       toast.error("Error receiving market distributions");
@@ -59,8 +64,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     getCounts();
-    userDistribution();
+  }, []);
 
+  useEffect(() => {
+    if (counts) {
+      userDistribution();
+    }
+  }, [counts]);
+
+  useEffect(() => {
     if (marketDistribution) {
       const data = {
         labels: marketDistribution.map((item) => item.market),
@@ -68,154 +80,146 @@ const Dashboard = () => {
           {
             data: marketDistribution.map((item) => item.count),
             backgroundColor: [
-              "#FF5733",
-              "#33FF57",
-              "#3357FF",
-              "#FF33A1",
-              "#FFD700",
-              "#4B0082",
-              "#FF4500",
-              "#ADFF2F",
-              "#D2691E",
-              "#DC143C",
+              "#4c34b5",
+              "#51f35f",
+              "#b4d092",
+              "#11f901",
+              "#c25310",
+              "#6c45bd",
+              "#9f473e",
+              "#ac710a",
+              "#9a1c2f",
+              "#aab3bc",
+              "#ab825c",
+              "#a7574b",
+              "#06b716",
+              "#35dffb",
+              "#d99b0c",
             ],
-            hoverOffset: 4,
           },
         ],
       };
 
-      setPieChartData({ data });
+      setPieChartData(data);
     }
   }, [marketDistribution]);
 
   return (
     <>
       <Navbar publicPage={false} navLinks={adminLinks} />
-      <div className="flex flex-col p-5 gap-5">
-        {/* counts section */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="flex flex-col  shadow-lg h-40  bg-lime-100 rounded-lg justify-center text-gray-800">
-            <div className="flex flex-col items-center gap-2">
-              <FontAwesomeIcon icon={faUsers} className="text-5xl" />
-              <CountUp
-                start={0}
-                end={counts?.userCount}
-                separator=","
-                className="text-3xl"
-              />
-              <span className="text-sm">Registered Users</span>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="flex flex-col p-5 gap-5">
+          {/* counts section */}
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="flex flex-col  shadow-lg h-40  bg-lime-100 rounded-lg justify-center text-gray-800 hover:cursor-pointer">
+              <div className="flex flex-col items-center gap-2">
+                <FontAwesomeIcon icon={faUsers} className="text-5xl" />
+                <CountUp
+                  start={0}
+                  end={counts?.userCount}
+                  separator=","
+                  className="text-3xl"
+                />
+                <span className="text-sm">Registered Users</span>
+              </div>
+            </div>
+            <div className="flex flex-col  shadow-lg h-40  bg-red-300 rounded-lg justify-center text-gray-800 hover:cursor-pointer">
+              <div className="flex flex-col items-center gap-2">
+                <FontAwesomeIcon icon={faLocationDot} className="text-5xl" />
+                <CountUp
+                  start={0}
+                  end={counts?.marketCount}
+                  separator=","
+                  className="text-3xl"
+                />
+                <span className="text-sm">Market Areas</span>
+              </div>
+            </div>
+            <div className="flex flex-col  shadow-lg h-40  bg-blue-100 rounded-lg justify-center text-gray-800 hover:cursor-pointer">
+              <div className="flex flex-col items-center gap-2">
+                <FontAwesomeIcon icon={faCarrot} className="text-5xl" />
+                <CountUp
+                  start={0}
+                  end={counts?.vegCount}
+                  separator=","
+                  className="text-3xl"
+                />
+                <span className="text-sm">Vegetables</span>
+              </div>
+            </div>
+            <div className="flex flex-col  shadow-lg h-40  bg-green-100 rounded-lg justify-center text-gray-800 hover:cursor-pointer">
+              <div className="flex flex-col items-center gap-2">
+                <FontAwesomeIcon icon={faMessage} className="text-5xl" />
+                <CountUp
+                  start={0}
+                  end={counts?.queryCount}
+                  separator=","
+                  className="text-3xl"
+                />
+                <span className="text-sm">Queries Received</span>
+              </div>
             </div>
           </div>
-          <div className="flex flex-col  shadow-lg h-40  bg-red-300 rounded-lg justify-center text-gray-800">
-            <div className="flex flex-col items-center gap-2">
-              <FontAwesomeIcon icon={faLocationDot} className="text-5xl" />
-              <CountUp
-                start={0}
-                end={counts?.marketCount}
-                separator=","
-                className="text-3xl"
-              />
-              <span className="text-sm">Market Areas</span>
-            </div>
-          </div>
-          <div className="flex flex-col  shadow-lg h-40  bg-blue-100 rounded-lg justify-center text-gray-800">
-            <div className="flex flex-col items-center gap-2">
-              <FontAwesomeIcon icon={faCarrot} className="text-5xl" />
-              <CountUp
-                start={0}
-                end={counts?.vegCount}
-                separator=","
-                className="text-3xl"
-              />
-              <span className="text-sm">Vegetables</span>
-            </div>
-          </div>
-          <div className="flex flex-col  shadow-lg h-40  bg-green-100 rounded-lg justify-center text-gray-800">
-            <div className="flex flex-col items-center gap-2">
-              <FontAwesomeIcon icon={faMessage} className="text-5xl" />
-              <CountUp
-                start={0}
-                end={counts?.queryCount}
-                separator=","
-                className="text-3xl"
-              />
-              <span className="text-sm">Queries Received</span>
-            </div>
-          </div>
-        </div>
-        <h1 className="text-center">Distributions</h1>
-        {/* charts section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 justify-center">
-          {/* market distribution chart */}
-          <div className="min-h-[50vh] grid grid-cols-1 lg:grid-cols-2 px-5 items-center">
-            {pieChartData ? (
-              <>
-                <div className="flex flex-col  text-center">
-                  <span className="text-lg font-semibold mb-4">
-                    User Distribution of Market Areas
-                  </span>
-                  <ul className="flex flex-col gap-2">
+          {/* charts section */}
+          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 items-center justify-center">
+            {/* Market distribution */}
+            <div className="flex flex-col items-center justify-center gap-2 bg-white rounded-lg shadow-lg p-4">
+              <h2 className="text-center text-xl font-bold text-gray-800">
+                Distribution of{" "}
+                <CountUp start={0} end={counts?.userCount} separator="," />{" "}
+                Users
+              </h2>
+              {pieChartData ? (
+                <div className="w-full flex flex-col gap-3 items-center justify-center">
+                  <div className="mx-auto">
+                    <Pie
+                      className="w-52 h-52 hover:cursor-pointer"
+                      data={pieChartData}
+                      options={{
+                        plugins: {
+                          legend: { display: false },
+                          tooltip: { enabled: true },
+                        },
+                        maintainAspectRatio: true,
+                      }}
+                    />
+                  </div>
+                  <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {marketDistribution?.map((item, index) => (
                       <li
-                        key={item.location}
-                        className="flex items-center gap-3 text-sm"
+                        key={index}
+                        className="flex items-center gap-2 text-sm"
                       >
                         <span
                           className="w-4 h-4 rounded-full"
                           style={{
                             backgroundColor:
-                              pieChartData.data.datasets[0].backgroundColor[
-                                index
-                              ],
+                              pieChartData.datasets[0].backgroundColor[index],
                           }}
                         ></span>
                         <span className="font-medium">{item.market}</span>
                         <span className="text-gray-500">
-                          ({item.count} users)
+                          ({(item.count * 100) / counts?.userCount}%)
                         </span>
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="flex ">
-                  <Pie
-                    className="h-52 lg:h-72"
-                    data={pieChartData.data}
-                    options={{
-                      plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: false },
-                      },
-                      maintainAspectRatio: true,
-                    }}
-                  />
+              ) : (
+                <div className="text-center col-span-2">
+                  Loading User Distribution...
                 </div>
-              </>
-            ) : (
-              <div className="text-center col-span-2">
-                Loading user distribution...
-              </div>
-            )}
-          </div>
-          <div className="w-full bg-orange-400">
-            {pieChartData ? (
-              <Pie
-                className="mx-auto"
-                data={pieChartData.data}
-                options={{
-                  plugins: {
-                    legend: { display: false },
-                    tooltip: { enabled: false },
-                  },
-                  maintainAspectRatio: false,
-                }}
-              />
-            ) : (
-              <div>Loading market location data...</div>
-            )}
+              )}
+            </div>
+
+            {/* vegetable distribution */}
+            <div className="bg-black h-20"></div>
           </div>
         </div>
-      </div>
+      )}
+
       <Toaster richColors position="top-right" />
     </>
   );
