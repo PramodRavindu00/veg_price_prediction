@@ -1,5 +1,6 @@
 import { isValidObjectId } from "mongoose";
 import User from "../models/UserModel.mjs";
+import Market from "../models/MarketModel.mjs";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -84,6 +85,42 @@ export const updateUserPreferences = async (req, res) => {
     res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
     console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getUserDistribution = async (req, res) => {
+  try {
+    const userCounts = await User.aggregate([
+      { $match: { userType: { $ne: "Admin" } } }, //exclude admin
+      {
+        $group: {
+          _id: "$nearestMarket.market",   //group by market
+          count: { $sum: 1 },             //get the count
+        },
+      },
+    ]);
+
+    const allMarkets = await Market.find({});    //get all markets
+
+    const result = allMarkets.map((market) => {   
+      const hasACount = userCounts.find(        //check all markets have any count
+        (entry) => entry._id.toString() === market._id.toString()
+      );
+
+      return {
+        market: market.market,
+        count: hasACount ? hasACount.count : 0,
+      };
+    });
+
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
