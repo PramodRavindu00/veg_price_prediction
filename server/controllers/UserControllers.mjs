@@ -1,7 +1,10 @@
 import { isValidObjectId } from "mongoose";
 import User from "../models/UserModel.mjs";
 import Market from "../models/MarketModel.mjs";
-import Vegetable from "../models/VegetableModel.mjs"
+import Vegetable from "../models/VegetableModel.mjs";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { sendEmail } from "../utils/emailService.mjs";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -164,5 +167,54 @@ export const getPreferredVeggieCount = async (req, res) => {
       success: false,
       message: "Internal Server Error",
     });
+  }
+};
+
+export const sendOTP = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const userFound = await User.findOne({ email }).select("_id"); //finding the user by email
+
+    if (!userFound)
+      res.status(404).json({ success: false, message: "user not found" });
+
+    const otp = crypto.randomInt(100000, 999999).toString(); //building a 6 digit random number as OTP;
+
+    const token = jwt.sign(
+      //generating a token with users id and generated OTP
+      { id: userFound._id, otp: otp },
+      process.env.JWT_SECRET,
+      { expiresIn: "5m" }
+    );
+
+    res.cookie("OTPToken", token, {
+      httpOnly: true,
+      //secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 300000,
+    });
+
+    const emailSent = await sendEmail(
+      //sending the email
+      email,
+      "Password Reset OTP",
+      `This is your one time password for reset your password as per your request : ${otp}`
+    );
+
+    if (!emailSent) {
+      console.error("Failed to send email");
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to send email" });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: { userFound, otp },
+      message: "OTP sent to the provided email",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).json({ success: false, message: "Internal Server Error" });
   }
 };
