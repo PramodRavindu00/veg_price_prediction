@@ -11,6 +11,7 @@ const VegetableSchema = new mongoose.Schema({
   },
 });
 
-const Vegetable = mongoose.model("Vegetable", VegetableSchema);
+const Vegetable =
+  mongoose.models.Vegetable || mongoose.model("Vegetable", VegetableSchema);
 
 export default Vegetable;

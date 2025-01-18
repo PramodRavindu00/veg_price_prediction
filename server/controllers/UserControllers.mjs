@@ -1,6 +1,7 @@
 import { isValidObjectId } from "mongoose";
 import User from "../models/UserModel.mjs";
 import Market from "../models/MarketModel.mjs";
+import Vegetable from "../models/VegetableModel.mjs"
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -98,16 +99,17 @@ export const getUserDistribution = async (req, res) => {
       { $match: { userType: { $ne: "Admin" } } }, //exclude admin
       {
         $group: {
-          _id: "$nearestMarket.market",   //group by market
-          count: { $sum: 1 },             //get the count
+          _id: "$nearestMarket.market", //group by market
+          count: { $sum: 1 }, //get the count
         },
       },
     ]);
 
-    const allMarkets = await Market.find({});    //get all markets
+    const allMarkets = await Market.find({}); //get all markets
 
-    const result = allMarkets.map((market) => {   
-      const hasACount = userCounts.find(        //check all markets have any count
+    const result = allMarkets.map((market) => {
+      const hasACount = userCounts.find(
+        //check all markets have any count
         (entry) => entry._id.toString() === market._id.toString()
       );
 
@@ -121,6 +123,43 @@ export const getUserDistribution = async (req, res) => {
   } catch (error) {
     console.log(error);
 
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getPreferredVeggieCount = async (req, res) => {
+  try {
+    const veggieCount = await User.aggregate([
+      { $match: { userType: { $ne: "Admin" } } },
+      { $unwind: "$preferredVeggies" },
+      {
+        $group: {
+          _id: "$preferredVeggies.vegetable",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const allVeggies = await Vegetable.find({}); //get all veggies
+
+    const result = allVeggies.map((vegetable) => {
+      const hasACount = veggieCount.find(
+        //check all veggies have any count
+        (entry) => entry._id.toString() === vegetable._id.toString()
+      );
+
+      return {
+        vegetable: vegetable.vegetableName,
+        count: hasACount ? hasACount.count : 0,
+      };
+    });
+
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",

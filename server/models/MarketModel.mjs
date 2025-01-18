@@ -11,6 +11,7 @@ const MarketsSchema = new mongoose.Schema({
   },
 });
 
-const Market = mongoose.model("Market", MarketsSchema);
+const Market =
+  mongoose.models.Market || mongoose.model("Market", MarketsSchema);
 
 export default Market;
