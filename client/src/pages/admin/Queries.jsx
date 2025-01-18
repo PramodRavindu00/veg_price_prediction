@@ -29,7 +29,7 @@ const Queries = () => {
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  useEffect(() => {
+ 
     const getQueries = async () => {
       try {
         const res = await axios.get("/api/query/viewQueries");
@@ -43,9 +43,10 @@ const Queries = () => {
       } catch (error) {
         console.log(error.message);
       }
-    };
-    getQueries();
-  }, [queries]);
+  };
+   useEffect(() => {
+     getQueries();
+   }, []);
 
   const filteredData = queries.filter((query) => {
     return (
@@ -100,11 +101,12 @@ const Queries = () => {
           `/api/query/replyToQuery/${clickedQuery._id}`,
           formValues
         );
-
+        
         closeModal();
         setBtnDisabled(false);
 
         if (data.success) toast.success("Reply Submitted Successfully");
+        getQueries()
       } catch (error) {
         toast.error("Internal Server Error");
       }
@@ -114,24 +116,25 @@ const Queries = () => {
   return (
     <>
       <Navbar publicPage={false} navLinks={adminLinks} />
-      <div className="flex flex-col p-5 gap-5">
-        <div className="flex justify-end ">
-          <div className="w-4/5 md:w-1/2 lg:w-1/4">
-            <input
-              type="text"
-              placeholder="Search Queries...."
-              className="form-input"
-              name="query"
-              onChange={(e) => {
-                setSearchText(e.target.value);
-                setCurrentPage(0);
-              }}
-            />
+
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="flex flex-col p-5 gap-5">
+          <div className="flex justify-end ">
+            <div className="w-4/5 md:w-1/2 lg:w-1/4">
+              <input
+                type="text"
+                placeholder="Search Queries...."
+                className="form-input"
+                name="query"
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                  setCurrentPage(0);
+                }}
+              />
+            </div>
           </div>
-        </div>
-        {loading ? (
-          <Loader />
-        ) : (
           <div className="overflow-x-auto rounded-md">
             {filteredData.length == 0 ? (
               <p className="text-center text-gray-500 py-4">
@@ -181,24 +184,25 @@ const Queries = () => {
               </table>
             )}
           </div>
-        )}
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          pageCount={Math.ceil(filteredData.length / itemsPerPage)}
-          onPageChange={handlePageChange}
-          containerClassName={"pagination"}
-          activeClassName={"active"}
-          pageClassName={"page-item"}
-          pageLinkClassName={"page-link"}
-          previousClassName={"page-item"}
-          previousLinkClassName={"page-link"}
-          nextClassName={"page-item"}
-          nextLinkClassName={"page-link"}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={1}
-        />
-      </div>
+          <ReactPaginate
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
+            pageCount={Math.ceil(filteredData.length / itemsPerPage)}
+            onPageChange={handlePageChange}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"page-item"}
+            previousLinkClassName={"page-link"}
+            nextClassName={"page-item"}
+            nextLinkClassName={"page-link"}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={1}
+          />
+        </div>
+      )}
+
       <Modal isOpen={modalOpen} closeModal={closeModal}>
         <div className="w-full">
           <div className="flex flex-col gap-1 border-b pb-4 mb-4">

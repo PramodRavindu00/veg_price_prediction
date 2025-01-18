@@ -167,7 +167,7 @@ const PredictMultiVeg = () => {
         <>
           <div className="flex flex-col p-5">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-              <div className="flex flex-col bg-white p-6 w-full rounded-lg shadow-lg gap-4">
+              <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border border-gray-200">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="form-row-2">
                     {" "}
@@ -183,7 +183,9 @@ const PredictMultiVeg = () => {
                           handleSelectChange(selectedOption, "vegetables")
                         }
                       />
-                      <span className="form-error">{formErrors.vegetables}</span>
+                      <span className="form-error">
+                        {formErrors.vegetables}
+                      </span>
                     </div>
                   </div>
                   <div className="form-row-2">

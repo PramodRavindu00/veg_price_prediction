@@ -66,24 +66,25 @@ const Users = () => {
   return (
     <>
       <Navbar publicPage={false} navLinks={adminLinks} />
-      <div className="flex flex-col p-5 gap-5">
-        <div className="flex justify-end ">
-          <div className="w-4/5 md:w-1/2 lg:w-1/4">
-            <input
-              type="text"
-              placeholder="Search Users...."
-              className="form-input"
-              name="query"
-              onChange={(e) => {
-                setSearchText(e.target.value);
-                setCurrentPage(0);
-              }}
-            />
+
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="flex flex-col p-5 gap-5">
+          <div className="flex justify-end ">
+            <div className="w-4/5 md:w-1/2 lg:w-1/4">
+              <input
+                type="text"
+                placeholder="Search Users...."
+                className="form-input"
+                name="query"
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                  setCurrentPage(0);
+                }}
+              />
+            </div>
           </div>
-        </div>
-        {loading ? (
-          <Loader />
-        ) : (
           <div className="overflow-x-auto  rounded-md">
             {filteredData.length == 0 ? (
               <p className="text-center text-gray-500 py-4">
@@ -138,24 +139,25 @@ const Users = () => {
               </table>
             )}
           </div>
-        )}
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          pageCount={Math.ceil(filteredData.length / itemsPerPage)}
-          onPageChange={handlePageChange}
-          containerClassName={"pagination"}
-          activeClassName={"active"}
-          pageClassName={"page-item"}
-          pageLinkClassName={"page-link"}
-          previousClassName={"page-item"}
-          previousLinkClassName={"page-link"}
-          nextClassName={"page-item"}
-          nextLinkClassName={"page-link"}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={1}
-        />
-      </div>
+          <ReactPaginate
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
+            pageCount={Math.ceil(filteredData.length / itemsPerPage)}
+            onPageChange={handlePageChange}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"page-item"}
+            previousLinkClassName={"page-link"}
+            nextClassName={"page-item"}
+            nextLinkClassName={"page-link"}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={1}
+          />
+        </div>
+      )}
+
       <Modal isOpen={modalOpen} closeModal={closeModal}>
         <div className="flex flex-col w-full  mx-auto gap-2 bg">
           <h2 className="text-center text-2xl font-semibold text-gray-800 mb-4">
