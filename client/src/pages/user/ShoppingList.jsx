@@ -207,7 +207,7 @@ const ShoppingList = () => {
                     No personalized vegetable list added yet
                   </h1>
                 ) : (
-                  <div className="p-6 flex flex-col w-full lg:w-2/3 mx-auto bg-white rounded-lg shadow-md border border-gray-200">
+                  <div className="p-5 flex flex-col w-full lg:w-2/3 mx-auto bg-white rounded-lg shadow-lg border border-gray-200">
                     <h2 className="text-center text-xl font-bold text-gray-800 mb-6">
                       Preferred Vegetables{" "}
                     </h2>
@@ -239,7 +239,7 @@ const ShoppingList = () => {
                 )}
               </div>
             </div>
-            <div className="flex flex-col bg-white p-6 w-full rounded-lg shadow-lg gap-4">
+            <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg border border-gray-200 gap-5">
               <h2 className="text-base sm:text-2xl font-bold text-gray-800 text-center">
                 Fill this form to predict your preferred vegetables
               </h2>

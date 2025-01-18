@@ -113,7 +113,10 @@ const PredictMain = () => {
     setSelectedMarket(null);
     setSelectedPeriod(null);
     setSelectedFestival(null);
-    setFormValues((prev) => ({ ...initialValues,["fuelPrice"]:prev.fuelPrice }));
+    setFormValues((prev) => ({
+      ...initialValues,
+      ["fuelPrice"]: prev.fuelPrice,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -158,7 +161,7 @@ const PredictMain = () => {
           <div className="layout-2-in-row">
             <h2 className="form-heading">How to use this prediction tool</h2>
           </div>
-          <div className="flex flex-col bg-white p-6 w-full rounded-lg shadow-lg gap-4">
+          <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border border-gray-200">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="form-row-2">
                 <div className="w-full">
