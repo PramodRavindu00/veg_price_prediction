@@ -175,8 +175,9 @@ export const sendOTP = async (req, res) => {
   try {
     const userFound = await User.findOne({ email }).select("_id"); //finding the user by email
 
-    if (!userFound)
+    if (!userFound) {
       res.status(404).json({ success: false, message: "user not found" });
+    }
 
     const otp = crypto.randomInt(100000, 999999).toString(); //building a 6 digit random number as OTP;
 
@@ -198,7 +199,7 @@ export const sendOTP = async (req, res) => {
       //sending the email
       email,
       "Password Reset OTP",
-      `This is your one time password for reset your password as per your request : ${otp}`
+      `This is your one time password for reset password reset : ${otp}. This OTP is only valid for 5 minutes`
     );
 
     if (!emailSent) {
@@ -215,6 +216,31 @@ export const sendOTP = async (req, res) => {
     });
   } catch (error) {
     console.log(error.message);
+    res.status(404).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const verifyOTP = async (req, res) => {
+  const { otp } = req.body;
+  const token = req.cookies.OTPToken;
+
+  if (!token) {
+   return res.status(404).json({ success: false, message: "Token not found" });
+  }
+
+  try {
+    const decodedOTPToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decodedOTPToken.otp !== otp) {
+      return res.status(404).json({ success: false, message: "Invalid OTP" });
+    }
+
+    res.status(200).json({ success: true, message: "OTP verified" });
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res.status(400).json({ success: false, message: "OTP expired" });
+    }
+
     res.status(404).json({ success: false, message: "Internal Server Error" });
   }
 };
