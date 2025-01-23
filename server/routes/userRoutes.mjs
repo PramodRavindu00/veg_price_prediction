@@ -6,6 +6,7 @@ import {
   getUserDistribution,
   sendOTP,
   updateUserPreferences,
+  verifyOTP,
 } from "../controllers/UserControllers.mjs";
 import { authenticate, authorize } from "../middlewares/authMiddleWares.mjs";
 
@@ -18,4 +19,5 @@ router.patch(`${prefix}/updatePreferences/:id`, updateUserPreferences);
 router.get(`${prefix}/getUserDistribution`, getUserDistribution);
 router.get(`${prefix}/getVeggieCount`, getPreferredVeggieCount);
 router.post(`${prefix}/sendOTP`, sendOTP);
+router.post(`${prefix}/verifyOTP`, verifyOTP);
 export default router;
