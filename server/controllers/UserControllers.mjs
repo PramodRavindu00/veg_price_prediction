@@ -5,6 +5,7 @@ import Vegetable from "../models/VegetableModel.mjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { sendEmail } from "../utils/emailService.mjs";
+import { hashPassword } from "../utils/bcryptUtil.mjs";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -176,7 +177,10 @@ export const sendOTP = async (req, res) => {
     const userFound = await User.findOne({ email }).select("_id"); //finding the user by email
 
     if (!userFound) {
-      res.status(404).json({ success: false, message: "user not found" });
+      return res.status(404).json({
+        success: false,
+        message: "No user found with submitted Email",
+      });
     }
 
     const otp = crypto.randomInt(100000, 999999).toString(); //building a 6 digit random number as OTP;
@@ -211,7 +215,7 @@ export const sendOTP = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: { userFound, otp },
+      data: { id: userFound._id },
       message: "OTP sent to the provided email",
     });
   } catch (error) {
@@ -225,7 +229,7 @@ export const verifyOTP = async (req, res) => {
   const token = req.cookies.OTPToken;
 
   if (!token) {
-   return res.status(404).json({ success: false, message: "Token not found" });
+    return res.status(404).json({ success: false, message: "Token not found" });
   }
 
   try {
@@ -241,6 +245,38 @@ export const verifyOTP = async (req, res) => {
       return res.status(400).json({ success: false, message: "OTP expired" });
     }
 
-    res.status(404).json({ success: false, message: "Internal Server Error" });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  const { id } = req.params;
+  const { password } = req.body;
+
+  if (!isValidObjectId(id)) {
+    return res.status(400).json({ success: false, message: "Invalid user ID" });
+  }
+  try {
+    const userFound = await User.findById(id);
+
+    if (!userFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "user Not Found" });
+    }
+    const hashedPassword = await hashPassword(password);
+
+    userFound.password = hashedPassword;
+    await userFound.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Password Changed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };

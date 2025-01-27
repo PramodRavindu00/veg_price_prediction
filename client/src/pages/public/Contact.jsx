@@ -69,10 +69,7 @@ const Contact = () => {
           <h2 className="text-center">Having a problem? Ask our experts</h2>
         </div>
       </div>
-      <div
-        className="w-full flex flex-col  items-center justify-center p-5 bg-bg-content
-"
-      >
+      <div className="relative w-full h-auto bg-cover bg-center bg-bg-content flex-grow flex items-center justify-center p-5">
         <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/2 rounded-lg shadow-lg gap-4">
           <h2 className="text-2xl font-bold text-gray-800 text-center">
             Get in Touch with Us

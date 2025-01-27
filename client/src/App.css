@@ -3,7 +3,7 @@
 }
 
 .form-input {
-  @apply w-full px-4 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-1 text-sm sm:text-base;
+  @apply w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:border-none focus:outline-none focus:ring-2 focus:ring-blue-500 mb-1 text-sm sm:text-base;
 }
 
 .form-label {

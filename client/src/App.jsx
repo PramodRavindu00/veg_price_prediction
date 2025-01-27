@@ -8,6 +8,7 @@ import Profile from "./pages/common/Profile";
 import About from "./pages/public/About";
 import Services from "./pages/public/Services";
 import Contact from "./pages/public/Contact";
+import PasswordReset from "./pages/public/PasswordReset";
 import PredictMain from "./pages/user/PredictMain";
 import Queries from "./pages/admin/Queries";
 import { useEffect, useState } from "react";
@@ -35,7 +36,7 @@ const App = () => {
   return (
     <AuthContextProvider>
       <div
-        className={`flex flex-col min-h-[90vh] bg-[#fdfaf5] flex-grow ${
+        className={`flex flex-col min-h-screen bg-[#fdfaf5] flex-grow ${
           fadeIn ? "animate-fade" : ""
         } `}
       >
@@ -47,6 +48,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/passwordReset" element={<PasswordReset />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<NotFound />} />
 
