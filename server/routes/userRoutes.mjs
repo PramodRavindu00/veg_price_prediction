@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changePassword,
   getAllUsers,
   getPreferredVeggieCount,
   getSingleUser,
@@ -8,7 +9,6 @@ import {
   updateUserPreferences,
   verifyOTP,
 } from "../controllers/UserControllers.mjs";
-import { authenticate, authorize } from "../middlewares/authMiddleWares.mjs";
 
 const router = Router();
 const prefix = "/user";
@@ -20,4 +20,6 @@ router.get(`${prefix}/getUserDistribution`, getUserDistribution);
 router.get(`${prefix}/getVeggieCount`, getPreferredVeggieCount);
 router.post(`${prefix}/sendOTP`, sendOTP);
 router.post(`${prefix}/verifyOTP`, verifyOTP);
+router.patch(`${prefix}/changePassword/:id`, changePassword);
+
 export default router;

@@ -9,10 +9,11 @@ import {
 
 const Footer = () => {
   const location = useLocation();
-  const  publicFooterLinks = [
+  const publicFooterLinks = [
     ...publicLinks,
     { text: "Login", route: "/login" },
     { text: "Register", route: "/register" },
+    { text: "Password Reset", route: "/passwordReset" },
   ];
 
   const publicFooterRoutes = publicFooterLinks.map((link) => link.route);
@@ -26,16 +27,18 @@ const Footer = () => {
             <div className="flex flex-col gap-1">
               <h3 className="text-lg ">Quick Links</h3>
               <ul className="flex  flex-col">
-                {publicFooterLinks.map((link, index) => (
-                  <li key={index}>
-                    <Link
-                      to={link.route}
-                      className="hover:font-semibold hover:text-black transition ease-out duration-1000"
-                    >
-                      {link.text}
-                    </Link>
-                  </li>
-                ))}
+                {publicFooterLinks
+                  .filter((link) => link.text !== "Password Reset")
+                  .map((link, index) => (
+                    <li key={index}>
+                      <Link
+                        to={link.route}
+                        className="hover:font-semibold hover:text-black transition ease-out duration-1000"
+                      >
+                        {link.text}
+                      </Link>
+                    </li>
+                  ))}
               </ul>
             </div>
             <div className="hidden sm:block h-auto border-l-2 border-gray-400"></div>
