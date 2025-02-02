@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently --kill-others-on-fail \"npm run start-client\" \"npm run start-server\" ",
+    "start": "concurrently --kill-others-on-fail \"npm run start-client\" \"npm run start-server\" \"npm run start-python\"",
     "start-client": "cd client && npm run dev",
-    "start-server": "cd server && nodemon server.mjs"
+    "start-server": "cd server && nodemon server.mjs",
+    "start-python": "cd ML-Model && python app.py"
   },
   "keywords": [],
   "author": "",
