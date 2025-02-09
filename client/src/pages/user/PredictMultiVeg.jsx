@@ -7,6 +7,7 @@ import axios from "axios";
 import { MultiplePredictionFormValidations } from "../../assets/validations.mjs";
 import SelectBox from "../../components/SelectBox";
 import { isFestivalSeason } from "../../assets/Data.mjs";
+import { toast, Toaster } from "sonner";
 
 const initialValues = {
   date: new Date().toISOString().slice(0, 10),
@@ -29,71 +30,62 @@ const PredictMultiVeg = () => {
   const [selectedFestival, setSelectedFestival] = useState(null);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [fetchingWeather, setFetchingWeather] = useState(false);
 
-  useEffect(() => {
-    if (userData && userData.nearestMarket) {
+  const getWeatherData = async (location) => {
+    setFetchingWeather(true);
+    setBtnDisabled(true);
+    if (!location) {
+      toast.error(
+        "Weather data could not be fetched. try again or enter it manually."
+      );
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `/api/maintenance/getWeatherData/${location}`
+      );
+
+      const avgRainfall = response.data.data.avgRainfall;
+
+      setFormValues((prev) => ({ ...prev, rainfall: avgRainfall }));
+    } catch (error) {
+      console.log(error.message);
+      toast.error(
+        "Weather data could not be fetched. try again or enter it manually."
+      );
+    } finally {
+      setFetchingWeather(false);
+      setBtnDisabled(false);
+    }
+  };
+
+  const getFuelPrice = async () => {
+    try {
+      const { data } = await axios.get("/api/maintenance/getFuelPrice");
       setFormValues((prev) => ({
         ...prev,
-        location: userData.nearestMarket.market.location,
+        fuelPrice: parseFloat(Number(data.price).toFixed(2)),
       }));
+    } catch (error) {
+      console.log(error.message);
+      toast.error("Failed receiving fuel price.Enter it manually");
     }
+  };
 
-    const getAllVegetables = async () => {
-      try {
-        const response = await axios.get("/api/vegetables/allVegetables");
-        const options = response.data.data.map((vegetable) => ({
-          label: vegetable.vegetableName,
-          value: vegetable.value,
-        }));
+  const getAllVegetables = async () => {
+    try {
+      const response = await axios.get("/api/vegetables/allVegetables");
+      const options = response.data.data.map((vegetable) => ({
+        label: vegetable.vegetableName,
+        value: vegetable.value,
+      }));
 
-        setVegetableOptions(options);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-
-    const getAllMarkets = async () => {
-      try {
-        const response = await axios.get("/api/market/getAllMarkets");
-        const options = response.data.data.map((market) => ({
-          id: market._id,
-          label: market.market,
-          value: market.location,
-        }));
-
-        setMarketOptions(options);
-        const userMarket = options.find(
-          (market) => market.id === userData.nearestMarket.market._id
-        );
-        setSelectedMarket(userMarket || "");
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    const getFuelPrice = async () => {
-      try {
-        const { data } = await axios.get("/api/maintenance/getFuelPrice");
-        setFormValues((prev) => ({
-          ...prev,
-          fuelPrice: Number(data.price).toFixed(2),
-        }));
-      } catch (error) {
-        console.log(error.message);
-        setFormErrors((prev) => ({
-          ...prev,
-          fuelPrice: "Failed receiving fuel price.Enter it manually",
-        }));
-      }
-    };
-
-    getAllVegetables();
-    getAllMarkets();
-    getFuelPrice();
-
-    if (userData && userData.nearestMarket) {
-      setLoading(false);
+      setVegetableOptions(options);
+    } catch (error) {
+      console.log(error.message);
     }
-  }, [userData]);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -129,12 +121,15 @@ const PredictMultiVeg = () => {
     const userMarket = marketOptions.find(
       (market) => market.id === userData?.nearestMarket?.market?._id
     );
-    setFormValues((prev)=>({
+
+    setFormValues((prev) => ({
       ...initialValues,
-      location: userMarket?.location || "",["fuelPrice"]:prev.fuelPrice
+      location: userMarket?.location || "",
+      fuelPrice: prev.fuelPrice,
     }));
+    getWeatherData(userData.nearestMarket.market.location);
     setSelectedVegetables([]);
-    setSelectedMarket(userMarket || null); 
+    setSelectedMarket(userMarket || null);
     setSelectedFestival(null);
   };
 
@@ -158,6 +153,41 @@ const PredictMultiVeg = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (userData && userData.nearestMarket) {
+      setFormValues((prev) => ({
+        ...prev,
+        location: userData.nearestMarket.market.location,
+      }));
+      setLoading(false);
+      getWeatherData(userData.nearestMarket.market.location);
+    }
+
+    const getAllMarkets = async () => {
+      try {
+        const response = await axios.get("/api/market/getAllMarkets");
+        const options = response.data.data.map((market) => ({
+          id: market._id,
+          label: market.market,
+          value: market.location,
+        }));
+
+        setMarketOptions(options);
+        const userMarket = options.find(
+          (market) => market.id === userData.nearestMarket.market._id
+        );
+        setSelectedMarket(userMarket || "");
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    getAllVegetables();
+    getAllMarkets();
+    getFuelPrice();
+  }, [userData]);
+
   return (
     <>
       <Navbar publicPage={false} navLinks={userLinks} />
@@ -197,24 +227,30 @@ const PredictMultiVeg = () => {
                         options={marketOptions}
                         value={selectedMarket}
                         placeholder="Select Market Area"
-                        onChange={(selectedOption) =>
-                          handleSelectChange(selectedOption, "location")
-                        }
+                        onChange={(selectedOption) => {
+                          handleSelectChange(selectedOption, "location");
+                          getWeatherData(selectedOption.value);
+                        }}
                       />
                       <span className="form-error">{formErrors.location}</span>
                     </div>{" "}
                     <div className="w-full">
                       <label className="form-label">
-                        Average Rainfall in mm
+                        Next Week Average Precipitation in mm/hr
                       </label>
                       <input
                         type="text"
-                        placeholder="Enter next week's average rainfall"
+                        placeholder="Enter next week's precipitation"
                         className="form-input"
                         name="rainfall"
                         value={formValues.rainfall}
                         onChange={handleChange}
                       />
+                      {fetchingWeather && (
+                        <span className="text-green-800 text-sm w-full mt-1 block">
+                          Please wait until fetching weather data
+                        </span>
+                      )}
                       <span className="form-error">{formErrors.rainfall}</span>
                     </div>
                   </div>
@@ -235,7 +271,7 @@ const PredictMultiVeg = () => {
                       <span className="form-error">{formErrors.fuelPrice}</span>
                     </div>
                     <div className="w-full">
-                      <label className="form-label">Festival Seasonality</label>
+                      <label className="form-label">Festivity</label>
                       <SelectBox
                         name="festival"
                         options={isFestivalSeason}
@@ -265,6 +301,7 @@ const PredictMultiVeg = () => {
           </div>
         </>
       )}
+      <Toaster richColors position="top-right" />
     </>
   );
 };

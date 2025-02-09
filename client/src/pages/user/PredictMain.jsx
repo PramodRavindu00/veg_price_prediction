@@ -7,6 +7,7 @@ import { scroller } from "react-scroll";
 import Chart from "react-google-charts";
 import SelectBox from "../../components/SelectBox";
 import { isFestivalSeason, predType } from "../../assets/Data.mjs";
+import { toast, Toaster } from "sonner";
 
 const initialValues = {
   date: new Date().toISOString().slice(0, 10),
@@ -28,6 +29,7 @@ const PredictMain = () => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [predPeriod, setPredPeriod] = useState();
   const [formErrors, setFormErrors] = useState({});
+  const [fetchingWeather, setFetchingWeather] = useState(false);
 
   const getAllMarkets = async () => {
     try {
@@ -62,14 +64,39 @@ const PredictMain = () => {
       const { data } = await axios.get("/api/maintenance/getFuelPrice");
       setFormValues((prev) => ({
         ...prev,
-        fuelPrice: Number(data.price).toFixed(2),
+        fuelPrice: parseFloat(Number(data.price).toFixed(2)),
       }));
     } catch (error) {
       console.log(error.message);
-      setFormErrors((prev) => ({
-        ...prev,
-        fuelPrice: "Failed receiving fuel price.Enter it manually",
-      }));
+      toast.error("Failed receiving fuel price.Enter it manually");
+    }
+  };
+
+  const getWeatherData = async (location) => {
+    setFetchingWeather(true);
+    setBtnDisabled(true);
+    if (!location) {
+      toast.error(
+        "Weather data could not be fetched. try again or enter it manually."
+      );
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `/api/maintenance/getWeatherData/${location}`
+      );
+
+      const avgRainfall = response.data.data.avgRainfall;
+
+      setFormValues((prev) => ({ ...prev, rainfall: avgRainfall }));
+    } catch (error) {
+      console.log(error.message);
+      toast.error(
+        "Weather data could not be fetched. try again or enter it manually."
+      );
+    } finally {
+      setFetchingWeather(false);
+      setBtnDisabled(false);
     }
   };
 
@@ -127,6 +154,8 @@ const PredictMain = () => {
       console.log("Form has validation errors");
     } else {
       try {
+        console.log(formValues);
+
         setBtnDisabled(true);
         const result = await axios.post(
           "/api/prediction/getPredictions",
@@ -184,24 +213,32 @@ const PredictMain = () => {
                     options={marketOptions}
                     value={selectedMarket}
                     placeholder="Select Market Area"
-                    onChange={(selectedOption) =>
-                      handleSelectChange(selectedOption, "location")
-                    }
+                    onChange={(selectedOption) => {
+                      handleSelectChange(selectedOption, "location");
+                      getWeatherData(selectedOption.value);
+                    }}
                   />
                   <span className="form-error">{formErrors.location}</span>
                 </div>
               </div>
               <div className="form-row-2">
                 <div className="w-full">
-                  <label className="form-label">Average Rainfall in mm</label>
+                  <label className="form-label">
+                    Next Week Average Precipitation in mm/hr
+                  </label>
                   <input
                     type="text"
-                    placeholder="Enter next week's average rainfall"
+                    placeholder="Enter next week's precipitation"
                     className="form-input"
                     name="rainfall"
                     value={formValues.rainfall}
                     onChange={handleChange}
                   />
+                  {fetchingWeather && (
+                    <span className="text-green-800 text-sm w-full mt-1 block">
+                      Please wait until fetching weather data
+                    </span>
+                  )}
                   <span className="form-error">{formErrors.rainfall}</span>
                 </div>
                 <div className="w-full">
@@ -234,7 +271,7 @@ const PredictMain = () => {
                   <span className="form-error">{formErrors.predType}</span>
                 </div>
                 <div className="w-full">
-                  <label className="form-label">Festival Seasonality</label>
+                  <label className="form-label">Festivity</label>
                   <SelectBox
                     name="festival"
                     options={isFestivalSeason}
@@ -292,6 +329,7 @@ const PredictMain = () => {
           )}
         </div>
       </div>
+      <Toaster richColors position="top-right" />
     </>
   );
 };

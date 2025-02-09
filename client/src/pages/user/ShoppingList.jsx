@@ -13,42 +13,24 @@ import {
 } from "../../assets/validations.mjs";
 import Modal from "../../components/Modal";
 
+const initialValues = {
+  date: new Date().toISOString().slice(0, 10),
+  predType: "week",
+  festival: "",
+};
+
 const ShoppingList = () => {
   const { userData, setUserData } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [predictFormValues, setPredictFormValues] = useState(null);
+  const [predictFormValues, setPredictFormValues] = useState(initialValues);
   const [preferenceFormValues, setPreferenceFormValues] = useState(null);
   const [submitBtnTxt, setSubmitBtnTxt] = useState("Add Preferences");
-
-  useEffect(() => {
-    if (userData) {
-      setLoading(false);
-
-      setPredictFormValues({
-        date: new Date().toISOString().slice(0, 10),
-        vegetable: userData.preferredVeggies,
-        location: userData.nearestMarket.market.location,
-        rainfall: "",
-        fuelPrice: "",
-        predType: "week",
-        festival: "",
-      });
-
-      setPreferenceFormValues({ userId: userData._id, preferredVeggies: [] });
-      if (userData.preferredVeggies.length > 0) {
-        setSubmitBtnTxt("Change Preferences");
-      }
-    }
-  }, [userData]);
-
+  const [fetchingWeather, setFetchingWeather] = useState(false);
   const [predictFormErrors, setPredictFormErrors] = useState({});
   const [preferenceFormErrors, setPreferenceFormErrors] = useState({});
-
   const [vegetableOptions, setVegetableOptions] = useState([]);
   const [selectedVegetables, setSelectedVegetables] = useState([]);
-
   const [selectedFestival, setSelectedFestival] = useState(null);
-
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -57,6 +39,34 @@ const ShoppingList = () => {
     setModalOpen(false);
     setSelectedVegetables([]);
     setPreferenceFormErrors({});
+  };
+
+  const getWeatherData = async (location) => {
+    setFetchingWeather(true);
+    setBtnDisabled(true);
+    if (!location) {
+      toast.error(
+        "Weather data could not be fetched. try again or enter it manually."
+      );
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `/api/maintenance/getWeatherData/${location}`
+      );
+
+      const avgRainfall = response.data.data.avgRainfall;
+
+      setPredictFormValues((prev) => ({ ...prev, rainfall: avgRainfall }));
+    } catch (error) {
+      console.log(error.message);
+      toast.error(
+        "Weather data could not be fetched. try again or enter it manually."
+      );
+    } finally {
+      setFetchingWeather(false);
+      setBtnDisabled(false);
+    }
   };
 
   const getAllVegetables = async () => {
@@ -72,22 +82,18 @@ const ShoppingList = () => {
     }
   };
 
-    const getFuelPrice = async () => {
-      try {
-        const { data } = await axios.get("/api/maintenance/getFuelPrice");
-        setPredictFormValues((prev) => ({
-          ...prev,
-          fuelPrice: Number(data.price).toFixed(2),
-        }));
-      } catch (error) {
-        console.log(error.message);
-        setPredictFormErrors((prev) => ({
-          ...prev,
-          fuelPrice: "Failed receiving fuel price.Enter it manually",
-        }));
-      }
-    };
-
+  const getFuelPrice = async () => {
+    try {
+      const { data } = await axios.get("/api/maintenance/getFuelPrice");
+      setPredictFormValues((prev) => ({
+        ...prev,
+        fuelPrice: parseFloat(Number(data.price).toFixed(2)),
+      }));
+    } catch (error) {
+      console.log(error.message);
+      toast.error("Failed receiving fuel price.Enter it manually");
+    }
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     const validNumericValue = value
@@ -186,6 +192,23 @@ const ShoppingList = () => {
     getFuelPrice();
   }, []);
 
+  useEffect(() => {
+    if (userData) {
+      setLoading(false);
+      getWeatherData(userData?.nearestMarket.market.location);
+      setPredictFormValues((prev) => ({
+        ...prev,
+        vegetable: userData?.preferredVeggies || [],
+        location: userData?.nearestMarket.market.location || "",
+      }));
+
+      setPreferenceFormValues({ userId: userData._id, preferredVeggies: [] });
+      if (userData.preferredVeggies.length > 0) {
+        setSubmitBtnTxt("Change Preferences");
+      }
+    }
+  }, [userData]);
+
   return (
     <>
       <Navbar publicPage={false} navLinks={userLinks} />
@@ -202,7 +225,7 @@ const ShoppingList = () => {
                 </button>
               </div>
               <div>
-                {userData.preferredVeggies.length <= 0 ? (
+                {userData?.preferredVeggies.length <= 0 ? (
                   <h1 className="px-6 py-4 text-center bg-orange-300 font-semibold rounded-lg">
                     No personalized vegetable list added yet
                   </h1>
@@ -219,7 +242,7 @@ const ShoppingList = () => {
                         Qty/week
                       </span>
                     </div>
-                    {userData.preferredVeggies.map((veg, index) => (
+                    {userData?.preferredVeggies.map((veg, index) => (
                       <div
                         className="flex flex-row mb-2 px-2 py-1 space-x-2 border-b-2"
                         key={index}
@@ -252,7 +275,7 @@ const ShoppingList = () => {
                       type="text"
                       disabled
                       name="location"
-                      value={userData.nearestMarket.market.market}
+                      value={userData?.nearestMarket.market.market}
                       className="form-input"
                     />
                     <span className="form-error">
@@ -260,15 +283,23 @@ const ShoppingList = () => {
                     </span>
                   </div>
                   <div className="w-full">
-                    <label className="form-label">Average Rainfall in mm</label>
+                    <label className="form-label">
+                      {" "}
+                      Next Week Average Precipitation in mm/hr
+                    </label>
                     <input
                       type="text"
-                      placeholder="Enter next week's average rainfall"
+                      placeholder="Enter next week's precipitation"
                       className="form-input"
                       name="rainfall"
                       value={predictFormValues.rainfall}
                       onChange={handleChange}
                     />
+                    {fetchingWeather && (
+                      <span className="text-green-800 text-sm w-full mt-1 block">
+                        Please wait until fetching weather data
+                      </span>
+                    )}
                     <span className="form-error">
                       {predictFormErrors.rainfall}
                     </span>
@@ -285,7 +316,7 @@ const ShoppingList = () => {
                       placeholder="Enter fuel price"
                       className="form-input"
                       name="fuelPrice"
-                      value={predictFormValues.fuelPrice}
+                      value={predictFormValues?.fuelPrice}
                       onChange={handleChange}
                     />
                     <span className="form-error">
@@ -293,7 +324,7 @@ const ShoppingList = () => {
                     </span>
                   </div>
                   <div className="w-full">
-                    <label className="form-label">Festival Seasonality</label>
+                    <label className="form-label">Festivity</label>
                     <SelectBox
                       name="festival"
                       options={isFestivalSeason}
