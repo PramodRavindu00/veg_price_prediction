@@ -52,7 +52,7 @@ const SelectBox = ({
 SelectBox.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.any,
       label: PropTypes.string,
     })
   ).isRequired,
