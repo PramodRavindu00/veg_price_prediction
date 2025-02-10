@@ -31,6 +31,7 @@ const PredictMultiVeg = () => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [fetchingWeather, setFetchingWeather] = useState(false);
+  const [result, setResult] = useState(null);
 
   const getWeatherData = async (location) => {
     setFetchingWeather(true);
@@ -65,7 +66,7 @@ const PredictMultiVeg = () => {
       const { data } = await axios.get("/api/maintenance/getFuelPrice");
       setFormValues((prev) => ({
         ...prev,
-        fuelPrice: parseFloat(Number(data.price).toFixed(2)),
+        fuelPrice: data.price,
       }));
     } catch (error) {
       console.log(error.message);
@@ -141,15 +142,18 @@ const PredictMultiVeg = () => {
       console.log("Form has validation errors");
     } else {
       try {
-        console.log(formValues);
+        // console.log(formValues);
 
         setBtnDisabled(true);
-        const res = await axios.post("/api/prediction/multiVegPredictions");
-        console.log(res.data.data);
-        clearForm();
+        const response = await axios.post(
+          "/api/prediction/getPredictions",
+          formValues
+        );
+        setResult(response.data.data);
         setBtnDisabled(false);
+        clearForm();
       } catch (error) {
-        console.log(error.message);
+        console.log("Internal Server Error", error);
       }
     }
   };
@@ -197,7 +201,7 @@ const PredictMultiVeg = () => {
         <>
           <div className="flex flex-col p-5">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-              <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border border-gray-200">
+              <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border-2 border-green-800">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="form-row-2">
                     {" "}
@@ -296,7 +300,35 @@ const PredictMultiVeg = () => {
                   </div>
                 </form>
               </div>
-              <div className="layout-2-in-row">Results table</div>
+              {result && (
+                <div className="p-5 flex flex-col w-full bg-white rounded-lg shadow-lg border-2 border-green-800">
+                  <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
+                    Predicted Price for Next Week per 1KG
+                  </h2>
+                  <div className="flex flex-row bg-gray-100 p-3 rounded-t-md mb-2 items-center">
+                    <span className="flex flex-1 font-semibold text-gray-700 text-center">
+                      Vegetable
+                    </span>
+                    <span className="flex flex-1 font-semibold text-gray-700 text-center">
+                      Price
+                    </span>
+                  </div>
+                  {result?.predictions.map((prediction, index) => (
+                    <div
+                      className="flex flex-row mb-2 px-2 py-1 space-x-2 border-b-2"
+                      key={index}
+                    >
+                      <span className="flex flex-1 text-gray-800 font-medium capitalize">
+                        {prediction.vegetable}
+                      </span>
+                      <span className="flex flex-1 text-center text-gray-600 font-medium ">
+                        {" "}
+                        {`Rs ${prediction.price.toFixed(2)}`}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </>

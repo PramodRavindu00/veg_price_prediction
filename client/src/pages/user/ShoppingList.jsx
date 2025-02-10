@@ -33,6 +33,7 @@ const ShoppingList = () => {
   const [selectedFestival, setSelectedFestival] = useState(null);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [result, setResult] = useState(null);
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => {
@@ -87,7 +88,7 @@ const ShoppingList = () => {
       const { data } = await axios.get("/api/maintenance/getFuelPrice");
       setPredictFormValues((prev) => ({
         ...prev,
-        fuelPrice: parseFloat(Number(data.price).toFixed(2)),
+        fuelPrice: data.price,
       }));
     } catch (error) {
       console.log(error.message);
@@ -176,14 +177,36 @@ const ShoppingList = () => {
     }
   };
 
-  const handlePredictSubmit = (e) => {
+  const clearForm = () => {
+    setPredictFormValues((prev) => ({
+      ...prev,
+      festival: "",
+    }));
+    getWeatherData(userData.nearestMarket.market.location);
+    setSelectedFestival(null);
+  };
+
+  const handlePredictSubmit = async (e) => {
     e.preventDefault();
     const errors = predictFormValidations(predictFormValues);
     setPredictFormErrors(errors);
     if (Object.keys(errors).length > 0) {
       console.log("form has validation errors");
     } else {
-      console.log(predictFormValues);
+      try {
+        // console.log(predictFormValues);
+        setBtnDisabled(true);
+        const response = await axios.post(
+          "/api/prediction/preferredPredictions",
+          predictFormValues
+        );
+
+        setResult(response.data.data);
+        setBtnDisabled(false);
+        clearForm();
+      } catch (error) {
+        console.log("Internal Server Error", error);
+      }
     }
   };
 
@@ -198,7 +221,11 @@ const ShoppingList = () => {
       getWeatherData(userData?.nearestMarket.market.location);
       setPredictFormValues((prev) => ({
         ...prev,
-        vegetable: userData?.preferredVeggies || [],
+        vegetable:
+          userData?.preferredVeggies.map((veggie) => ({
+            vegetable: veggie.vegetable.value,
+            amount: veggie.amount,
+          })) || [],
         location: userData?.nearestMarket.market.location || "",
       }));
 
@@ -215,7 +242,7 @@ const ShoppingList = () => {
       {loading && !predictFormValues && !preferenceFormValues ? (
         <Loader />
       ) : (
-        <div className="flex flex-col p-5">
+        <div className="flex flex-col p-5 gap-5">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
             <div className="flex flex-col w-full">
               <div className="flex justify-end lg:justify-start mb-6">
@@ -230,7 +257,7 @@ const ShoppingList = () => {
                     No personalized vegetable list added yet
                   </h1>
                 ) : (
-                  <div className="p-5 flex flex-col w-full lg:w-2/3 mx-auto bg-white rounded-lg shadow-lg border border-gray-200">
+                  <div className="p-5 flex flex-col w-full lg:w-2/3 mx-auto bg-white rounded-lg shadow-lg border-2 border-green-800">
                     <h2 className="text-center text-xl font-bold text-gray-800 mb-6">
                       Preferred Vegetables{" "}
                     </h2>
@@ -262,7 +289,7 @@ const ShoppingList = () => {
                 )}
               </div>
             </div>
-            <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg border border-gray-200 gap-5">
+            <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg border-2 border-green-800 gap-5">
               <h2 className="text-base sm:text-2xl font-bold text-gray-800 text-center">
                 Fill this form to predict your preferred vegetables
               </h2>
@@ -352,6 +379,58 @@ const ShoppingList = () => {
               </form>
             </div>
           </div>
+          {result && (
+            <div className="p-5 flex flex-col w-full lg:w-2/3 mx-auto bg-white rounded-lg shadow-lg border-2 border-green-800">
+              <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
+                Next Week Predicted Prices of Preferred Veggies
+              </h2>
+              <table className="w-full border-collapse bg-gray-100 rounded-lg shadow-lg">
+                <thead>
+                  <tr className="bg-gray-200 text-gray-700 text-center text-sm sm:text-base">
+                    <th className="p-3 font-semibold">Vegetable</th>
+                    <th className="p-3 font-semibold">Amount</th>
+                    <th className="hidden sm:table-cell p-3 font-semibold">
+                      Price / KG
+                    </th>
+                    <th className="p-3 font-semibold">Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {result?.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="border-b border-gray-300 text-center text-gray-800 text-sm sm:text-base"
+                    >
+                      <td className="p-3 font-medium capitalize">
+                        {item.vegetable}
+                      </td>
+                      <td className="p-3 font-medium">
+                        {item.amount !== 1000
+                          ? `${item.amount} g`
+                          : `${item.amount / 1000} KG`}
+                      </td>
+                      <td className="hidden sm:table-cell p-3 text-gray-600 font-medium">
+                        {`Rs ${item.priceKG.toFixed(2)}`}
+                      </td>
+                      <td className="p-3 text-gray-600 font-medium">{`Rs ${item.cost.toFixed(
+                        2
+                      )}`}</td>
+                    </tr>
+                  ))}
+                  <tr className="bg-gray-200 font-semibold text-gray-800 text-sm sm:text-base">
+                    <td></td>
+                    <td className="hidden sm:table-cell"></td>
+                    <td className="p-3 text-right capitalize">
+                    Sub Total:
+                    </td>
+                    <td className="p-3 text-gray-900 text-center">{`Rs ${result
+                      ?.reduce((sum, item) => sum + item.cost, 0)
+                      .toFixed(2)}`}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
       <Modal
