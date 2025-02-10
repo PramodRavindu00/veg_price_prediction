@@ -29,7 +29,7 @@ export const updateFuelPrice = async (req, res) => {
 export const getFuelPrice = async (req, res) => {
   try {
     const price = await readFile(textFilePath, "utf-8");
-    res.status(200).json({ success: true, price: price });
+    res.status(200).json({ success: true, price: Number(price).toFixed(2) });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ success: false, message: "Internal Server Error" });

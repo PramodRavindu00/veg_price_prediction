@@ -4,10 +4,10 @@ import Navbar from "../../components/Navbar";
 import axios from "axios";
 import { MainPredictionFormValidations } from "../../assets/validations.mjs";
 import { scroller } from "react-scroll";
-import Chart from "react-google-charts";
 import SelectBox from "../../components/SelectBox";
 import { isFestivalSeason, predType } from "../../assets/Data.mjs";
 import { toast, Toaster } from "sonner";
+import PredictionChart from "../../components/PredictionChart";
 
 const initialValues = {
   date: new Date().toISOString().slice(0, 10),
@@ -30,6 +30,7 @@ const PredictMain = () => {
   const [predPeriod, setPredPeriod] = useState();
   const [formErrors, setFormErrors] = useState({});
   const [fetchingWeather, setFetchingWeather] = useState(false);
+  const [result, setResult] = useState(null);
 
   const getAllMarkets = async () => {
     try {
@@ -64,7 +65,7 @@ const PredictMain = () => {
       const { data } = await axios.get("/api/maintenance/getFuelPrice");
       setFormValues((prev) => ({
         ...prev,
-        fuelPrice: parseFloat(Number(data.price).toFixed(2)),
+        fuelPrice: data.price,
       }));
     } catch (error) {
       console.log(error.message);
@@ -154,19 +155,20 @@ const PredictMain = () => {
       console.log("Form has validation errors");
     } else {
       try {
-        console.log(formValues);
+        // console.log(formValues);
 
         setBtnDisabled(true);
-        const result = await axios.post(
+        const response = await axios.post(
           "/api/prediction/getPredictions",
           formValues
         );
-        setPredPeriod(result.data.data.type);
+        setPredPeriod(response.data.data.type);
+        setResult(response.data.data);
         scroller.scrollTo("resultsDiv", {
           duration: 1000,
           delay: 0,
           smooth: "linear",
-          offset: 0,
+          offset: -80,
         });
         setBtnDisabled(false);
         clearForm();
@@ -190,7 +192,7 @@ const PredictMain = () => {
           <div className="layout-2-in-row">
             <h2 className="form-heading">How to use this prediction tool</h2>
           </div>
-          <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border border-gray-200">
+          <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border-2 border-green-800">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="form-row-2">
                 <div className="w-full">
@@ -296,36 +298,30 @@ const PredictMain = () => {
             </form>
           </div>
         </div>
-        <div id="resultsDiv" className="py-4 items-center flex flex-col">
-          {predPeriod === "week" && (
-            <div className="flex flex-col w-full sm:w-[70%] lg:w-[40%] bg-slate-100 p-5 rounded-lg">
-              <h2 className="form-heading">Weekly Predictable Price</h2>
+        <div
+          id="resultsDiv"
+          className="py-5 items-center flex flex-col w-full mt-10"
+        >
+          {result && predPeriod === "week" && (
+            <div className="p-5 flex flex-col w-full lg:w-1/2 mx-auto bg-white rounded-lg shadow-lg border-2 border-green-800">
+              <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
+                Predicted Price for Next Week per 1KG
+              </h2>
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <p>From - 2024-12-23</p>
-                <p>To - 2024-12-30</p>
+                <p>From - {result?.week_start}</p>
+                <p>To - {result?.week_end}</p>
               </div>
-              <p>Vegetable - Carrot</p>
-              <p>Market Area - Colombo</p>
-              <p>Predictable Price - 650.00 Rs</p>
+              <p className="capitalize">
+                Vegetable - {result?.predictions[0].vegetable}
+              </p>
+              <p className="capitalize">Market Area - {result?.location}</p>
+              <p>
+                Predicted Price - Rs {result.predictions[0]?.price.toFixed(2)}
+              </p>
             </div>
           )}
-          {predPeriod === "4week" && (
-            <Chart
-              className="h-[50vh] rounded-lg"
-              chartType="LineChart"
-              data={[
-                ["Age", "Weight"],
-                [4, 16],
-                [8, 25],
-                [12, 40],
-                [16, 55],
-                [20, 70],
-              ]}
-              options={{
-                title: "Average Weight by Age",
-              }}
-              width={"100%"}
-            />
+          {result && predPeriod === "4week" && (
+            <PredictionChart data={result} />
           )}
         </div>
       </div>

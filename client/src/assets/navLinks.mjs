@@ -9,7 +9,7 @@ export const userLinks = [
   { text: "Prediction Tool", route: "/user/predict" },
   { text: "Multiple Prediction", route: "/user/predictMultiple" },
   { text: "Shopping List", route: "/user/shoppingList" },
-  { text: "Support", route: "/user/support" },
+  // { text: "Support", route: "/user/support" },
 ];
 
 export const adminLinks = [

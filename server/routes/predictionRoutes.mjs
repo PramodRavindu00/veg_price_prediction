@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { multipleVegPredictions, predictions } from "../controllers/PredictionControllers.mjs";
+import { predictions, preferredPredictions } from "../controllers/PredictionControllers.mjs";
 
 const router = Router();
 const prefix = "/prediction"
 
 router.post(`${prefix}/getPredictions`, predictions);
-router.post(`${prefix}/multiVegPredictions`, multipleVegPredictions);
+router.post(`${prefix}/preferredPredictions`, preferredPredictions);
 
 export default router;
