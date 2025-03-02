@@ -9,12 +9,12 @@ const styles = {
     paddingRight: "0.4rem",
     paddingTop: "0.11rem",
     paddingBottom: "0.11rem",
-    border: state.isFocused ? "1px solid #3B82F6" : "2px solid #D1D5DB",
+    border: state.isFocused ? "1px solid #3B82F6" : "2px solid #E5E7EB",
     borderRadius: "0.375rem",
     outline: "none",
     marginBottom: "0.25rem",
     "&:hover": {
-      border: state.isFocused ? "1px solid #3B82F6" : "2px solid #D1D5DB",
+      border: state.isFocused ? "1px solid #3B82F6" : "2px solid #E5E7EB",
     },
   }),
   placeholder: (provided) => ({

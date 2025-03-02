@@ -51,7 +51,8 @@ export const preferredPredictions = async (req, res) => {
       "http://localhost:5001/predict",
       predictionInput
     );
-   
+
+
     const weeklyCost = input.vegetable.map((veggie) => {
       const vegetableFound = response.data.result?.predictions.find(
         (item) => item.vegetable === veggie.vegetable
@@ -64,7 +65,7 @@ export const preferredPredictions = async (req, res) => {
           priceKG: vegetableFound.price,
           cost: (vegetableFound.price * veggie.amount) / 1000,
         };
-      } else { 
+      } else {
         return {
           vegetable: veggie.vegetable,
           amount: veggie.amount,
@@ -74,11 +75,17 @@ export const preferredPredictions = async (req, res) => {
       }
     });
 
+    const dataToSend = {
+      weeklyCost: weeklyCost,
+      location: response.data.result?.location,
+      week_start: response.data.result?.week_start,
+      week_end: response.data.result?.week_end,
+    }
+
     res.status(200).json({
       status: "success",
-      data: weeklyCost,
+      data: dataToSend,
     });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
