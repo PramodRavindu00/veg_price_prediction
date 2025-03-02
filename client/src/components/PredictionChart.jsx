@@ -36,38 +36,47 @@ const PredictionChart = ({ data }) => {
     ],
   };
   const options = {
-  responsive: true,
-  scales: {
-    y: {
-      ticks: {
-        callback: function (value) {
-          return value.toFixed(2); // Ensures two decimal places on the Y-axis
+    responsive: true,
+    scales: {
+      y: {
+        ticks: {
+          callback: function (value) {
+            return value.toFixed(2); // Ensures two decimal places on the Y-axis
+          },
         },
       },
     },
-  },
-  plugins: {
-    legend: {
-      labels: {
-        fontColor: "black",
+    plugins: {
+      legend: {
+        labels: {
+          fontColor: "black",
+        },
+      },
+      tooltip: {
+        backgroundColor: "rgb(0, 0, 0)", // Background color of the tooltip
       },
     },
-    tooltip: {
-      backgroundColor: "rgb(0, 0, 0)", // Background color of the tooltip
-    },
-  },
-};
-
+  };
 
   return (
     <>
-      <div className="p-5 flex flex-col w-full lg:w-2/3 mx-auto bg-white rounded-lg shadow-lg border-2 border-green-800">
+      <div className="p-5 flex flex-col w-full lg:w-2/3 mx-auto bg-white rounded-lg shadow-lg border-2 border-gray-2">
         <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
-          Predicted Price for Next 4 Weeks per 1KG
+          Predicted Prices for Next 4 Weeks per 1Kg
         </h2>
-        <div className="flex flex-row justify-evenly font-bold">
-          <p className="capitalize">Vegetable - {data?.vegetable}</p>
-          <p className="capitalize">Market Area - {data?.location}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-700 mb-4">
+          <p className="capitalize">
+            <strong>From:</strong> {data?.predictions[0]?.week_start}
+          </p>
+          <p className="capitalize">
+            <strong>To:</strong> {data?.predictions[3]?.week_end}
+          </p>
+          <p className="capitalize">
+            <strong>Vegetable:</strong> {data?.vegetable}
+          </p>
+          <p className="capitalize">
+            <strong>Market Area:</strong> {data?.location}
+          </p>
         </div>
 
         <Line data={chartData} options={options} />

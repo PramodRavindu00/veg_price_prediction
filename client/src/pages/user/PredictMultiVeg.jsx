@@ -8,6 +8,7 @@ import { MultiplePredictionFormValidations } from "../../assets/validations.mjs"
 import SelectBox from "../../components/SelectBox";
 import { isFestivalSeason } from "../../assets/Data.mjs";
 import { toast, Toaster } from "sonner";
+import { scroller } from "react-scroll";
 
 const initialValues = {
   date: new Date().toISOString().slice(0, 10),
@@ -150,6 +151,12 @@ const PredictMultiVeg = () => {
           formValues
         );
         setResult(response.data.data);
+         scroller.scrollTo("resultsDiv", {
+           duration: 1000,
+           delay: 0,
+           smooth: "linear",
+           offset: -80,
+         });
         setBtnDisabled(false);
         clearForm();
       } catch (error) {
@@ -199,137 +206,140 @@ const PredictMultiVeg = () => {
         <Loader />
       ) : (
         <>
-          <div className="flex flex-col p-5">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-              <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border-2 border-green-800">
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="form-row-2">
-                    {" "}
-                    <div className="w-full">
-                      <label className="form-label">Vegetables</label>
-                      <SelectBox
-                        name="vegetables"
-                        options={vegetableOptions}
-                        value={selectedVegetables}
-                        placeholder="Select vegetables"
-                        isMulti={true}
-                        onChange={(selectedOption) =>
-                          handleSelectChange(selectedOption, "vegetables")
-                        }
-                      />
-                      <span className="form-error">
-                        {formErrors.vegetables}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="form-row-2">
-                    <div className="w-full">
-                      <label className="form-label">Market Area</label>
-
-                      <SelectBox
-                        name="location"
-                        options={marketOptions}
-                        value={selectedMarket}
-                        placeholder="Select Market Area"
-                        onChange={(selectedOption) => {
-                          handleSelectChange(selectedOption, "location");
-                          getWeatherData(selectedOption.value);
-                        }}
-                      />
-                      <span className="form-error">{formErrors.location}</span>
-                    </div>{" "}
-                    <div className="w-full">
-                      <label className="form-label">
-                        Next Week Average Precipitation in mm/hr
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Enter next week's precipitation"
-                        className="form-input"
-                        name="rainfall"
-                        value={formValues.rainfall}
-                        onChange={handleChange}
-                      />
-                      {fetchingWeather && (
-                        <span className="text-green-800 text-sm w-full mt-1 block">
-                          Please wait until fetching weather data
-                        </span>
-                      )}
-                      <span className="form-error">{formErrors.rainfall}</span>
-                    </div>
-                  </div>
-                  <div className="form-row-2">
-                    {" "}
-                    <div className="w-full">
-                      <label className="form-label">
-                        Fuel Price (Lanka Auto Diesel) in Rs
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Enter fuel price"
-                        className="form-input"
-                        name="fuelPrice"
-                        value={formValues.fuelPrice}
-                        onChange={handleChange}
-                      />
-                      <span className="form-error">{formErrors.fuelPrice}</span>
-                    </div>
-                    <div className="w-full">
-                      <label className="form-label">Festivity</label>
-                      <SelectBox
-                        name="festival"
-                        options={isFestivalSeason}
-                        value={selectedFestival}
-                        placeholder="Any festival in next week?"
-                        onChange={(selectedOption) =>
-                          handleSelectChange(selectedOption, "festival")
-                        }
-                      />
-                      <span className="form-error">{formErrors.festival}</span>
-                    </div>
-                  </div>
-
-                  <div className="my-2 lg:mt-4 flex justify-center form-group">
-                    <button
-                      type="submit"
-                      className="btn-primary"
-                      disabled={btnDisabled}
-                    >
-                      {btnDisabled ? "Please Wait..." : "Predict Prices"}
-                    </button>
-                  </div>
-                </form>
+          <div className="flex flex-col p-5 gap-5">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border-2 border-gray-200"
+            >
+              <div className="w-full">
+                <label className="form-label">Vegetables</label>
+                <SelectBox
+                  name="vegetables"
+                  options={vegetableOptions}
+                  value={selectedVegetables}
+                  placeholder="Select vegetables"
+                  isMulti={true}
+                  onChange={(selectedOption) =>
+                    handleSelectChange(selectedOption, "vegetables")
+                  }
+                />
+                <span className="form-error">{formErrors.vegetables}</span>
               </div>
-              {result && (
-                <div className="p-5 flex flex-col w-full bg-white rounded-lg shadow-lg border-2 border-green-800">
-                  <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
-                    Predicted Price for Next Week per 1KG
-                  </h2>
-                  <div className="flex flex-row bg-gray-100 p-3 rounded-t-md mb-2 items-center">
-                    <span className="flex flex-1 font-semibold text-gray-700 text-center">
-                      Vegetable
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="w-full">
+                  <label className="form-label">Market Area</label>
+
+                  <SelectBox
+                    name="location"
+                    options={marketOptions}
+                    value={selectedMarket}
+                    placeholder="Select Market Area"
+                    onChange={(selectedOption) => {
+                      handleSelectChange(selectedOption, "location");
+                      getWeatherData(selectedOption.value);
+                    }}
+                  />
+                  <span className="form-error">{formErrors.location}</span>
+                </div>{" "}
+                <div className="w-full">
+                  <label className="form-label">
+                    Average Rainfall in mm/hr
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter next week's precipitation"
+                    className="form-input"
+                    name="rainfall"
+                    value={formValues.rainfall}
+                    onChange={handleChange}
+                  />
+                  {fetchingWeather && (
+                    <span className="text-green-800 text-sm w-full mt-1 block">
+                      Please wait until fetching weather data
                     </span>
-                    <span className="flex flex-1 font-semibold text-gray-700 text-center">
-                      Price
+                  )}
+                  <span className="form-error">{formErrors.rainfall}</span>
+                </div>
+                <div className="w-full">
+                  <label className="form-label">
+                    Fuel Price (Lanka Auto Diesel) in Rs
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter fuel price"
+                    className="form-input"
+                    name="fuelPrice"
+                    value={formValues.fuelPrice}
+                    onChange={handleChange}
+                  />
+                  <span className="form-error">{formErrors.fuelPrice}</span>
+                </div>
+                <div className="w-full">
+                  <label className="form-label">Festivity</label>
+                  <SelectBox
+                    name="festival"
+                    options={isFestivalSeason}
+                    value={selectedFestival}
+                    placeholder="Any festival happening?"
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "festival")
+                    }
+                  />
+                  <span className="form-error">{formErrors.festival}</span>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={btnDisabled}
+              >
+                {btnDisabled ? "Please Wait..." : "Predict Prices"}
+              </button>
+            </form>
+            {result && (
+              <div
+                className="p-5 flex flex-col w-full lg:w-1/2 mx-auto bg-white rounded-lg shadow-lg border-2 border-gray-200"
+                id="resultsDiv"
+              >
+                <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
+                  Predicted Prices for Next Week per 1Kg
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-gray-700 mb-4">
+                  <p className="capitalize">
+                    <strong>From:</strong> {result?.week_start}
+                  </p>
+                  <p className="capitalize">
+                    <strong>To:</strong> {result?.week_end}
+                  </p>
+                  <p className="capitalize">
+                    <strong>Market Area:</strong> {result?.location}
+                  </p>
+                </div>
+
+                <div className="flex flex-row bg-gray-100 p-3 rounded-t-md mb-2 items-center">
+                  <span className="flex flex-1 font-semibold text-gray-700 text-center">
+                    Vegetable
+                  </span>
+                  <span className="flex flex-1 font-semibold text-gray-700 text-center">
+                    Price
+                  </span>
+                </div>
+                {result?.predictions.map((prediction, index) => (
+                  <div
+                    className="flex flex-row mb-2 px-2 py-1 space-x-2 border-b-2"
+                    key={index}
+                  >
+                    <span className="flex flex-1 text-gray-800 font-medium capitalize">
+                      {prediction.vegetable}
+                    </span>
+                    <span className="flex flex-1 text-center text-gray-600 font-medium ">
+                      {" "}
+                      {`Rs ${prediction.price.toFixed(2)}`}
                     </span>
                   </div>
-                  {result?.predictions.map((prediction, index) => (
-                    <div
-                      className="flex flex-row mb-2 px-2 py-1 space-x-2 border-b-2"
-                      key={index}
-                    >
-                      <span className="flex flex-1 text-gray-800 font-medium capitalize">
-                        {prediction.vegetable}
-                      </span>
-                      <span className="flex flex-1 text-center text-gray-600 font-medium ">
-                        {" "}
-                        {`Rs ${prediction.price.toFixed(2)}`}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </>
       )}
