@@ -36,66 +36,70 @@ const App = () => {
   return (
     <AuthContextProvider>
       <div
-        className={`flex flex-col min-h-screen bg-[#fdfaf5] flex-grow ${
+        className={`flex flex-col min-h-screen bg-[#fdfaf5] ${
           fadeIn ? "animate-fade" : ""
-        } `}
+        }`}
       >
-        <Routes>
-          {/* Public routes which are not required a login */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/passwordReset" element={<PasswordReset />} />
-          <Route path="/unauthorized" element={<Unauthorized />} />
-          <Route path="*" element={<NotFound />} />
+        <div className="flex-grow">
+          <Routes>
+            {/* Public routes which are not required a login */}
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/passwordReset" element={<PasswordReset />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="*" element={<NotFound />} />
 
-          {/* User private Routes which requires login as a user*/}
-          <Route
-            path="/user/predict"
-            element={<PrivateRoute userRole="User" component={PredictMain} />}
-          />
-          <Route
-            path="/user/predictMultiple"
-            element={
-              <PrivateRoute userRole="User" component={PredictMultiVeg} />
-            }
-          />
-          <Route
-            path="/user/shoppingList"
-            element={<PrivateRoute userRole="User" component={ShoppingList} />}
-          />
-          <Route
-            path="/user/support"
-            element={<PrivateRoute userRole="User" component={Support} />}
-          />
+            {/* User private Routes which requires login as a user*/}
+            <Route
+              path="/user/predict"
+              element={<PrivateRoute userRole="User" component={PredictMain} />}
+            />
+            <Route
+              path="/user/predictMultiple"
+              element={
+                <PrivateRoute userRole="User" component={PredictMultiVeg} />
+              }
+            />
+            <Route
+              path="/user/shoppingList"
+              element={
+                <PrivateRoute userRole="User" component={ShoppingList} />
+              }
+            />
+            <Route
+              path="/user/support"
+              element={<PrivateRoute userRole="User" component={Support} />}
+            />
 
-          {/* Admin private Routes which requires login as admin*/}
-          <Route
-            path="/admin/dashboard"
-            element={<PrivateRoute userRole="Admin" component={Dashboard} />}
-          />
-          <Route
-            path="/admin/queries"
-            element={<PrivateRoute userRole="Admin" component={Queries} />}
-          />
-          <Route
-            path="/admin/users"
-            element={<PrivateRoute userRole="Admin" component={Users} />}
-          />
+            {/* Admin private Routes which requires login as admin*/}
+            <Route
+              path="/admin/dashboard"
+              element={<PrivateRoute userRole="Admin" component={Dashboard} />}
+            />
+            <Route
+              path="/admin/queries"
+              element={<PrivateRoute userRole="Admin" component={Queries} />}
+            />
+            <Route
+              path="/admin/users"
+              element={<PrivateRoute userRole="Admin" component={Users} />}
+            />
 
-          {/* common private Routes which requires login only*/}
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute userTypeRequired={false} component={Profile} />
-            }
-          />
-        </Routes>
+            {/* common private Routes which requires login only*/}
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute userTypeRequired={false} component={Profile} />
+              }
+            />
+          </Routes>
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </AuthContextProvider>
   );
 };

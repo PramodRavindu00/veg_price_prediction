@@ -13,6 +13,8 @@ import {
 } from "../../assets/validations.mjs";
 import Modal from "../../components/Modal";
 import { scroller } from "react-scroll";
+import FormInstructions from "../../components/FormInstructions";
+import { shoppingList } from "../../assets/formInstructions.mjs";
 
 const initialValues = {
   date: new Date().toISOString().slice(0, 10),
@@ -209,12 +211,6 @@ const ShoppingList = () => {
         );
 
         setResult(response.data.data);
-        scroller.scrollTo("resultsDiv", {
-          duration: 1000,
-          delay: 0,
-          smooth: "linear",
-          offset: -80,
-        });
         setBtnDisabled(false);
         clearForm();
       } catch (error) {
@@ -249,168 +245,197 @@ const ShoppingList = () => {
     }
   }, [userData]);
 
+    useEffect(() => {
+      if (result) {
+        scroller.scrollTo("resultsDiv", {
+          duration: 1000,
+          delay: 0,
+          smooth: "linear",
+          offset: -105,
+        });
+      }
+    }, [result]);
+
   return (
     <>
       <Navbar publicPage={false} navLinks={userLinks} />
       {loading && !predictFormValues && !preferenceFormValues ? (
         <Loader />
       ) : (
-        <div className="flex flex-col p-5 gap-5">
-          <div className="flex flex-row w-1/2  md:w-1/6 self-end">
-            <button
-              className="flex-1 bg-blue-500 text-white border-none rounded-l-md hover:bg-blue-600 px-4 py-2"
-              onClick={openViewModal}
-            >
-              View
-            </button>
-            <button
-              className="flex-1 bg-lime-500 text-white border-none rounded-r-md hover:bg-lime-600 px-4 py-2"
-              onClick={openModal}
-            >
-              {submitBtnTxt}
-            </button>
+        <>
+          <div className="flex flex-col p-5 gap-5">
+            <div className="flex flex-row w-1/2  md:w-1/6 self-end">
+              <button
+                className="flex-1 bg-blue-500 text-white border-none rounded-l-md hover:bg-blue-600 px-4 py-2"
+                onClick={openViewModal}
+              >
+                View
+              </button>
+              <button
+                className="flex-1 bg-lime-500 text-white border-none rounded-r-md hover:bg-lime-600 px-4 py-2"
+                onClick={openModal}
+              >
+                {submitBtnTxt}
+              </button>
+            </div>
+            <div className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border-2 border-gray-200">
+              <FormInstructions content={shoppingList} />
+              <form
+                className="flex flex-col gap-5"
+                onSubmit={handlePredictSubmit}
+              >
+                <hr className="hidden sm:block border-t-2 border-gray-300" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                  {" "}
+                  <div className="w-full">
+                    <label className="form-label">Market Area</label>
+                    <input
+                      type="text"
+                      disabled
+                      name="location"
+                      value={userData?.nearestMarket.market.market}
+                      className="form-input"
+                    />
+                    <span className="form-error">
+                      {predictFormErrors.location}
+                    </span>
+                  </div>
+                  <div className="w-full">
+                    <label className="form-label">
+                      {" "}
+                      Average Rainfall in mm/hr
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter next week's precipitation"
+                      className="form-input"
+                      name="rainfall"
+                      value={predictFormValues.rainfall}
+                      onChange={handleChange}
+                    />
+                    {fetchingWeather && (
+                      <span className="text-green-800 text-sm w-full mt-1 block">
+                        Please wait until fetching weather data
+                      </span>
+                    )}
+                    <span className="form-error">
+                      {predictFormErrors.rainfall}
+                    </span>
+                  </div>
+                  <div className="w-full">
+                    <label className="form-label">
+                      Fuel Price (Lanka Auto Diesel) in Rs
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter fuel price"
+                      className="form-input"
+                      name="fuelPrice"
+                      value={predictFormValues?.fuelPrice}
+                      onChange={handleChange}
+                    />
+                    <span className="form-error">
+                      {predictFormErrors.fuelPrice}
+                    </span>
+                  </div>
+                  <div className="w-full">
+                    <label className="form-label">Festivity</label>
+                    <SelectBox
+                      name="festival"
+                      options={isFestivalSeason}
+                      value={selectedFestival}
+                      placeholder="Any festival happening?"
+                      onChange={(selectedOption) =>
+                        handleSelectChange(selectedOption, "festival")
+                      }
+                    />
+                    <span className="form-error">
+                      {predictFormErrors.festival}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  disabled={btnDisabled}
+                >
+                  {btnDisabled ? "Please Wait..." : "Predict Prices"}
+                </button>
+              </form>
+            </div>
+
+            {result && (
+              <div
+                id="resultsDiv"
+                className="py-5 items-center flex flex-col w-full"
+              >
+                <div className="p-5 flex flex-col w-full lg:w-2/3 mx-auto bg-white rounded-lg shadow-lg border-2 border-gray-200">
+                  <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
+                    Predicted Prices of Preferred Veggies in Next Week
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-gray-700 mb-4">
+                    <p className="capitalize">
+                      <strong>From:</strong> {result?.week_start}
+                    </p>
+                    <p className="capitalize">
+                      <strong>To:</strong> {result?.week_end}
+                    </p>
+                    <p className="capitalize">
+                      <strong>Market Area:</strong> {result?.location}
+                    </p>
+                  </div>
+                  <table className="w-full border-collapse bg-gray-100 rounded-t-md overflow-hidden shadow-lg">
+                    <thead className="rounded-t-md">
+                      <tr className="bg-gray-200 text-gray-700 text-center text-sm sm:text-base">
+                        <th className="p-3 font-semibold">Vegetable</th>
+                        <th className="p-3 font-semibold">Amount</th>
+                        <th className="hidden sm:table-cell p-3 font-semibold">
+                          Price / KG
+                        </th>
+                        <th className="p-3 font-semibold">Cost</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.weeklyCost?.map((item, index) => (
+                        <tr
+                          key={index}
+                          className="border-b border-gray-300 text-center text-gray-800 text-sm sm:text-base"
+                        >
+                          <td className="p-3 font-medium capitalize">
+                            {item.vegetable}
+                          </td>
+                          <td className="p-3 font-medium">
+                            {item.amount !== 1000
+                              ? `${item.amount} g`
+                              : `${item.amount / 1000} KG`}
+                          </td>
+                          <td className="hidden sm:table-cell p-3 text-gray-600 font-medium">
+                            {`Rs ${item.priceKG.toFixed(2)}`}
+                          </td>
+                          <td className="p-3 text-gray-600 font-medium">{`Rs ${item.cost.toFixed(
+                            2
+                          )}`}</td>
+                        </tr>
+                      ))}
+                      <tr className="bg-gray-200 font-semibold text-gray-800 text-sm sm:text-base">
+                        <td></td>
+                        <td className="hidden sm:table-cell"></td>
+                        <td className="p-3 text-right capitalize">
+                          Sub Total:
+                        </td>
+                        <td className="p-3 text-gray-900 text-center">{`Rs ${result?.weeklyCost
+                          ?.reduce((sum, item) => sum + item.cost, 0)
+                          .toFixed(2)}`}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
-
-          <form
-            className="flex flex-col bg-white p-5 w-full rounded-lg shadow-lg gap-5 border-2 border-gray-200"
-            onSubmit={handlePredictSubmit}
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {" "}
-              <div className="w-full">
-                <label className="form-label">Market Area</label>
-                <input
-                  type="text"
-                  disabled
-                  name="location"
-                  value={userData?.nearestMarket.market.market}
-                  className="form-input"
-                />
-                <span className="form-error">{predictFormErrors.location}</span>
-              </div>
-              <div className="w-full">
-                <label className="form-label"> Average Rainfall in mm/hr</label>
-                <input
-                  type="text"
-                  placeholder="Enter next week's precipitation"
-                  className="form-input"
-                  name="rainfall"
-                  value={predictFormValues.rainfall}
-                  onChange={handleChange}
-                />
-                {fetchingWeather && (
-                  <span className="text-green-800 text-sm w-full mt-1 block">
-                    Please wait until fetching weather data
-                  </span>
-                )}
-                <span className="form-error">{predictFormErrors.rainfall}</span>
-              </div>
-              <div className="w-full">
-                <label className="form-label">
-                  Fuel Price (Lanka Auto Diesel) in Rs
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter fuel price"
-                  className="form-input"
-                  name="fuelPrice"
-                  value={predictFormValues?.fuelPrice}
-                  onChange={handleChange}
-                />
-                <span className="form-error">
-                  {predictFormErrors.fuelPrice}
-                </span>
-              </div>
-              <div className="w-full">
-                <label className="form-label">Festivity</label>
-                <SelectBox
-                  name="festival"
-                  options={isFestivalSeason}
-                  value={selectedFestival}
-                  placeholder="Any festival happening?"
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "festival")
-                  }
-                />
-                <span className="form-error">{predictFormErrors.festival}</span>
-              </div>
-            </div>
-            <button
-              type="submit"
-              className="btn-primary"
-              disabled={btnDisabled}
-            >
-              {btnDisabled ? "Please Wait..." : "Predict Prices"}
-            </button>
-          </form>
-
-          {result && (
-            <div
-              id="resultsDiv"
-              className="p-5 flex flex-col w-full lg:w-2/3 mx-auto bg-white rounded-lg shadow-lg border-2 border-gray-200"
-            >
-              <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
-                Predicted Prices of Preferred Veggies in Next Week
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-gray-700 mb-4">
-                <p className="capitalize">
-                  <strong>From:</strong> {result?.week_start}
-                </p>
-                <p className="capitalize">
-                  <strong>To:</strong> {result?.week_end}
-                </p>
-                <p className="capitalize">
-                  <strong>Market Area:</strong> {result?.location}
-                </p>
-              </div>
-
-              <table className="w-full border-collapse bg-gray-100 rounded-t-md overflow-hidden shadow-lg">
-                <thead className="rounded-t-md">
-                  <tr className="bg-gray-200 text-gray-700 text-center text-sm sm:text-base">
-                    <th className="p-3 font-semibold">Vegetable</th>
-                    <th className="p-3 font-semibold">Amount</th>
-                    <th className="hidden sm:table-cell p-3 font-semibold">
-                      Price / KG
-                    </th>
-                    <th className="p-3 font-semibold">Cost</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.weeklyCost?.map((item, index) => (
-                    <tr
-                      key={index}
-                      className="border-b border-gray-300 text-center text-gray-800 text-sm sm:text-base"
-                    >
-                      <td className="p-3 font-medium capitalize">
-                        {item.vegetable}
-                      </td>
-                      <td className="p-3 font-medium">
-                        {item.amount !== 1000
-                          ? `${item.amount} g`
-                          : `${item.amount / 1000} KG`}
-                      </td>
-                      <td className="hidden sm:table-cell p-3 text-gray-600 font-medium">
-                        {`Rs ${item.priceKG.toFixed(2)}`}
-                      </td>
-                      <td className="p-3 text-gray-600 font-medium">{`Rs ${item.cost.toFixed(
-                        2
-                      )}`}</td>
-                    </tr>
-                  ))}
-                  <tr className="bg-gray-200 font-semibold text-gray-800 text-sm sm:text-base">
-                    <td></td>
-                    <td className="hidden sm:table-cell"></td>
-                    <td className="p-3 text-right capitalize">Sub Total:</td>
-                    <td className="p-3 text-gray-900 text-center">{`Rs ${result?.weeklyCost
-                      ?.reduce((sum, item) => sum + item.cost, 0)
-                      .toFixed(2)}`}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+        </>
       )}
+
       <Modal
         isOpen={modalOpen}
         closeModal={closeModal}
