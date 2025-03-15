@@ -26,6 +26,7 @@ const styles = {
     //color: "#111827",
     //fontWeight: "600",
   }),
+
 };
 
 const SelectBox = ({
@@ -34,6 +35,7 @@ const SelectBox = ({
   onChange,
   placeholder,
   isMulti = false,
+  
 }) => {
   return (
     <div>
@@ -44,6 +46,8 @@ const SelectBox = ({
         placeholder={placeholder}
         styles={styles}
         isMulti={isMulti}
+        menuPortalTarget={document.body}
+        menuPlacement="auto"
       />
     </div>
   );
