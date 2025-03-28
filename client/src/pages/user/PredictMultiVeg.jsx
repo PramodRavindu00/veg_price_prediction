@@ -303,7 +303,7 @@ const PredictMultiVeg = () => {
                 </div>
                 <button
                   type="submit"
-                  className="btn-primary"
+                  className="btn-primary w-full sm:w-1/4"
                   disabled={btnDisabled}
                 >
                   {btnDisabled ? "Please Wait..." : "Predict Prices"}
@@ -315,46 +315,45 @@ const PredictMultiVeg = () => {
                 id="resultsDiv"
                 className="py-5 items-center flex flex-col w-full"
               >
-     
-                  <div className="p-5 flex flex-col w-full lg:w-1/2 mx-auto bg-white rounded-lg shadow-lg border-2 border-gray-200">
-                    <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
-                      Predicted Prices for Next Week per 1Kg
-                    </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-gray-700 mb-4">
-                      <p className="capitalize">
-                        <strong>From:</strong> {result?.week_start}
-                      </p>
-                      <p className="capitalize">
-                        <strong>To:</strong> {result?.week_end}
-                      </p>
-                      <p className="capitalize">
-                        <strong>Market Area:</strong> {result?.location}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-row bg-gray-100 p-3 rounded-t-md mb-2 items-center">
-                      <span className="flex flex-1 font-semibold text-gray-700 text-center">
-                        Vegetable
-                      </span>
-                      <span className="flex flex-1 font-semibold text-gray-700 text-center">
-                        Price
-                      </span>
-                    </div>
-                    {result?.predictions.map((prediction, index) => (
-                      <div
-                        className="flex flex-row mb-2 px-2 py-1 space-x-2 border-b-2"
-                        key={index}
-                      >
-                        <span className="flex flex-1 text-gray-800 font-medium capitalize">
-                          {prediction.vegetable}
-                        </span>
-                        <span className="flex flex-1 text-center text-gray-600 font-medium ">
-                          {" "}
-                          {`Rs ${prediction.price.toFixed(2)}`}
-                        </span>
-                      </div>
-                    ))}
+                <div className="p-5 flex flex-col w-full lg:w-1/2 mx-auto bg-white rounded-lg shadow-lg border-2 border-gray-200">
+                  <h2 className="text-center md:text-xl font-bold text-gray-800 mb-4">
+                    Predicted Prices for Next Week per 1Kg
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-gray-700 mb-4">
+                    <p className="capitalize">
+                      <strong>From:</strong> {result?.week_start}
+                    </p>
+                    <p className="capitalize">
+                      <strong>To:</strong> {result?.week_end}
+                    </p>
+                    <p className="capitalize">
+                      <strong>Market Area:</strong> {result?.location}
+                    </p>
                   </div>
+
+                  <div className="flex flex-row bg-gray-100 p-3 rounded-t-md mb-2 items-center">
+                    <span className="flex flex-1 font-semibold text-gray-700 text-center">
+                      Vegetable
+                    </span>
+                    <span className="flex flex-1 font-semibold text-gray-700 text-center">
+                      Price
+                    </span>
+                  </div>
+                  {result?.predictions.map((prediction, index) => (
+                    <div
+                      className="flex flex-row mb-2 px-2 py-1 space-x-2 border-b-2"
+                      key={index}
+                    >
+                      <span className="flex flex-1 text-gray-800 font-medium capitalize">
+                        {prediction.vegetable}
+                      </span>
+                      <span className="flex flex-1 text-center text-gray-600 font-medium ">
+                        {" "}
+                        {`Rs ${prediction.price.toFixed(2)}`}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>

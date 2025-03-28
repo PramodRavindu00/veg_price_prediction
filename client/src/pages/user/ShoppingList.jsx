@@ -245,16 +245,16 @@ const ShoppingList = () => {
     }
   }, [userData]);
 
-    useEffect(() => {
-      if (result) {
-        scroller.scrollTo("resultsDiv", {
-          duration: 1000,
-          delay: 0,
-          smooth: "linear",
-          offset: -105,
-        });
-      }
-    }, [result]);
+  useEffect(() => {
+    if (result) {
+      scroller.scrollTo("resultsDiv", {
+        duration: 1000,
+        delay: 0,
+        smooth: "linear",
+        offset: -105,
+      });
+    }
+  }, [result]);
 
   return (
     <>
@@ -356,7 +356,7 @@ const ShoppingList = () => {
                 </div>
                 <button
                   type="submit"
-                  className="btn-primary"
+                  className="btn-primary w-full sm:w-1/4"
                   disabled={btnDisabled}
                 >
                   {btnDisabled ? "Please Wait..." : "Predict Prices"}
@@ -500,7 +500,7 @@ const ShoppingList = () => {
           <div className="my-2 lg:mt-4 flex justify-center form-group">
             <button
               type="submit"
-              className="btn-primary"
+              className="btn-primary w-full sm:w-1/2"
               disabled={btnDisabled}
             >
               {btnDisabled ? "Please Wait..." : submitBtnTxt}

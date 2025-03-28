@@ -57,39 +57,39 @@ export const getCounts = async (req, res) => {
 };
 
 export const getWeatherData = async (req, res) => {
-  //const { location } = req.params;
+  const { location } = req.params;
   try {
-    // const response = await axios.get(
-    //   `http://api.worldweatheronline.com/premium/v1/weather.ashx?q=${location},sri+lanka&num_of_days=8&tp=24&format=json&key=${process.env.WEATHER_API_KEY}`
-    // );
+    const response = await axios.get(
+      `http://api.worldweatheronline.com/premium/v1/weather.ashx?q=${location},sri+lanka&num_of_days=8&tp=24&format=json&key=${process.env.WEATHER_API_KEY}`
+    );
 
-    // const dailyData = response.data.data.weather;
+    const dailyData = response.data.data.weather;
 
-    // const totalRainfall = dailyData.reduce((sum, singleDay) => {
-    //   const dailyRainfall = singleDay.hourly.reduce(
-    //     (daySum, item) => daySum + parseFloat(item.precipMM),
-    //     0
-    //   );
-    //   return sum + dailyRainfall;
-    // }, 0);
+    const totalRainfall = dailyData.reduce((sum, singleDay) => {
+      const dailyRainfall = singleDay.hourly.reduce(
+        (daySum, item) => daySum + parseFloat(item.precipMM),
+        0
+      );
+      return sum + dailyRainfall;
+    }, 0);
 
-    // const avgRainfall = parseFloat(
-    //   (totalRainfall / dailyData.length).toFixed(2)
-    // );
+    const avgRainfall = parseFloat(
+      (totalRainfall / dailyData.length).toFixed(2)
+    );
 
-    // const avgTemp =
-    //   dailyData.reduce((sum, item) => sum + parseFloat(item.avgtempC), 0) /
-    //   dailyData.length;
-
-    // const nextWeekAvg = {
-    //   avgTemp: avgTemp,
-    //   avgRainfall: avgRainfall,
-    // };
+    const avgTemp =
+      dailyData.reduce((sum, item) => sum + parseFloat(item.avgtempC), 0) /
+      dailyData.length;
 
     const nextWeekAvg = {
-      avgTemp: 10,
-      avgRainfall: 0.45,
+      avgTemp: avgTemp,
+      avgRainfall: avgRainfall,
     };
+
+    // const nextWeekAvg = {
+    //   avgTemp: 10,
+    //   avgRainfall: 0.45,
+    // };
 
     res.status(200).json({ success: true, data: nextWeekAvg });
   } catch (error) {

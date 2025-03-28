@@ -153,3 +153,26 @@ export const guestContactFormValidations = (values) => {
   }
   return errors;
 };
+
+export const passwordChangeValidations = (values) => {
+  const errors = {};
+  if (!values.password) {
+    errors.password = "Current Password is required!";
+  }
+
+  if (!values.newPassword) {
+    errors.newPassword = "New Password is required!";
+  } else if (values.newPassword.length < 4) {
+    errors.newPassword = "Password must be more than 4 characters";
+  } else if (values.newPassword.length > 10) {
+    errors.newPassword = "Password cannot exceed more than 10 characters";
+  } else if (values.password === values.newPassword) {
+    errors.newPassword = "New password cannot be same as current password";
+  }
+  if (!values.confirmPassword) {
+    errors.confirmPassword = "Confirm password is required!";
+  } else if (values.confirmPassword !== values.newPassword) {
+    errors.confirmPassword = "Passwords do not match";
+  }
+  return errors;
+};

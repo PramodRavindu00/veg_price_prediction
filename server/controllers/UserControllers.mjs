@@ -5,7 +5,7 @@ import Vegetable from "../models/VegetableModel.mjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { sendEmail } from "../utils/emailService.mjs";
-import { hashPassword } from "../utils/bcryptUtil.mjs";
+import { hashPassword, verifyPassword } from "../utils/bcryptUtil.mjs";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -249,7 +249,7 @@ export const verifyOTP = async (req, res) => {
   }
 };
 
-export const changePassword = async (req, res) => {
+export const ResetPasswordAfterVerified = async (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
 
@@ -280,3 +280,70 @@ export const changePassword = async (req, res) => {
     });
   }
 };
+
+export const changePassword = async (req, res) => {
+  const { id } = req.params;
+
+  if (!isValidObjectId(id)) {
+    return res.status(400).json({ success: false, message: "Invalid user ID" });
+  }
+  try {
+    const { password, newPassword } = req.body;
+    const userFound = await User.findById(id);
+
+    if (!userFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "user Not Found" });
+    }
+
+    const isPasswordValid = await verifyPassword(password, userFound.password);
+    if (!isPasswordValid) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Current Password is Invalid" });
+    }
+
+    const hashedNewPassword = await hashPassword(newPassword);
+
+    userFound.password = hashedNewPassword;
+    await userFound.save();
+    res
+      .status(200)
+      .json({ success: true, message: "Password Changed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const deleteAccount = async (req, res) => { 
+  const { id } = req.params;
+
+  if (!isValidObjectId(id)) {
+    return res.status(400).json({ success: false, message: "Invalid user ID" });
+  }
+
+  try {
+    const userFound = await User.findById(id);
+
+    if (!userFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "user Not Found" });
+    }
+
+    await User.findByIdAndDelete(id);
+     res
+       .status(200)
+       .json({ success: true, message: "User Account has been deleted successfully" });
+  } catch (error) {
+     res.status(500).json({
+       success: false,
+       message: "Internal Server Error",
+     });
+  }
+}

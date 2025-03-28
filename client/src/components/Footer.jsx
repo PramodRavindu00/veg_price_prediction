@@ -20,7 +20,7 @@ const Footer = () => {
   const isPublicRoute = publicFooterRoutes.includes(location.pathname);
 
   return (
-    <footer className="text-center text-white flex flex-col w-full mt-auto bg-[#1d362e] py-5">
+    <footer className="text-center text-white flex flex-col justify-center w-full mt-auto bg-[#1d362e] py-5 min-h-[15vh]">
       {isPublicRoute && (
         <>
           <div className="flex flex-col sm:flex-row justify-evenly p-3 gap-3">

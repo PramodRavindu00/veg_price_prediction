@@ -164,11 +164,11 @@ const PredictMain = () => {
           "/api/prediction/getPredictions",
           formValues
         );
-       // console.log(response.data.data);
-        
+        // console.log(response.data.data);
+
         setPredPeriod(response.data.data.type);
         setResult(response.data.data);
-      
+
         setBtnDisabled(false);
         clearForm();
       } catch (error) {
@@ -182,7 +182,6 @@ const PredictMain = () => {
     getAllVegetables();
     getFuelPrice();
   }, []);
-
 
   useEffect(() => {
     if (result) {
@@ -292,7 +291,7 @@ const PredictMain = () => {
             </div>
             <button
               type="submit"
-              className="btn-primary"
+              className="btn-primary w-full sm:w-1/4"
               disabled={btnDisabled}
             >
               {btnDisabled ? "Please Wait..." : "Predict Price"}

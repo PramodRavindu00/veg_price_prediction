@@ -26,7 +26,14 @@ const styles = {
     //color: "#111827",
     //fontWeight: "600",
   }),
-
+  menu: (provided) => ({
+    ...provided,
+    zIndex: 200, // Ensure the dropdown is above the modal content
+  }),
+  menuPortal: (provided) => ({
+    ...provided,
+    zIndex: 200, // Ensure menu portal also has higher z-index
+  }),
 };
 
 const SelectBox = ({
@@ -35,7 +42,6 @@ const SelectBox = ({
   onChange,
   placeholder,
   isMulti = false,
-  
 }) => {
   return (
     <div>
