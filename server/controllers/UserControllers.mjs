@@ -320,7 +320,7 @@ export const changePassword = async (req, res) => {
   }
 };
 
-export const deleteAccount = async (req, res) => { 
+export const deleteAccount = async (req, res) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
@@ -337,13 +337,54 @@ export const deleteAccount = async (req, res) => {
     }
 
     await User.findByIdAndDelete(id);
-     res
-       .status(200)
-       .json({ success: true, message: "User Account has been deleted successfully" });
+    res.status(200).json({
+      success: true,
+      message: "User Account has been deleted successfully",
+    });
   } catch (error) {
-     res.status(500).json({
-       success: false,
-       message: "Internal Server Error",
-     });
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
-}
+};
+
+export const profileEdit = async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  if (!isValidObjectId(id)) {
+    return res.status(400).json({ success: false, message: "Invalid user ID" });
+  }
+
+  try {
+    const userFound = await User.findById(id);
+    if (!userFound) {
+      return res
+        .status(404)
+        .json({ success: false, message: "user Not Found" });
+    }
+
+    await User.findByIdAndUpdate(id, data);
+
+    const updatedUser = await User.findById(id)
+      .select("-password")
+      .populate([
+        { path: "preferredVeggies.vegetable" },
+        { path: "nearestMarket.market" },
+      ]);
+
+    res.status(200).json({
+      success: true,
+      message: "Profile Details has been updated successfully",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};

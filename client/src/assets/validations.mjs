@@ -176,3 +176,30 @@ export const passwordChangeValidations = (values) => {
   }
   return errors;
 };
+
+export const proFileEditValidations = (values) => {
+  const errors = {};
+  if (!values.firstName) {
+    errors.firstName = "First name is required!";
+  }
+  if (!values.lastName) {
+    errors.lastName = "Last name is required!";
+  }
+  if (!values.email) {
+    errors.email = "Email is required!";
+  } else if (!emailRegex.test(values.email)) {
+    errors.email = "Invalid Email format!";
+  }
+  if (!values.contactNo) {
+    errors.contactNo = "Contact No is required!";
+  }
+  if (!values.address) {
+    errors.address = "Address is required!";
+  }
+
+  if (!values.nearestMarket) {
+    errors.nearestMarket = "Market Area is required!";
+  }
+
+  return errors;
+};
