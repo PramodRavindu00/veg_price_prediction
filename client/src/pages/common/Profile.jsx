@@ -2,11 +2,14 @@ import { toast, Toaster } from "sonner";
 import { adminLinks, userLinks } from "../../assets/navLinks.mjs";
 import { useAuth } from "../../assets/useAuth.mjs";
 import Navbar from "../../components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectBox from "../../components/SelectBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { passwordChangeValidations } from "../../assets/validations.mjs";
+import {
+  passwordChangeValidations,
+  proFileEditValidations,
+} from "../../assets/validations.mjs";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import Confirm from "../../components/Confirm";
@@ -21,22 +24,53 @@ const initialPasswordValues = {
 const Profile = () => {
   const navigate = useNavigate();
   const { auth, userData, setAuth, setUserData } = useAuth();
-  const initialValues = {
-    firstName: userData?.firstName,
-    lastName: userData?.lastName,
-    email: userData?.email,
-    address: userData?.address,
-    contact: userData?.contact,
-    marketArea: userData?.marketArea,
-  };
   const [formErrors, setFormErrors] = useState(null);
   const [passwordFormErrors, setPasswordFormErrors] = useState(null);
+  const [formValues, setFormValues] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    address: "",
+    contactNo: "",
+    nearestMarket: null, // This will be set when data loads
+  });
 
-  const [formValues, setFormValues] = useState(initialValues);
+  useEffect(() => {
+    if (userData) {
+      setFormValues({
+        firstName: userData?.firstName || "",
+        lastName: userData?.lastName || "",
+        email: userData?.email || "",
+        address: userData?.address || "",
+        contactNo: userData?.contactNo || "",
+        nearestMarket: userData?.nearestMarket?.market?._id ,
+      });
+
+      const getAllMarkets = async () => {
+        try {
+          const response = await axios.get("/api/market/getAllMarkets");
+          const options = response.data.data.map((market) => ({
+            label: market.market,
+            value: market._id,
+          }));
+
+          setMarketOptions(options);
+          // Set the nearest market option based on userData
+          const userMarket = options.find(
+            (market) => market.value === userData?.nearestMarket?.market?._id
+          );
+          setSelectedMarket(userMarket || "");
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+      getAllMarkets();
+    }
+  }, [userData]);
+
   const [passwordFormValues, setPasswordFormValues] = useState(
     initialPasswordValues
   );
-
   const [btnProfileDisabled, setBtnProfileDisabled] = useState(false);
   const [btnPasswordDisabled, setBtnPasswordDisabled] = useState(false);
 
@@ -44,17 +78,34 @@ const Profile = () => {
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
+  const [marketOptions, setMarketOptions] = useState([]);
+  const [selectedMarket, setSelectedMarket] = useState(null);
+
   const togglePassword = (e) => {
     e.preventDefault();
     setPasswordVisible(!passwordVisible);
   };
+
   const toggleNewPassword = (e) => {
     e.preventDefault();
     setNewPasswordVisible(!newPasswordVisible);
   };
+
   const toggleConfirmPassword = (e) => {
     e.preventDefault();
     setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "contactNo") {
+      const numericValue = value.replace(/[^0-9]/g, "");
+      setFormValues({ ...formValues, [name]: numericValue.slice(0, 10) });
+    } else {
+      setFormValues({ ...formValues, [name]: value });
+    }
+
+    setFormErrors({ ...formErrors, [name]: "" });
   };
 
   const handlePasswordChange = (e) => {
@@ -63,11 +114,9 @@ const Profile = () => {
     setPasswordFormErrors({ ...passwordFormErrors, [name]: "" });
   };
 
-  const handleSelectChange = (option, name) => {
-    //  setSelectedMarket(option);
-    setFormValues((prev) => ({ ...prev, location: option?.value }));
-
-    setFormErrors((prev) => ({ ...prev, [name]: "" }));
+  const handleSelectChange = (option) => {
+    setSelectedMarket(option);
+    setFormValues({ ...formValues, nearestMarket: { market: option?.value } });
   };
 
   const handlePasswordChangeSubmit = async (e) => {
@@ -125,6 +174,29 @@ const Profile = () => {
     });
   };
 
+  const handleProfileEdit = async (e) => {
+    e.preventDefault();
+    const errors = proFileEditValidations(formValues);
+    setFormErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      console.log("Form has validation errors");
+    } else {
+      setBtnProfileDisabled(true);
+      try {
+        const res = await axios.patch(
+          `/api/user/profileEdit/${userData?._id}`,
+          formValues
+        );
+        toast.success("Profile Details Updated Successfully");
+        setUserData(res?.data?.data);
+      } catch (error) {
+        toast.error(error.response.data.message);
+      } finally {
+        setBtnProfileDisabled(false);
+      }
+    }
+  };
+
   return (
     <>
       <Navbar
@@ -134,19 +206,98 @@ const Profile = () => {
       <div className="flex flex-col md:flex-row p-5 gap-5">
         <div className="flex flex-col bg-white p-5 rounded-lg shadow-lg gap-5 border-2 border-gray-200 w-full md:w-2/3">
           <h2 className="text-2xl font-bold text-gray-800">Edit Profile</h2>
-          <form className="flex flex-col gap-5">
+          <form className="flex flex-col gap-5" onSubmit={handleProfileEdit}>
+            <div className="form-row-2">
+              <div className="w-full">
+                <label className="form-label">First Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter your First Name"
+                  className="form-input"
+                  name="firstName"
+                  value={formValues?.firstName}
+                  onChange={handleChange}
+                />
+                <span className="form-error">{formErrors?.firstName}</span>
+              </div>
+              <div className="w-full">
+                <label className="form-label">Last Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter your Last Name"
+                  className="form-input"
+                  name="lastName"
+                  value={formValues?.lastName}
+                  onChange={handleChange}
+                />
+                <span className="form-error">{formErrors?.lastName}</span>
+              </div>
+            </div>
+
             <div className="w-full">
-              <label className="form-label">Market Area</label>
-              <SelectBox
-                name="location"
-                // options={marketOptions}
-                // value={selectedMarket}
-                placeholder="Select Market Area"
-                onChange={(selectedOption) => {
-                  handleSelectChange(selectedOption, "location");
-                }}
+              <label className="form-label">Email</label>
+              <input
+                type="text"
+                placeholder="Enter your Email"
+                className="form-input"
+                name="email"
+                value={formValues?.email}
+                disabled={userData?.userType === "Admin" ? true : false}
+                onChange={handleChange}
               />
-              <span className="form-error">{formErrors?.location}</span>
+              <span className="form-error">{formErrors?.email}</span>
+            </div>
+            <div className="w-full">
+              <label className="form-label">Address</label>
+              <input
+                type="text"
+                placeholder="Enter your Address"
+                className="form-input"
+                name="address"
+                value={formValues?.address}
+                onChange={handleChange}
+              />
+              <span className="form-error">{formErrors?.address}</span>
+            </div>
+
+            <div className="form-row-2">
+              <div className="w-full">
+                <label className="form-label">Contact No</label>
+                <input
+                  type="text"
+                  placeholder="Enter your Contact No"
+                  className="form-input"
+                  name="contactNo"
+                  value={formValues?.contactNo}
+                  onChange={handleChange}
+                />
+                <span className="form-error">{formErrors?.contactNo}</span>
+              </div>
+
+              <div className="w-full">
+                <label className="form-label">Closest Market Area</label>
+                {userData?.userType === "Admin" ? (
+                  <input
+                    type="text"
+                    name="nearestMarket"
+                    className="form-input"
+                    value={userData?.nearestMarket.market.market}
+                    disabled={true}
+                  />
+                ) : (
+                  <SelectBox
+                    name="nearestMarket"
+                    options={marketOptions}
+                    value={selectedMarket}
+                    placeholder="Select Market Area"
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption)
+                    }
+                  />
+                )}
+
+                <span className="form-error">{formErrors?.nearestMarket}</span>
+              </div>
             </div>
 
             <button

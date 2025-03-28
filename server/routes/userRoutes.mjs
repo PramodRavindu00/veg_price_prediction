@@ -10,6 +10,7 @@ import {
   updateUserPreferences,
   verifyOTP,
   deleteAccount,
+  profileEdit,
 } from "../controllers/UserControllers.mjs";
 
 const router = Router();
@@ -28,5 +29,6 @@ router.patch(
 );
 router.patch(`${prefix}/changePassword/:id`, changePassword);
 router.delete(`${prefix}/deleteAccount/:id`, deleteAccount);
+router.patch(`${prefix}/profileEdit/:id`, profileEdit);
 
 export default router;
