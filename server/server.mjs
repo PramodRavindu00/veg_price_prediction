@@ -31,7 +31,11 @@ app.use(UserRoutes);
 app.use(QueryRoutes);
 app.use(MaintenanceRoutes);
 
-app.listen(port, () => {
-  console.log(`Server started running on port : ${port}`);
-  connectDB();
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(`Server started running on port : ${port}`);
+    connectDB();
+  });
+}
+
+export default app;

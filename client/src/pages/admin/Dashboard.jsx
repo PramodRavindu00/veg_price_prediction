@@ -342,7 +342,8 @@ const Dashboard = () => {
                         ></span>
                         <span className="font-medium">{item.vegetable}</span>
                         <span className="text-gray-500">
-                          ({(item.count * 100) / counts?.userCount}%)
+                          ({((item.count * 100) / counts?.userCount).toFixed(2)}
+                          %)
                         </span>
                       </li>
                     ))}
@@ -376,7 +377,9 @@ const Dashboard = () => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-1">
-                  <p className="text-lg sm:text-xl text-center">Current Fuel Price (Lanka Auto Diesel)</p>
+                  <p className="text-lg sm:text-xl text-center">
+                    Current Fuel Price (Lanka Auto Diesel)
+                  </p>
                   <span className="animate-blink text-xl sm:text-2xl font-bold">
                     LKR {Number(currentFuelPrice?.price).toFixed(2)}
                   </span>
@@ -403,7 +406,7 @@ const Dashboard = () => {
                   <span className="form-error">{formError}</span>
                   <button
                     type="submit"
-                    className="btn-primary mt-4"
+                    className="btn-primary w-full sm:w-2/3 mt-4"
                     disabled={btnDisabled}
                   >
                     {btnDisabled ? "Please Wait..." : "Update"}

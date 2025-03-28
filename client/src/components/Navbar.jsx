@@ -13,9 +13,10 @@ import Confirm from "./Confirm";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
 import { useAuth } from "../assets/useAuth.mjs";
+import { autoLogout } from "../assets/utilFunctions.mjs";
 
 const Navbar = ({ publicPage = true, navLinks }) => {
-  const { auth,setAuth, setUserData } = useAuth();
+  const { auth, setAuth, setUserData } = useAuth();
 
   const [toggleBtn, setToggleBtn] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
@@ -39,31 +40,21 @@ const Navbar = ({ publicPage = true, navLinks }) => {
       title: "Confirm Log out",
       message: "Are you sure you want to log out?",
       onConfirm: async () => {
+        try {
+          const res = await axios.post(
+            "/api/auth/logOut",
+            {},
+            { withCredentials: true }
+          );
 
-    try {
-      const res = await axios.post(
-        "/api/auth/logOut",
-        {},
-        { withCredentials: true }
-      );
-
-     if (res.data.success) {
-      sessionStorage.clear();
-      setAuth({
-        isLoggedIn: false,
-        userId: null,
-        userType: null,
-      });
-      setUserData(null);
-
-      console.log(res.data.message);
-      navigate("/login");
-       }
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  });
+          if (res.data.success) {
+            await autoLogout(setAuth, navigate, setUserData);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    });
   };
 
   return (

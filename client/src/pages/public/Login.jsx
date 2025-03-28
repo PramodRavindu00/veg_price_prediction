@@ -78,7 +78,7 @@ const Login = () => {
   return (
     <>
       <Navbar navLinks={publicLinks} />
-      <div className="relative w-full h-auto bg-cover bg-center bg-bg-content flex-grow flex items-center justify-center p-5">
+      <div className="w-full  bg-cover bg-center bg-bg-content flex-grow flex items-center justify-center p-5">
         <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/3 rounded-lg shadow-lg gap-4">
           <h2 className="text-2xl font-bold text-gray-800 text-center">
             Login
@@ -135,7 +135,7 @@ const Login = () => {
             <div className="my-8 lg:my-4 flex justify-center">
               <button
                 type="submit"
-                className="btn-primary"
+                className="btn-primary w-full sm:w-2/3"
                 disabled={btnDisabled}
               >
                 {btnDisabled ? "Please Wait..." : "Login"}

@@ -40,7 +40,8 @@ const App = () => {
           fadeIn ? "animate-fade" : ""
         }`}
       >
-        <div className="flex-grow">
+ 
+  <div className="flex-grow">
           <Routes>
             {/* Public routes which are not required a login */}
             <Route path="/" element={<Home />} />
@@ -96,8 +97,9 @@ const App = () => {
                 <PrivateRoute userTypeRequired={false} component={Profile} />
               }
             />
-          </Routes>
-        </div>
+            </Routes>
+            </div>
+
         <Footer />
       </div>
     </AuthContextProvider>

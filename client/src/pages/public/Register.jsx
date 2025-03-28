@@ -152,7 +152,7 @@ const Register = () => {
                 <span className="form-error">{formErrors.firstName}</span>
               </div>
               <div className="w-full">
-                <label className="form-label">Your Last Name</label>
+                <label className="form-label">Last Name</label>
                 <input
                   type="text"
                   placeholder="Enter your Last Name"
@@ -319,7 +319,7 @@ const Register = () => {
             <div className="mb-1 flex flex-col items-center justify-center">
               <button
                 type="submit"
-                className="btn-primary"
+                className="btn-primary w-full sm:w-2/3"
                 disabled={btnDisabled}
               >
                 {btnDisabled ? "Please Wait..." : "Create Account"}

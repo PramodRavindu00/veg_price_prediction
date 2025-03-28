@@ -147,7 +147,7 @@ const Contact = () => {
             <div className="flex flex-col items-center justify-center">
               <button
                 type="submit"
-                className="btn-primary"
+                className="btn-primary w-full sm:w-1/2"
                 disabled={btnDisabled}
               >
                 {btnDisabled ? "Please Wait..." : "Submit"}

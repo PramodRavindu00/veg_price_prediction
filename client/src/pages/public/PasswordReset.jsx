@@ -69,7 +69,7 @@ const PasswordReset = () => {
         }
       } finally {
         setBtnDisabled(false);
-        setFormValues((prev)=>({...prev,email:""}))
+        setFormValues((prev) => ({ ...prev, email: "" }));
       }
     }
   };
@@ -108,7 +108,7 @@ const PasswordReset = () => {
     }
   };
 
-  const changePassword = async (e) => {
+  const changePasswordAfterVerified = async (e) => {
     e.preventDefault();
     const errors = {};
     if (!formValues.password) {
@@ -123,7 +123,7 @@ const PasswordReset = () => {
     } else if (formValues.confirmPassword !== formValues.password) {
       errors.confirmPassword = "Passwords do not match";
     }
-    
+
     setFormErrors(errors);
     if (Object.keys(errors).length > 0) {
       console.log("Form has validation errors");
@@ -131,7 +131,7 @@ const PasswordReset = () => {
       setBtnDisabled(true);
       try {
         const res = await axios.patch(
-          `/api/user/changePassword/${formValues.id}`,
+          `/api/user/resetPasswordAfterVerified/${formValues.id}`,
           { password: formValues.password }
         );
 
@@ -148,15 +148,15 @@ const PasswordReset = () => {
         }
       } finally {
         setBtnDisabled(false);
-        setFormValues(initialValues)
+        setFormValues(initialValues);
       }
     }
   };
   return (
     <>
       <Navbar navLinks={publicLinks} />
-      <div className="relative w-full h-auto bg-cover bg-center bg-bg-content flex-grow flex items-center justify-center p-5">
-        <div className="flex flex-col bg-white p-6 w-full sm:w-3/4 lg:w-1/3 rounded-lg shadow-lg gap-4">
+      <div className="flex items-center justify-center bg-bg-content p-5 min-h-[50vh]">
+        <div className="flex flex-col bg-white p-5 w-full sm:w-3/4 lg:w-1/3 rounded-lg shadow-lg gap-4">
           <h2 className="text-2xl font-bold text-gray-800 text-center">
             Password Reset
           </h2>
@@ -178,7 +178,7 @@ const PasswordReset = () => {
               <div className="my-8 lg:my-4 flex justify-center">
                 <button
                   type="submit"
-                  className="btn-primary"
+                  className="btn-primary w-full sm:w-2/3"
                   disabled={btnDisabled}
                 >
                   {btnDisabled ? "Please Wait..." : "Verify Email"}
@@ -203,7 +203,7 @@ const PasswordReset = () => {
               <div className="my-8 lg:my-4 flex justify-center">
                 <button
                   type="submit"
-                  className="btn-primary"
+                  className="btn-primary w-full sm:w-2/3"
                   disabled={btnDisabled}
                 >
                   {btnDisabled ? "Please Wait..." : "Verify OTP"}
@@ -212,7 +212,7 @@ const PasswordReset = () => {
             </form>
           )}
           {step === 3 && (
-            <form onSubmit={changePassword} className="space-y-4">
+            <form onSubmit={changePasswordAfterVerified} className="space-y-4">
               <div className="w-full">
                 <label className="form-label">Password</label>
                 <div className="relative flex items-center">
@@ -261,7 +261,7 @@ const PasswordReset = () => {
               <div className="my-8 lg:my-4 flex justify-center">
                 <button
                   type="submit"
-                  className="btn-primary"
+                  className="btn-primary w-full sm:w-2/3"
                   disabled={btnDisabled}
                 >
                   {btnDisabled ? "Please Wait..." : "Change Password"}
