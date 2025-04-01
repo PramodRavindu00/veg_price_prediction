@@ -86,11 +86,6 @@ export const getWeatherData = async (req, res) => {
       avgRainfall: avgRainfall,
     };
 
-    // const nextWeekAvg = {
-    //   avgTemp: 10,
-    //   avgRainfall: 0.45,
-    // };
-
     res.status(200).json({ success: true, data: nextWeekAvg });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal Server Error" });
